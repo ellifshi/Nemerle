@@ -11,6 +11,7 @@ using System.Net.Sockets;
 
 class Exe1
 {
+    public static mutable lableCounter = 0;
 
     public static add(fs:FileStream) : void
     {
@@ -95,10 +96,48 @@ class Exe1
     }
     public static eq(fs:FileStream) : void
     {
+        mutable fname = fs.Name;
 
         mutable writer =  StreamWriter(fs);
         
-
+        //pop to D
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+        
+        //pop to A
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+        
+        //if a == d jump
+        writer.WriteLine("D=D-A");
+        def lable1 = "EQ_"+fname+lableCounter;
+        lableCounter++;
+        writer.WriteLine("@"+lable1);
+        writer.WriteLine("D;JEQ");
+        
+        //else  do d=1 and jump to the end
+        writer.WriteLine("D=1");
+        def lable2 = "END_"+fname+lableCounter;
+        lableCounter++;
+        writer.WriteLine("@"+lable2);
+        writer.WriteLine("1;JMP");
+        
+        //if condition
+        writer.WriteLine("("+lable1+")");
+        writer.WriteLine("D=0");
+        
+        //end - push d
+        writer.WriteLine("("+lable2+")");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
+        
         writer.Close();
         fs.Close();
     }
