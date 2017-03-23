@@ -1,0 +1,7 @@
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\bin\Debug\Exe_0.exe
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\bin\Debug\Exe_0.pdb
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\bin\Debug\Nemerle.dll
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\bin\Debug\Nemerle.xml
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\obj\Debug\Exe 0.nprojResolveAssemblyReference.cache
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\obj\Debug\Exe_0.exe
+C:\Users\Lenovo\Documents\GitHub\Nemerle\targilim\Exe 0\Exe 0\Exe 0\obj\Debug\Exe_0.pdb
