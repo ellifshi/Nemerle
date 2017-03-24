@@ -174,23 +174,89 @@ class Exe1
         writer.Close();
         fs.Close();
     }
-    public static push(fs:FileStream) : void
+    public static push(fs:FileStream, line:String) : void
     {
-
-        mutable writer =  StreamWriter(fs);
+        mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
         
-
+        //assign value to d
+        match (words[0]) {
+            | "constant" => func2(fs,words[1]);
+            | "local" => func1(fs,"LOCAL", words[1]);
+            | "argument" => func1(fs,"ARGUMENT",words[1]);
+            | "static" => func1(fs,"STATIC",words[1]);
+            | "pointer" => ();
+            | "this" => ();
+            | "that" => ();
+            | "temp" => ();
+            | _ => ();
+        }
+        
+        mutable writer =  StreamWriter(fs);        
+        //push d
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
         writer.Close();
         fs.Close();
     }
-    public static pop(fs:FileStream) : void
+    public static func1(fs:FileStream, seg:String, offset:String) : void
     {
         mutable writer =  StreamWriter(fs);   
-        
-
+        writer.WriteLine("@"+seg);
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@"+offset);
+        writer.WriteLine("A=D+A");
+        writer.WriteLine("D=M");
         writer.Close();
         fs.Close();
     }
+    public static func2(fs:FileStream, val:String) : void
+    {
+        mutable writer =  StreamWriter(fs);
+        writer.WriteLine("@"+val);
+        writer.WriteLine("D=A");
+        writer.Close();
+        fs.Close();
+    }
+    public static pop(fs:FileStream, line:String) : void
+    {
+        //pop from stack to d
+        mutable writer =  StreamWriter(fs);   
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+        writer.Close();
+        fs.Close();
+        
+        mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+        match (words[0]) {
+            | "local" => ();
+            | "argument" => ();
+            | "static" => ();
+            | "pointer" => ();
+            | "this" => ();
+            | "that" => ();
+            | "temp" => ();
+            | _ => ();
+        }
+    }
+    public static func11(fs:FileStream, seg:String, offset:String) : void
+    {
+        mutable writer =  StreamWriter(fs);   
+        writer.WriteLine("@"+seg);
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@"+offset);
+        writer.WriteLine("A=D+A");
+        writer.WriteLine("");
+        writer.Close();
+        fs.Close();
+    }
+    
 
 
     //SeesionData hendle all the line, by split the line 
@@ -224,8 +290,8 @@ class Exe1
                 | "lt" => lt(fs)
                 | "neg" => neg(fs)
                 | "not" => not(fs)
-                | "push" => push(fs)
-                | "pop" => pop(fs);
+                | "push" => push(fs, words[i+1]+" "+words[i+2])
+                | "pop" => pop(fs, words[i+1]+" "+words[i+2]);
                 | _ => ();
             }
 
