@@ -169,8 +169,16 @@ class Exe1
     public static not(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);   
-        
-
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+        writer.WriteLine("D=!D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
         writer.Close();
         fs.Close();
     }
