@@ -1,4 +1,9 @@
-﻿using Nemerle.Collections;
+﻿//אראל פלדמר 209374420
+//שניאור גלעדי 301739561
+
+
+
+using Nemerle.Collections;
 using Nemerle.Text;
 using Nemerle.Utility;
 using System.IO.File;
@@ -16,17 +21,25 @@ class Exe1
 
     public static add(fs:FileStream) : void
     {
-        mutable writer =  StreamWriter(fs); //V
+        mutable writer =  StreamWriter(fs);
+
+        //pop first val to d
         writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
         writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
         writer.WriteLine("D=M");
-        writer.WriteLine("A=A+1");
-        writer.WriteLine("D=D+M");
+
+        //pop second val to a
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //compute
+        writer.WriteLine("D=D+A"); 
+
+        //push to stack
+        writer.WriteLine("@SP");
         writer.WriteLine("A=M");
         writer.WriteLine("M=D");
         writer.WriteLine("@SP");
@@ -35,19 +48,27 @@ class Exe1
         writer.Close();
         fs.Close();
     }
-    public static sub(fs:FileStream) : void //V
+    public static sub(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
+
+        //push first val to d
         writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("D=M");
-        writer.WriteLine("A=A+1");
-        writer.WriteLine("D=D-M");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M-1"); 
         writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+
+        //push second val to a
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //compute
+        writer.WriteLine("D=A-D"); 
+
+        //push to stack
+        writer.WriteLine("@SP");
         writer.WriteLine("A=M");
         writer.WriteLine("M=D");
         writer.WriteLine("@SP");
@@ -56,19 +77,27 @@ class Exe1
         writer.Close();
         fs.Close();
     }
-    public static andd(fs:FileStream) : void//V
+    public static andd(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);   
+
+        //get first val to d
         writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
         writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
         writer.WriteLine("D=M");
-        writer.WriteLine("A=M+1");
-        writer.WriteLine("D=D&M"); 
+
+        //get second val to a
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //compute
+        writer.WriteLine("D=D&A"); 
+
+        //push to stack
+        writer.WriteLine("@SP");
         writer.WriteLine("A=M");
         writer.WriteLine("M=D");
         writer.WriteLine("@SP");
@@ -77,20 +106,27 @@ class Exe1
         writer.Close();
         fs.Close();
     }
-    public static or(fs:FileStream) : void//V
+    public static or(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
 
+        //get first val to d
         writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
         writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
         writer.WriteLine("D=M");
-        writer.WriteLine("A=M+1");
-        writer.WriteLine("D=D|M"); 
+
+        //ger second val to a
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //compute
+        writer.WriteLine("D=D|A"); 
+
+        //push to stack
+        writer.WriteLine("@SP");
         writer.WriteLine("A=M");
         writer.WriteLine("M=D");
         writer.WriteLine("@SP");
@@ -99,290 +135,261 @@ class Exe1
         writer.Close();
         fs.Close();
     }
-    public static eq(fs:FileStream) : void//V
+    public static eq(fs:FileStream) : void
     {
+        mutable fname = "";
+
         mutable writer =  StreamWriter(fs);
 
+        //pop to D
         writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
         writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
         writer.WriteLine("D=M");
-        writer.WriteLine("A=A+1");
-        writer.WriteLine("D=D-M");
+
+        //pop to A
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
-        mutable lable1 = "TRUE"+lableCounter;
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //if a == d jump
+        writer.WriteLine("D=A-D");
+        mutable lable1 = "EQ_"+fname+lableCounter;
         lableCounter++;
         writer.WriteLine("@"+lable1);
         writer.WriteLine("D;JEQ");
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=0");
-        mutable lable2 = "END"+lableCounter;
-        writer.WriteLine("@"+lable2);
-        writer.WriteLine("0;JMP");
-        writer.WriteLine("("+lable1+")");
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=-1");
-        writer.WriteLine("("+lable2+")");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M+1");
 
-        writer.Close();
-        fs.Close();
-    }
-    public static gt(fs:FileStream) : void //V
-    {
-        mutable writer =  StreamWriter(fs);
-
-
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("D=M");
-        writer.WriteLine("A=A+1");
-        writer.WriteLine("D=D-M");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
-        mutable lable1 = "TRUE"+lableCounter;
+        //else  do d=0 and jump to the end
+        writer.WriteLine("D=0");
+        mutable lable2 = "END_"+fname+lableCounter;
         lableCounter++;
-        writer.WriteLine("@"+lable1);
-        writer.WriteLine("D;JGT");
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=0");
-        mutable lable2 = "END"+lableCounter;
         writer.WriteLine("@"+lable2);
-        writer.WriteLine("0;JMP");
+        writer.WriteLine("1;JMP");
+
+        //if condition
         writer.WriteLine("("+lable1+")");
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=-1");
+        writer.WriteLine("D=-1");
+
+        //end - push d
         writer.WriteLine("("+lable2+")");
         writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
         writer.WriteLine("M=M+1");
-
 
         writer.Close();
         fs.Close();
     }
-    public static lt(fs:FileStream) : void//V
+    public static gt(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
 
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("A=A-1");
-        writer.WriteLine("D=M");
-        writer.WriteLine("A=A+1");
-        writer.WriteLine("D=D-M");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M-1");
-        writer.WriteLine("M=M-1");
-        mutable lable1 = "TRUE"+lableCounter;
+        //generate lables
+        mutable fname = "";
+        mutable lable1 = "Label_"+fname+lableCounter; //"D=A-D
         lableCounter++;
+        mutable lable2 = "Label_" + fname+lableCounter;
+        lableCounter++;
+
+        //get first val to d
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+
+        //get second val to a
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //check if a > d
+        writer.WriteLine("D=A-D");
         writer.WriteLine("@"+lable1);
-        writer.WriteLine("D;JLT");
-        writer.WriteLine("@SP");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=0");
-        mutable lable2 = "END"+lableCounter;
+        writer.WriteLine("D ; JGT");
+
+        //else d=0
         writer.WriteLine("@"+lable2);
-        writer.WriteLine("0;JMP");
+        writer.WriteLine("D=0 ; JMP");
+
+        //if true d=-1
         writer.WriteLine("("+lable1+")");
+        writer.WriteLine("D=-1");
+
+        //end - push d to stack
+        writer.WriteLine("("+lable2+")");
         writer.WriteLine("@SP");
         writer.WriteLine("A=M");
-        writer.WriteLine("M=-1");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");  
+
+
+        writer.Close();
+        fs.Close();
+    }
+    public static lt(fs:FileStream) : void
+    {
+        mutable writer =  StreamWriter(fs);
+
+        //generate lables
+        mutable fname = "";
+        mutable lable1 = "Label_"+fname+lableCounter;
+        lableCounter++;
+        mutable lable2 = "Label_" + fname+lableCounter;
+        lableCounter++;
+
+        //pop first val to d
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
+
+        //pop second val to a
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("A=M");
+
+        //check if d > a (a < d)
+        writer.WriteLine("D=D-A");
+        writer.WriteLine("@"+lable1);
+        writer.WriteLine("D ; JGT");
+
+        //else d = 0, jmp to end
+        writer.WriteLine("@"+lable2);
+        writer.WriteLine("D=0 ; JEQ");
+
+        //if true, d = -1
+        writer.WriteLine("("+lable1+")");
+        writer.WriteLine("D=-1");
+
+        //end - push to stack
         writer.WriteLine("("+lable2+")");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
         writer.WriteLine("@SP");
         writer.WriteLine("M=M+1");
 
         writer.Close();
         fs.Close();
     }
-    public static neg(fs:FileStream) : void//V
+    public static neg(fs:FileStream) : void
     {
 
         mutable writer =  StreamWriter(fs);
 
+        //pop
         writer.WriteLine("@SP");
-        writer.WriteLine("M=M-1");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=-M");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M+1");
+        writer.WriteLine("A=M-1");
+        writer.WriteLine("D=M");
+
+        //compute and push
+        writer.WriteLine("M=-D");
 
         writer.Close();
         fs.Close();
     }
-    public static not(fs:FileStream) : void//V
+    public static not(fs:FileStream) : void
+    {
+        mutable writer =  StreamWriter(fs);
+
+        //pop
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M-1");
+        writer.WriteLine("D=M");
+
+        //compute and push
+        writer.WriteLine("M=!D");
+
+        writer.Close();
+        fs.Close();
+    }
+    public static push(fs:FileStream, seg:string, offset:string) : void
+    {
+        mutable writer =  StreamWriter(fs);
+
+        writer.WriteLine("@" + offset);
+        writer.WriteLine("D=A");
+
+        if (seg.Equals("constant"))
+        {
+            writer.WriteLine("@SP");
+            writer.WriteLine("A=M");
+            writer.WriteLine("M=D");
+            writer.WriteLine("@SP");
+            writer.WriteLine("M=M+1");
+            writer.Close();
+            fs.Close();
+            return;
+        }
+        else
+        {
+            match(seg)
+            {
+                | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
+                | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
+                | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
+                | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
+                | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
+                | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
+                | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
+                | _ => ();
+            }
+
+            writer.WriteLine("@SP");
+            writer.WriteLine("A=M");
+            writer.WriteLine("M=D");
+            writer.WriteLine("@SP");
+            writer.WriteLine("M=M+1");
+
+            writer.Close();
+            fs.Close();
+        }
+    }
+    public static pop(fs:FileStream, seg:string, offset:string) : void
     {
         mutable writer =  StreamWriter(fs);   
 
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
-        writer.WriteLine("A=M");
-        writer.WriteLine("M=!M");
-        writer.WriteLine("@SP");
-        writer.WriteLine("M=M+1");
-
-        writer.Close();
-        fs.Close();
-    }
-    public static push(fs:FileStream, verible:string, number:string) : void
-    {
-        mutable writer =  StreamWriter(fs);
-        writer.WriteLine("@" + number);
-        writer.WriteLine("D=A");
-        if (verible.Equals("constant"))
+        if (seg.Equals("constant"))
         {
-            writer.WriteLine("@0");
-            writer.WriteLine("M=M+1");
-            writer.WriteLine("A=M-1");
-            writer.WriteLine("M=D");
-
             writer.Close();
             fs.Close();
             return;
         }
-        else if(verible.Equals("static")) 
-            // | "pointer" => writer.WriteLine("@3" + '\n' + "A=M+D" + '\n' + "D=M")
-             {
-                 writer.WriteLine("@16");
-                 writer.WriteLine("D=M");
-                 writer.WriteLine("@SP");
-                 writer.WriteLine("A=M");
-                 writer.WriteLine("M=D");
-                 writer.WriteLine("@SP");
-                 writer.WriteLine("M=M+1");
-             }
-             else if(verible.Equals("pointer"))
-                  {
-                      if(number.Equals("0"))
-                      {
-                          writer.WriteLine("@THIS");
-                          writer.WriteLine("D=M");
-                          writer.WriteLine("@0");
-                          writer.WriteLine("M=M+1");
-                          writer.WriteLine("M=M-1");
-                          writer.WriteLine("M=D");
-                      }
-                      else
-                      {
-                          writer.WriteLine("@THAT");
-                          writer.WriteLine("D=M");
-                          writer.WriteLine("@0");
-                          writer.WriteLine("M=M+1");
-                          writer.WriteLine("M=M-1");
-                          writer.WriteLine("M=D");
-                      }
-                  }
-                  else
-                  {
-                      match(verible)
-                      {
-                          | "local" => writer.WriteLine("@LCL" + '\n' + "A=M")
-                          | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M")
-                          | "this" => writer.WriteLine("@THIS" + '\n' + "A=M")
-                          | "that" => writer.WriteLine("@THAT" + '\n' + "A=M")
-                          | "temp" => writer.WriteLine("@5") 
-                          | _ => ();
-                      }
-                      writer.WriteLine("A=D+A");
-                      writer.WriteLine("D=M");
-                      writer.WriteLine("@0");
-                      writer.WriteLine("M=M+1");
-                      writer.WriteLine("A=M-1");
-                      writer.WriteLine("M=D");
-                  }
-
-
-        writer.Close();
-        fs.Close();
-    }
-    public static pop(fs:FileStream, verible:string, number:string) : void
-    {
-        mutable writer =  StreamWriter(fs);
-        
-        if (verible.Equals("constant"))
+        else
         {
-            writer.WriteLine("@0");
-            writer.WriteLine("M=M+1");
-            writer.WriteLine("A=M-1");
+            writer.WriteLine("@" + offset);
+            writer.WriteLine("D=A");
+            match(seg)
+            {
+                | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
+                | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
+                | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
+                | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
+                | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
+                | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
+                | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
+                | _ => ();
+            }
+            writer.WriteLine("@R13");
             writer.WriteLine("M=D");
-
-            writer.Close();
-            fs.Close();
-            return;
+            writer.WriteLine("@SP");
+            writer.WriteLine("A=M");
+            writer.WriteLine("D=M");
+            writer.WriteLine("@R13");
+            writer.WriteLine("A=M");   
+            writer.WriteLine("M=D"); 
         }
-        else if(verible.Equals("static")) 
-            // | "pointer" => writer.WriteLine("@3" + '\n' + "A=M+D" + '\n' + "D=M")
-             {
-                 writer.WriteLine("@16");
-                 writer.WriteLine("@SP");
-                 writer.WriteLine("A=M-1");
-                 writer.WriteLine("D=M");
-                 writer.WriteLine("@" + number);
-                 writer.WriteLine("m=D");
-                 writer.WriteLine("@SP");
-                
-                 writer.WriteLine("M=M-1");
-             }
-             else if(verible.Equals("pointer"))
-             {
-                      if(number.Equals("0"))
-                      {
-                          writer.WriteLine("@0");
-                          writer.WriteLine("M=M-1");
-                          writer.WriteLine("A=M");
-                          writer.WriteLine("D=M");
-                          writer.WriteLine("@THIS");
-                          writer.WriteLine("M=D");
-                      }
-                      else
-                      {
-                          writer.WriteLine("@0");
-                          writer.WriteLine("M=M-1");
-                          writer.WriteLine("A=M");
-                          writer.WriteLine("D=M");
-                          writer.WriteLine("@THAT");
-                          writer.WriteLine("M=D");
-                      }
-                  }
-                  else
-                  {
-                      
-                      match(verible)
-                      {
-                          | "local" => writer.WriteLine("@LCL" + '\n' + "D=M")
-                          | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M")
-                          | "this" => writer.WriteLine("@THIS" + '\n' + "D=M")
-                          | "that" => writer.WriteLine("@THAT" + '\n' + "D=M")
-                          | "temp" => writer.WriteLine("@5" + '\n' + "D=A") 
-                          | _ => ();
-                      }
-                      writer.WriteLine("@" + number);
-                      writer.WriteLine("D=A");
-                      writer.WriteLine("D=D+A");
-                      
-                      writer.WriteLine("@13");
-                      writer.WriteLine("M=D");
-                      writer.WriteLine("@SP");
-                      writer.WriteLine("M=M-1");
-                      writer.WriteLine("A=M");
-                      writer.WriteLine("D=M");
-                      writer.WriteLine("@13");
-                      writer.WriteLine("A=M");
-                      writer.WriteLine("M=D");
-                  }
-
-
 
         writer.Close();
         fs.Close();
@@ -430,21 +437,30 @@ class Exe1
     public static Main() : void
     {
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
-        mutable path : string = @"C:\Users\Shneor Giladi\Desktop\‏‏תיקיה חדשה (2)\MemoryAccess";//for the path of all matching file, (.vm)
-
-        foreach (file in Directory.EnumerateFiles(path, "*.vm"))
+        mutable path : string = @"C:\Users\Shneor Giladi\Documents\Visual Studio 2015\Projects\Nemerlr\Exe 1\folder\";//for the path of all matching file, (.vm)
+        if(!Directory.Exists(path))
         {
-            contentsOfFile = File.ReadAllText(file); //the contents of file
-            path = Path.GetFullPath(file);          //the path of file
-            def lines = File.ReadLines(path).Where(line => !line.Contains("//") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
+            WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
+            _ = ReadLine();
+            return;
+        }
+        else
+        {
 
-            path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
-            foreach (line in lines)
+            foreach (file in Directory.EnumerateFiles(path, "*.vm"))
             {
-                SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
-            } 
+                contentsOfFile = File.ReadAllText(file); //the contents of file
+                path = Path.GetFullPath(file);          //the path of file
+                def lines = File.ReadLines(path).Where(line => !line.Contains("//") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
+
+                path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
+                foreach (line in lines)
+                {
+                    SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
+                } 
+            }
         }
 
-    // _ = ReadLine();
+    //_ = ReadLine();
     }
 }
