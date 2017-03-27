@@ -437,7 +437,7 @@ class Exe1
     public static Main() : void
     {
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
-        mutable path : string = @"C:\Users\Shneor Giladi\Documents\Visual Studio 2015\Projects\Nemerlr\Exe 1\folder\";//for the path of all matching file, (.vm)
+        mutable path : string = @"C:\Users\Shneor Giladi\Documents\Visual Studio 2015\Projects\Nemerlr\Exe 1\folder";//for the path of all matching file, (.vm)
         if(!Directory.Exists(path))
         {
             WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
