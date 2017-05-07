@@ -1,3 +1,5 @@
+(Class2.set)
+
 @0
 D=A
 @ARG
@@ -8,6 +10,7 @@ A=M
 M=D
 @SP
 M=M+1
+
 @SP
 M=M-1
 @0
@@ -22,6 +25,7 @@ D=M
 @R13
 A=M
 M=D
+
 @1
 D=A
 @ARG
@@ -32,6 +36,7 @@ A=M
 M=D
 @SP
 M=M+1
+
 @SP
 M=M-1
 @1
@@ -46,6 +51,7 @@ D=M
 @R13
 A=M
 M=D
+
 @0
 D=A
 @SP
@@ -53,6 +59,23 @@ A=M
 M=D
 @SP
 M=M+1
+@SP
+M=M-1
+@0
+D=A
+@ARG
+D=M+D
+@R13
+M=D
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
+
+(Class2.get)
+
 @0
 D=A
 @16
@@ -63,6 +86,7 @@ A=M
 M=D
 @SP
 M=M+1
+
 @1
 D=A
 @16
@@ -73,6 +97,7 @@ A=M
 M=D
 @SP
 M=M+1
+
 @SP
 M=M-1
 A=M
@@ -87,3 +112,19 @@ A=M
 M=D
 @SP
 M=M+1
+
+@SP
+M=M-1
+@0
+D=A
+@ARG
+D=M+D
+@R13
+M=D
+@SP
+A=M
+D=M
+@R13
+A=M
+M=D
+

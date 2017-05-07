@@ -14,36 +14,61 @@ namespace Exe_2
   /// <summary>
   /// Translate VM commands: label, goto, if-goto, function, return and call.
   /// </summary>
-  module Analyzer2
+  module Analyzer2 
   {
-    public static label(fs:FileStream, seg:string) : void
+    public static mutable lableCounter = 0;
+    public static label(fs:FileStream, label:string) : void
     {
+        mutable fname = "";
         mutable writer =  StreamWriter(fs);
-        
+        mutable lable1 = label ;//+ "_" + fname + lableCounter;
+        writer.WriteLine("(" +lable1+ ")");
+        lableCounter++;
+        writer.WriteLine();
         writer.Close();
         fs.Close();
-    }
-        
-    public static goto(fs:FileStream, seg:string) : void
+    }  
+    public static goto(fs:FileStream, lable:string) : void
     {
+        mutable fname = "";
         mutable writer =  StreamWriter(fs);
-        
+        mutable lable1 = lable;// + "_" + fname + lableCounter;
+        writer.WriteLine("@" + lable1);
+        writer.WriteLine("1;JMP");
+        writer.WriteLine();
         writer.Close();
         fs.Close();
     }
     
-    public static ifGoto(fs:FileStream, seg:string) : void
+    public static ifGoto(fs:FileStream, lable:string) : void
     {
         mutable writer =  StreamWriter(fs);
+        //pop to D
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M-1");
+        writer.WriteLine("A=M");
+        writer.WriteLine("D=M");
         
+        writer.WriteLine("@" + lable);
+        writer.WriteLine("D;JMP");
+        
+        writer.WriteLine();
         writer.Close();
         fs.Close();
     }
     
-    public static function(fs:FileStream, seg:string, offset:string) : void
+    public static function(fs:FileStream, funName:string, offset:string) : void
     {
         mutable writer =  StreamWriter(fs);
         
+        writer.WriteLine("(" + funName +")");
+        
+        for(mutable i=0; i<Int32.Parse(offset); i++)
+        {
+            Analyzer1.push(fs, "constant", "0");
+        }
+        
+        writer.WriteLine();
         writer.Close();
         fs.Close();
     }
@@ -52,15 +77,135 @@ namespace Exe_2
     {
         mutable writer =  StreamWriter(fs);
         
-        writer.Close();
+        //return to R14
+        writer.WriteLine("@LCL");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@5");
+	    writer.WriteLine("A=D-A");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@R14");
+	    writer.WriteLine("M=D");
+	                                      
+	    Analyzer1.pop(fs, "argument", "0");
+                                          
+	    writer.WriteLine("@ARG");
+	    writer.WriteLine("D=M+1");
+	    writer.WriteLine("@SP");
+	    writer.WriteLine("M=D");
+           
+	    writer.WriteLine("@LCL");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@1");
+	    writer.WriteLine("A=D-A");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@THAT");
+	    writer.WriteLine("M=D");
+            
+        writer.WriteLine("@LCL");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@2");
+	    writer.WriteLine("A=D-A");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@THIS");
+	    writer.WriteLine("M=D");
+           
+	    writer.WriteLine("@LCL");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@3");
+	    writer.WriteLine("A=D-A");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@ARG");
+	    writer.WriteLine("M=D");
+            
+	    writer.WriteLine("@LCL");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@4");
+	    writer.WriteLine("A=D-A");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@LCL");
+	    writer.WriteLine("M=D");
+        
+	    //jmp to return address
+	    writer.WriteLine("@R14");
+	    writer.WriteLine("A=M");
+	    writer.WriteLine("1 ; JMP");
+        
+	    writer.WriteLine();
+      //  writer.Close();
         fs.Close();
     }
     
-    public static call(fs:FileStream, seg:string, offset:string) : void
+    public static call(fs:FileStream, funName:string, numArgs:string) : void
     {
         mutable writer =  StreamWriter(fs);
+        lableCounter++;
+        mutable label = "Lable_" + lableCounter;
         
-        writer.Close();
+        
+        Analyzer1.push(fs, "constant", label);
+        
+        //LCL
+        writer.WriteLine("LCL");
+        writer.WriteLine("D=M");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
+        
+        //ARG
+        writer.WriteLine("ARG");
+        writer.WriteLine("D=M");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
+        
+        //THIS
+        writer.WriteLine("THIS");
+        writer.WriteLine("D=M");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
+        
+        //THAT
+        writer.WriteLine("THAT");
+        writer.WriteLine("D=M");
+        writer.WriteLine("@SP");
+        writer.WriteLine("A=M");
+        writer.WriteLine("M=D");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=M+1");
+        
+        //change the args to call args
+        writer.WriteLine("@"+ numArgs);
+	    writer.WriteLine("D=A");
+	    writer.WriteLine("@5");
+	    writer.WriteLine("D=D+A");
+	    writer.WriteLine("@SP");
+	    writer.WriteLine("D=M-D");
+	    writer.WriteLine("@ARG");
+	    writer.WriteLine("M=D");
+	    
+	    //chnage the lcl to cal lcl
+	    writer.WriteLine("@SP");
+	    writer.WriteLine("D=M");
+	    writer.WriteLine("@LCL");
+	    writer.WriteLine("M=D");
+	    
+	    
+	    writer.WriteLine("@"+funName);
+	    writer.WriteLine("1 ; JMP");
+	    
+	    writer.WriteLine("("+label+")");
+        
+	    
+	    writer.WriteLine();
+	    
+       // writer.Close();
         fs.Close();
     }
   }

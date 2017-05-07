@@ -59,11 +59,11 @@ module Exe_2
         }
         fs.Close();
     }
-    
+
     Main() : void
     {
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
-        mutable path : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder";//for the path of all matching file, (.vm)
+        mutable path : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";//for the path of all matching file, (.vm)
         if(!Directory.Exists(path))
         {
             WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
@@ -77,7 +77,8 @@ module Exe_2
             {
                 contentsOfFile = File.ReadAllText(file); //the contents of file
                 path = Path.GetFullPath(file);          //the path of file
-                def lines = File.ReadLines(path).Where(line => !line.Contains("//") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
+
+                def lines = File.ReadLines(path).Where(line => !line.TrimStart.Equals("/") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
 
                 path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
                 foreach (line in lines)
@@ -85,7 +86,26 @@ module Exe_2
                     SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
                 } 
             }
+
         }
+        mutable temp = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";
+        MergeASMFile(temp, "*.asm", temp  + "\\"+Path.GetFileName( Path.GetDirectoryName(temp))+".asm");
         _ = ReadLine();
+    }
+
+    private static  MergeASMFile(inputDirectoryPath:string, inputFileNamePattern:string, outputFilePath:string):void
+    {
+        mutable inputFilePaths = Directory.GetFiles(inputDirectoryPath, inputFileNamePattern);
+        using (mutable outputStream = File.Create(outputFilePath))
+        {
+            foreach (inputFilePath in inputFilePaths)
+            {
+                using (inputStream = File.OpenRead(inputFilePath))
+                {
+                    inputStream.CopyTo(outputStream);
+                }
+                
+            }
+        }
     }
 }
