@@ -79,8 +79,9 @@ module Exe_2
                 path = Path.GetFullPath(file);          //the path of file
 
                 def lines = File.ReadLines(path).Where(line => !line.TrimStart.Equals("/") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
-
                 path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
+
+
                 foreach (line in lines)
                 {
                     SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
@@ -89,22 +90,24 @@ module Exe_2
 
         }
         mutable temp = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";
-        MergeASMFile(temp, "*.asm", temp  + "\\"+Path.GetFileName( Path.GetDirectoryName(temp))+".asm");
+        MergeASMFile(temp, "*.asm", temp  + "\\"+Path.GetFileName( Path.GetDirectoryName(temp+ @"\*.vm"))+".asm");
         _ = ReadLine();
     }
 
     private static  MergeASMFile(inputDirectoryPath:string, inputFileNamePattern:string, outputFilePath:string):void
     {
         mutable inputFilePaths = Directory.GetFiles(inputDirectoryPath, inputFileNamePattern);
+
         using (mutable outputStream = File.Create(outputFilePath))
         {
             foreach (inputFilePath in inputFilePaths)
             {
+
                 using (inputStream = File.OpenRead(inputFilePath))
                 {
                     inputStream.CopyTo(outputStream);
                 }
-                
+
             }
         }
     }

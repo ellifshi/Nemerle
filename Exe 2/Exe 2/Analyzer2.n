@@ -61,6 +61,17 @@ namespace Exe_2
     {
         mutable writer =  StreamWriter(fs);
         
+        if(funName.Equals("Sys.init"))
+        {
+           writer.WriteLine("@257"); 
+           writer.WriteLine("D=A");
+           writer.WriteLine("@SP");
+           writer.WriteLine("M=D");
+        }
+        else
+        {
+            
+        }
         writer.WriteLine("(" + funName +")");
         
         for(mutable i=0; i<Int32.Parse(offset); i++)

@@ -1,3 +1,7 @@
+@257
+D=A
+@SP
+M=D
 (Sys.init)
 
 @6
