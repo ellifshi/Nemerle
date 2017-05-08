@@ -79,7 +79,15 @@ module Exe_2
                 path = Path.GetFullPath(file);          //the path of file
 
                 def lines = File.ReadLines(path).Where(line => !line.TrimStart.Equals("/") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
-                path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
+                if(Path.GetFileName(file).Equals("Sys.vm"))
+                {
+                    path = Path.GetFullPath(file).Replace("Sys.vm", "1.asm"); 
+                }
+                else
+                {
+                    path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
+                }
+                
 
 
                 foreach (line in lines)
