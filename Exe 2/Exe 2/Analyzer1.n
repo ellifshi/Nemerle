@@ -22,7 +22,7 @@ namespace Exe_2
     public static add(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop first val to d
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
@@ -51,7 +51,7 @@ namespace Exe_2
     public static sub(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //push first val to d
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
@@ -80,7 +80,7 @@ namespace Exe_2
     public static andd(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);   
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //get first val to d
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
@@ -109,7 +109,7 @@ namespace Exe_2
     public static or(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //get first val to d
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
@@ -140,7 +140,7 @@ namespace Exe_2
         mutable fname = "";
 
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop to D
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
@@ -185,7 +185,7 @@ namespace Exe_2
     public static gt(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //generate lables
         mutable fname = "";
         mutable lable1 = "Label_"+fname+lableCounter; //"D=A-D
@@ -235,7 +235,7 @@ namespace Exe_2
     public static lt(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //generate lables
         mutable fname = "";
         mutable lable1 = "Label_"+fname+lableCounter;
@@ -286,7 +286,7 @@ namespace Exe_2
     {
 
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop
         writer.WriteLine("@SP");
         writer.WriteLine("A=M-1");
@@ -302,7 +302,7 @@ namespace Exe_2
     public static not(fs:FileStream) : void
     {
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop
         writer.WriteLine("@SP");
         writer.WriteLine("A=M-1");
@@ -317,8 +317,9 @@ namespace Exe_2
     }
     public static push(fs:FileStream, seg:string, offset:string) : void
     {
+        
         mutable writer =  StreamWriter(fs);
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
         writer.WriteLine("@" + offset);
         writer.WriteLine("D=A");
 
@@ -329,6 +330,7 @@ namespace Exe_2
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
+            writer.WriteLine();
             writer.Close();
             fs.Close();
             return;
@@ -361,7 +363,7 @@ namespace Exe_2
     public static pop(fs:FileStream, seg:string, offset:string) : void
     {
         mutable writer =  StreamWriter(fs);   
-
+        writer.WriteLine("//" + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
         writer.WriteLine("@SP");
         writer.WriteLine("M=M-1");
         if (seg.Equals("constant"))

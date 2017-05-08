@@ -55,14 +55,13 @@ module Exe_2
                 | "call"     => Analyzer2.call(fs, words[1], words[2])
                 | _ => ();
             }
-
         }
         fs.Close();
     }
 
     Main() : void
     {
-        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";//for the path of all matching file, (.vm);
+        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\ProgramFlow\BasicLoop";//for the path of all matching file, (.vm);
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
         mutable path : string = ConstPath;
         if(!Directory.Exists(path))
@@ -73,7 +72,6 @@ module Exe_2
         }
         else
         {
-
             foreach (file in Directory.EnumerateFiles(path, "*.vm"))
             {
                 contentsOfFile = File.ReadAllText(file); //the contents of file
@@ -82,7 +80,7 @@ module Exe_2
                 def lines = File.ReadLines(path).Where(line => !line.TrimStart.Equals("/") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
                 if(Path.GetFileName(file).Equals("Sys.vm"))
                 {
-                    path = Path.GetFullPath(file).Replace("Sys.vm", "1-Sys.asm"); //the path of file for the whole file
+                    path = Path.GetFullPath(file).Replace(".vm", ".asm").Replace("Sys.asm",  "1-Sys.asm"); //the path of file for the whole file
                 }
                 else
                 {
@@ -94,10 +92,13 @@ module Exe_2
                     SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
                 } 
             }
-
         }
-//mutable temp = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";
-        MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
+        def  fCount = Directory.GetFiles(ConstPath, "*.asm", SearchOption.TopDirectoryOnly).Length;
+        if(fCount>1)
+        {
+            MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
+        }
+        else{}
         _ = ReadLine();
     }
 
