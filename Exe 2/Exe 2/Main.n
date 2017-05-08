@@ -62,8 +62,9 @@ module Exe_2
 
     Main() : void
     {
+        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";//for the path of all matching file, (.vm);
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
-        mutable path : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";//for the path of all matching file, (.vm)
+        mutable path : string = ConstPath;
         if(!Directory.Exists(path))
         {
             WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
@@ -81,15 +82,13 @@ module Exe_2
                 def lines = File.ReadLines(path).Where(line => !line.TrimStart.Equals("/") && !line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
                 if(Path.GetFileName(file).Equals("Sys.vm"))
                 {
-                    path = Path.GetFullPath(file).Replace("Sys.vm", "1.asm"); 
+                    path = Path.GetFullPath(file).Replace("Sys.vm", "1-Sys.asm"); //the path of file for the whole file
                 }
                 else
                 {
                     path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
                 }
-                
-
-
+            
                 foreach (line in lines)
                 {
                     SeesionData(path, line); // any line that not contain commend, we can sen it to the switch to split the line
@@ -97,8 +96,8 @@ module Exe_2
             }
 
         }
-        mutable temp = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";
-        MergeASMFile(temp, "*.asm", temp  + "\\"+Path.GetFileName( Path.GetDirectoryName(temp+ @"\*.vm"))+".asm");
+//mutable temp = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\StaticsTest";
+        MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
         _ = ReadLine();
     }
 
@@ -110,7 +109,6 @@ module Exe_2
         {
             foreach (inputFilePath in inputFilePaths)
             {
-
                 using (inputStream = File.OpenRead(inputFilePath))
                 {
                     inputStream.CopyTo(outputStream);
