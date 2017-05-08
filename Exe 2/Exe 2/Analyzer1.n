@@ -327,96 +327,190 @@ namespace Exe_2
             writer.Close();
             fs.Close();
         }
-        public static push(fs:FileStream, seg:string, offset:string) : void
+        public static push(fs:FileStream, seg:string, offset:string, flage:string) : void
         {
-
-            mutable writer =  StreamWriter(fs);
-            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-            writer.WriteLine("@" + offset);
-            writer.WriteLine("D=A");
-
-            if (seg.Equals("constant"))
+            if(flage.Equals("true"))
             {
-                writer.WriteLine("@SP");
-                writer.WriteLine("A=M");
-                writer.WriteLine("M=D");
-                writer.WriteLine("@SP");
-                writer.WriteLine("M=M+1");
-                writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-                writer.WriteLine();
-                writer.Close();
-                fs.Close();
-                return;
-            }
-            else
-            {
-                match(seg)
-                {
-                    | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
-                    | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
-                    | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
-                    | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
-                    | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
-                    | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
-                    | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
-                    | _ => ();
-                }
-
-                writer.WriteLine("@SP");
-                writer.WriteLine("A=M");
-                writer.WriteLine("M=D");
-                writer.WriteLine("@SP");
-                writer.WriteLine("M=M+1");
-
-                writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-                writer.WriteLine();
-                writer.Close();
-                fs.Close();
-            }
-        }
-        public static pop(fs:FileStream, seg:string, offset:string) : void
-        {
-            mutable writer =  StreamWriter(fs);   
-            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-            writer.WriteLine("@SP");
-            writer.WriteLine("M=M-1");
-            if (seg.Equals("constant"))
-            {
-                writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-                writer.WriteLine();
-                writer.Close();
-                fs.Close();
-                return;
-            }
-            else
-            {
+                mutable writer =  StreamWriter(fs);
+                writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
                 writer.WriteLine("@" + offset);
                 writer.WriteLine("D=A");
-                match(seg)
+
+                if (seg.Equals("constant"))
                 {
-                    | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
-                    | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
-                    | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
-                    | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
-                    | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
-                    | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
-                    | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
-                    | _ => ();
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("M=M+1");
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+                    writer.Close();
+                    fs.Close();
+                    return;
                 }
-                writer.WriteLine("@R13");
-                writer.WriteLine("M=D");
-                writer.WriteLine("@SP");
-                writer.WriteLine("A=M");
-                writer.WriteLine("D=M");
-                writer.WriteLine("@R13");
-                writer.WriteLine("A=M");   
-                writer.WriteLine("M=D"); 
+                else
+                {
+                    match(seg)
+                    {
+                        | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
+                        | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
+                        | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
+                        | _ => ();
+                    }
+
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("M=M+1");
+
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+                    writer.Close();
+                    fs.Close();
+                }
             }
-            writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
-            writer.WriteLine();
-            writer.Close();
-            fs.Close();
+            else
+            {
+                mutable writer =  StreamWriter(fs);
+                writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                writer.WriteLine("@" + offset);
+                writer.WriteLine("D=A");
+
+                if (seg.Equals("constant"))
+                {
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("M=M+1");
+
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+
+                    return;
+                }
+                else
+                {
+                    match(seg)
+                    {
+                        | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
+                        | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
+                        | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
+                        | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
+                        | _ => ();
+                    }
+
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("M=M+1");
+
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+
+                }
+            }
+
+        }
+        public static pop(fs:FileStream, seg:string, offset:string, flage:string) : void
+        {
+            if(flage.Equals("true"))
+            {
+                mutable writer =  StreamWriter(fs);   
+                writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                writer.WriteLine("@SP");
+                writer.WriteLine("M=M-1");
+                if (seg.Equals("constant"))
+                {
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+                    writer.Close();
+                    fs.Close();
+                    return;
+                }
+                else
+                {
+                    writer.WriteLine("@" + offset);
+                    writer.WriteLine("D=A");
+                    match(seg)
+                    {
+                        | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
+                        | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
+                        | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
+                        | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
+                        | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
+                        | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
+                        | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
+                        | _ => ();
+                    }
+                    writer.WriteLine("@R13");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("D=M");
+                    writer.WriteLine("@R13");
+                    writer.WriteLine("A=M");   
+                    writer.WriteLine("M=D"); 
+                }
+                writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                writer.WriteLine();
+                writer.Close();
+                fs.Close();
+            }
+            else
+            {
+                mutable writer =  StreamWriter(fs);   
+                writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                writer.WriteLine("@SP");
+                writer.WriteLine("M=M-1");
+                if (seg.Equals("constant"))
+                {
+                    writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    writer.WriteLine();
+
+                    return;
+                }
+                else
+                {
+                    writer.WriteLine("@" + offset);
+                    writer.WriteLine("D=A");
+                    match(seg)
+                    {
+                        | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
+                        | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
+                        | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
+                        | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
+                        | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
+                        | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
+                        | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
+                        | _ => ();
+                    }
+                    writer.WriteLine("@R13");
+                    writer.WriteLine("M=D");
+                    writer.WriteLine("@SP");
+                    writer.WriteLine("A=M");
+                    writer.WriteLine("D=M");
+                    writer.WriteLine("@R13");
+                    writer.WriteLine("A=M");   
+                    writer.WriteLine("M=D"); 
+                }
+                writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                writer.WriteLine();
+
+            }
+
         }
 
+        
     }
 }

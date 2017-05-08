@@ -25,7 +25,7 @@ module Exe_2
         }
         else
         {
-            fs =  FileStream(path, FileMode.Append,FileAccess.Write);
+            fs =  FileStream(path, FileMode.Create,FileAccess.Write);
         }
 
         mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
@@ -45,14 +45,14 @@ module Exe_2
                 | "lt"       => Analyzer1.lt(fs)
                 | "neg"      => Analyzer1.neg(fs)
                 | "not"      => Analyzer1.not(fs)
-                | "push"     => Analyzer1.push(fs, words[1], words[2])
-                | "pop"      => Analyzer1.pop(fs, words[1], words[2]);
+                | "push"     => Analyzer1.push(fs, words[1], words[2], "true")
+                | "pop"      => Analyzer1.pop(fs, words[1], words[2], "true");
                 | "label"    => Analyzer2.label(fs, words[1])
                 | "goto"     => Analyzer2.goto(fs, words[1])
                 | "if-goto"  => Analyzer2.ifGoto(fs, words[1])
                 | "function" => Analyzer2.function(fs, words[1], words[2])
                 | "return"   => Analyzer2.returnn(fs);
-                | "call"     => Analyzer2.call(fs, words[1], words[2])
+                | "call"     => Analyzer2.call(fs, words[1], words[2], "true")
                 | _ => ();
             }
         }
@@ -61,7 +61,7 @@ module Exe_2
 
     Main() : void
     {
-        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\FibonacciElement";//for the path of all matching file, (.vm);
+        def ConstPath : string = @"C:\Users\Shneor Giladi\Desktop\Nemerle\Exe 2\folder\FunctionCalls\StaticsTest";//for the path of all matching file, (.vm);
         mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
         mutable path : string = ConstPath;
         if(!Directory.Exists(path))
