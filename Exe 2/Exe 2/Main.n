@@ -61,11 +61,12 @@ module Exe_2
 
     Main() : void
     {
-        
-        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\FibonacciElement";//for the path of all matching file, (.vm);
-        mutable contentsOfFile : string = ""; //for the contents of all matching file, (.vm)
-        mutable path : string = ConstPath;
-        if(!Directory.Exists(path))
+
+        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\FibonacciElement";// the constPath is for the main directory path that we need to run
+
+        mutable contentsOfFile : string; //for the contents of all matching file
+        mutable path : string = ConstPath; // the path is for the all files in the main directory that we need to run
+        if(!Directory.Exists(ConstPath)) //if the main directory not exsist, so return
         {
             WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
             _ = ReadLine();
@@ -73,37 +74,48 @@ module Exe_2
         }
         else
         {
-            foreach (file in Directory.EnumerateFiles(path, "*.vm"))
+            //befor we run the program we need to delete all asm file
+            foreach (file in Directory.EnumerateFiles(ConstPath, "*.asm")) 
             {
-                if(Path.GetFileName(file).Equals("Sys.vm"))
+                mutable temp = Path.GetFullPath(file);
+                System.IO.File.Delete(temp);
+            }
+
+            foreach (file in Directory.EnumerateFiles(ConstPath, "*.vm")) //we check for all VM files that in the main directory
+            {
+                if(Path.GetFileName(file).Equals("Sys.vm")) 
                 {
-                    System.IO.File.Move(path + "\\Sys.vm", path + "\\1-Sys.vm");
+                    System.IO.File.Move(path + "\\Sys.vm", path + "\\1-Sys.vm"); // we change the name of Sys.vm, because we must run this file first.
                 }
                 else
                 {
+                    continue;
                 }
             }
             foreach (file in Directory.EnumerateFiles(path, "*.vm"))
             {
                 contentsOfFile = File.ReadAllText(file); //the contents of file
-                path = Path.GetFullPath(file);          //the path of file
+                path = Path.GetFullPath(file);          //the path of specific file
 
                 def lines = File.ReadLines(path).Where(line => ! /*line.TrimStart.Equals("/") && !*/ line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
-                
-                if(Path.GetFileName(file).Equals("Sys.vm"))
+                path = Path.GetFullPath(file).Replace(".vm", ".asm");  //the path of asm file
+
+                /*if(Path.GetFileName(file).Equals("Sys.vm"))
                 {
                     path = Path.GetFullPath(file).Replace(".vm", ".asm").Replace("Sys.asm",  "1-Sys.asm"); //the path of file for the whole file
                 }
                 else
                 {
-                    path = Path.GetFullPath(file).Replace(".vm", ".asm");           //the path of file
-                }
-                mutable filenameWithoutPath = Path.GetFileName(path).Replace(".asm", "");
+
+                }*/
+                mutable filenameWithoutPath = Path.GetFileName(path).Replace(".asm", "");//the label must be unic so we sent the file name to seesion tata
+
                 foreach (line in lines)
                 {
                     SeesionData(path, line, filenameWithoutPath); // any line that not contain commend, we can sen it to the switch to split the line
                 } 
             }
+            //after we run all the asm file we return to the Sys.vm
             foreach (file in Directory.EnumerateFiles(ConstPath, "*.vm"))
             {
                 path = Path.GetFullPath(file); 
@@ -116,12 +128,29 @@ module Exe_2
                 }
             }
         }
-        def  fCount = Directory.GetFiles(ConstPath, "*.asm", SearchOption.TopDirectoryOnly).Length;
-        if(fCount>1)
+        def fCount = Directory.GetFiles(ConstPath, "*.asm", SearchOption.TopDirectoryOnly).Length; //if we hane some asm files, we need to sent all the file to become one file.
+
+        if(fCount > 1)
         {
-            MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
+            MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+ Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
         }
-        else{}
+        else //if we have only one asm file, so we don't nothing
+        {} 
+
+        //this loop for delete the temp files, if some file exsist we merge him to on file so we don't need them anymoor
+        foreach (file in Directory.EnumerateFiles(ConstPath, "*.asm")) 
+        {
+            path = Path.GetFullPath(file);
+
+            if(Path.GetFileName(file).Equals(Path.GetFileName(Path.GetDirectoryName(path)) +".asm"))
+            {
+                continue;
+            }
+            else
+            {
+                System.IO.File.Delete(path);
+            }
+        }
         _ = ReadLine();
     }
 
