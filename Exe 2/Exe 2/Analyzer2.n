@@ -16,14 +16,15 @@ namespace Exe_2
 /// </summary>
     module Analyzer2 
     {
+        
         public static mutable lableCounter = 0;
-        public static label(fs:FileStream, label:string) : void
+        public static label(fs:FileStream, label:string, filenameWithoutPath:string) : void
         {
-            mutable fname = "";
+            mutable fname = filenameWithoutPath;
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
 
-            mutable lable1 = label ;//+ "_" + fname + lableCounter;
+            mutable lable1 = label + "_" + fname;// + lableCounter;
             writer.WriteLine("(" +lable1+ ")");
             lableCounter++;
 
@@ -32,12 +33,13 @@ namespace Exe_2
             writer.Close();
             fs.Close();
         }  
-        public static goto(fs:FileStream, lable:string) : void
+        public static goto(fs:FileStream, lable:string, filenameWithoutPath:string) : void
         {
-            mutable fname = "";
+            mutable fname = filenameWithoutPath;
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
-            mutable lable1 = lable;// + "_" + fname + lableCounter;
+            mutable lable1 = lable + "_" + fname;// + lableCounter;
+            lableCounter++;
             writer.WriteLine("@" + lable1);
             writer.WriteLine("0;JMP");
 
@@ -47,8 +49,9 @@ namespace Exe_2
             fs.Close();
         }
 
-        public static ifGoto(fs:FileStream, lable:string) : void
+        public static ifGoto(fs:FileStream, lable:string, filenameWithoutPath:string) : void
         {
+            mutable fname = filenameWithoutPath;
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
         //pop to D
@@ -56,9 +59,10 @@ namespace Exe_2
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
-
+            mutable lable1 = lable + "_" + fname;// + lableCounter;
+            lableCounter++;
         // jump if is this < 0
-            writer.WriteLine("@" + lable);
+            writer.WriteLine("@" + lable1);
             writer.WriteLine("D;JMP");
 
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
@@ -78,9 +82,10 @@ namespace Exe_2
                 writer.WriteLine("D=A");
                 writer.WriteLine("@SP");
                 writer.WriteLine("M=D");
-                Analyzer2.call(fs, funName,k, "false"); 
-                writer.WriteLine("@" + funName);
-                writer.WriteLine("0;JMP");
+                //Analyzer2.call(fs, funName,k, "false");
+                
+                //writer.WriteLine("@" + funName);
+                //writer.WriteLine("0;JMP");
 
             }
             else 
@@ -168,7 +173,7 @@ namespace Exe_2
         //goto ret. jump to return address, in the caller cide
             writer.WriteLine("@R14");
             writer.WriteLine("A=M");
-            writer.WriteLine("1 ; JMP");
+            writer.WriteLine("0 ; JMP");
 
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
             writer.WriteLine();
@@ -243,7 +248,7 @@ namespace Exe_2
 
         //goto f
                 writer.WriteLine("@"+funName);
-                writer.WriteLine("1 ; JMP");
+                writer.WriteLine("0 ; JMP");
         //returen address
                 writer.WriteLine("("+label+")");
 
@@ -317,11 +322,11 @@ namespace Exe_2
 
         //goto f
                 writer.WriteLine("@"+funName);
-                writer.WriteLine("1 ; JMP");
+                writer.WriteLine("0 ; JMP");
         //returen address
                 writer.WriteLine("("+label+")");
                 
-                writer.WriteLine();
+                
                 writer.WriteLine("/End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + numArgs);
                 writer.WriteLine();
 

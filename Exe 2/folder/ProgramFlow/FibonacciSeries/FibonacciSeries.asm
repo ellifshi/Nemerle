@@ -1,4 +1,4 @@
-//push argument 1
+//Start push argument 1
 @1
 D=A
 @ARG
@@ -9,8 +9,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push argument 1
 
-//pop pointer 1
+//Start pop pointer 1
 @SP
 M=M-1
 @1
@@ -25,8 +26,9 @@ D=M
 @R13
 A=M
 M=D
+//End pop pointer 1
 
-//push constant 0
+//Start push constant 0
 @0
 D=A
 @SP
@@ -34,8 +36,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push constant 0
 
-//pop that 0
+//Start pop that 0
 @SP
 M=M-1
 @0
@@ -50,8 +53,9 @@ D=M
 @R13
 A=M
 M=D
+//End pop that 0
 
-//push constant 1
+//Start push constant 1
 @1
 D=A
 @SP
@@ -59,8 +63,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push constant 1
 
-//pop that 1
+//Start pop that 1
 @SP
 M=M-1
 @1
@@ -75,8 +80,9 @@ D=M
 @R13
 A=M
 M=D
+//End pop that 1
 
-//push argument 0
+//Start push argument 0
 @0
 D=A
 @ARG
@@ -87,8 +93,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push argument 0
 
-//push constant 2
+//Start push constant 2
 @2
 D=A
 @SP
@@ -96,8 +103,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push constant 2
 
-//sub
+//Start sub
 @SP
 M=M-1
 A=M
@@ -112,8 +120,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End sub
 
-//pop argument 0
+//Start pop argument 0
 @SP
 M=M-1
 @0
@@ -128,11 +137,13 @@ D=M
 @R13
 A=M
 M=D
+//End pop argument 0
 
-//label MAIN_LOOP_START
+//Start label MAIN_LOOP_START
 (MAIN_LOOP_START)
+//End label MAIN_LOOP_START
 
-//push argument 0
+//Start push argument 0
 @0
 D=A
 @ARG
@@ -143,23 +154,27 @@ A=M
 M=D
 @SP
 M=M+1
+//End push argument 0
 
-//ifGoto Exe_2.Analyzer2+_N_static_proxy_6478
+//Start ifGoto Exe_2.Analyzer2+_N_static_proxy_6517
 @SP
 M=M-1
 A=M
 D=M
 @COMPUTE_ELEMENT
 D;JMP
+//End ifGoto Exe_2.Analyzer2+_N_static_proxy_6517
 
-//goto Exe_2.Analyzer2+_N_static_proxy_6458
+//Start goto Exe_2.Analyzer2+_N_static_proxy_6493
 @END_PROGRAM
 0;JMP
+//End goto Exe_2.Analyzer2+_N_static_proxy_6493
 
-//label COMPUTE_ELEMENT
+//Start label COMPUTE_ELEMENT
 (COMPUTE_ELEMENT)
+//End label COMPUTE_ELEMENT
 
-//push that 0
+//Start push that 0
 @0
 D=A
 @THAT
@@ -170,8 +185,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push that 0
 
-//push that 1
+//Start push that 1
 @1
 D=A
 @THAT
@@ -182,8 +198,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push that 1
 
-//add
+//Start add
 @SP
 M=M-1
 A=M
@@ -198,8 +215,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End add
 
-//pop that 2
+//Start pop that 2
 @SP
 M=M-1
 @2
@@ -214,8 +232,9 @@ D=M
 @R13
 A=M
 M=D
+//End pop that 2
 
-//push pointer 1
+//Start push pointer 1
 @1
 D=A
 @3
@@ -226,8 +245,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push pointer 1
 
-//push constant 1
+//Start push constant 1
 @1
 D=A
 @SP
@@ -235,8 +255,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push constant 1
 
-//add
+//Start add
 @SP
 M=M-1
 A=M
@@ -251,8 +272,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End add
 
-//pop pointer 1
+//Start pop pointer 1
 @SP
 M=M-1
 @1
@@ -267,8 +289,9 @@ D=M
 @R13
 A=M
 M=D
+//End pop pointer 1
 
-//push argument 0
+//Start push argument 0
 @0
 D=A
 @ARG
@@ -279,8 +302,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push argument 0
 
-//push constant 1
+//Start push constant 1
 @1
 D=A
 @SP
@@ -288,8 +312,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End push constant 1
 
-//sub
+//Start sub
 @SP
 M=M-1
 A=M
@@ -304,8 +329,9 @@ A=M
 M=D
 @SP
 M=M+1
+//End sub
 
-//pop argument 0
+//Start pop argument 0
 @SP
 M=M-1
 @0
@@ -320,11 +346,14 @@ D=M
 @R13
 A=M
 M=D
+//End pop argument 0
 
-//goto Exe_2.Analyzer2+_N_static_proxy_6458
+//Start goto Exe_2.Analyzer2+_N_static_proxy_6493
 @MAIN_LOOP_START
 0;JMP
+//End goto Exe_2.Analyzer2+_N_static_proxy_6493
 
-//label END_PROGRAM
+//Start label END_PROGRAM
 (END_PROGRAM)
+//End label END_PROGRAM
 
