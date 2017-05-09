@@ -16,8 +16,8 @@ namespace Exe_2
 /// </summary>
     module Analyzer2 
     {
-        
         public static mutable lableCounter = 0;
+        
         public static label(fs:FileStream, label:string, filenameWithoutPath:string) : void
         {
             mutable fname = filenameWithoutPath;
@@ -37,13 +37,15 @@ namespace Exe_2
         {
             mutable fname = filenameWithoutPath;
             mutable writer =  StreamWriter(fs);
-            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
             mutable lable1 = lable + "_" + fname;// + lableCounter;
+            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + lable1);
+           
             lableCounter++;
             writer.WriteLine("@" + lable1);
             writer.WriteLine("0;JMP");
 
-            writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
+            writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + lable1);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -53,53 +55,43 @@ namespace Exe_2
         {
             mutable fname = filenameWithoutPath;
             mutable writer =  StreamWriter(fs);
-            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
+            mutable lable1 = lable + "_" + fname;// + lableCounter;
+            writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + lable1);
         //pop to D
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop to D");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
-            mutable lable1 = lable + "_" + fname;// + lableCounter;
+            
             lableCounter++;
         // jump if is this < 0
-            writer.WriteLine("@" + lable1);
-            writer.WriteLine("D;JMP");
+            writer.WriteLine("@" + lable1 + "// jump if is this < 0");
+            writer.WriteLine("D;JNE");
 
-            writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + label);
+            writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + lable1);
+           
             writer.WriteLine();
             writer.Close();
             fs.Close();
         }
 
-        public static function(fs:FileStream, funName:string, k:string) : void
+        public static function(fs:FileStream, funName:string, k:string, filenameWithoutPath:string) : void
         {
             mutable writer =  StreamWriter(fs);
 
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + k);
-            if(funName.Equals("Sys.init"))
-            {
-                writer.WriteLine("@256"); 
-                writer.WriteLine("D=A");
-                writer.WriteLine("@SP");
-                writer.WriteLine("M=D");
-                //Analyzer2.call(fs, funName,k, "false");
-                
-                //writer.WriteLine("@" + funName);
-                //writer.WriteLine("0;JMP");
-
-            }
-            else 
-            {
-            //(f) declare a label for the function variables
-                writer.WriteLine("(" + funName +")");
-            }
+            writer.WriteLine("(" + funName +")");
 
         //repat k times, mean the number of local variables, and intialize for all k to zero.
             for(mutable i=0; i<Int32.Parse(k); i++)
             {
-
-                Analyzer1.push(fs, "constant", "0", "false");
-
+                //Analyzer1.push(fs, "constant", "0", "false", filenameWithoutPath);
+                writer.WriteLine("@0 //start push for K");
+                writer.WriteLine("D=A");
+                writer.WriteLine("@SP");
+                writer.WriteLine("AM=M+1");
+                writer.WriteLine("A=A-1");
+                writer.WriteLine("M=D  //end push\n");
             }
 
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + k);
@@ -108,7 +100,7 @@ namespace Exe_2
             fs.Close();
         }
 
-        public static returnn(fs:FileStream) : void
+        public static returnn(fs:FileStream, filenameWithoutPath:string) : void
         {
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
@@ -117,7 +109,7 @@ namespace Exe_2
         //FRAME =LCL, FRAME is temp variable
 
         //RET=* (FRAME -5) put the return addrass in a temp (FRAME)
-            writer.WriteLine("@LCL");
+            writer.WriteLine("@LCL  //RET=* (FRAME -5) put the return addrass in a temp (FRAME)");
             writer.WriteLine("D=M");
             writer.WriteLine("@5");
             writer.WriteLine("A=D-A");
@@ -126,16 +118,24 @@ namespace Exe_2
             writer.WriteLine("M=D");
 
         //*ARS =pop(), reposition the return value for the caller
-            Analyzer1.pop(fs, "argument", "0", "false");
+            //Analyzer1.pop(fs, "argument", "0", "false", filenameWithoutPath);
+            
+            writer.WriteLine("@SP //*ARS =pop(), reposition the return value for the caller");
+            writer.WriteLine("AM=M-1");
+            writer.WriteLine("D=M");
+            writer.WriteLine("@ARG");
+            writer.WriteLine("A=M");
+            writer.WriteLine("M=D");
+            
 
         //SP = ARG+1. restore SP of the caller
-            writer.WriteLine("@ARG");
+            writer.WriteLine("@ARG //SP = ARG+1. restore SP of the caller");
             writer.WriteLine("D=M+1");
             writer.WriteLine("@SP");
             writer.WriteLine("M=D");
 
         //THAT =* (FRAME-1) restore that of the caller
-            writer.WriteLine("@LCL");
+            writer.WriteLine("@LCL //THAT =* (FRAME-1) restore that of the caller");
             writer.WriteLine("D=M");
             writer.WriteLine("@1");
             writer.WriteLine("A=D-A");
@@ -144,7 +144,7 @@ namespace Exe_2
             writer.WriteLine("M=D");
 
         //THIS =* (FRAME-2) restore THIS of the caller
-            writer.WriteLine("@LCL");
+            writer.WriteLine("@LCL //THIS =* (FRAME-2) restore THIS of the caller");
             writer.WriteLine("D=M");
             writer.WriteLine("@2");
             writer.WriteLine("A=D-A");
@@ -153,7 +153,7 @@ namespace Exe_2
             writer.WriteLine("M=D");
 
         //ARG =* (FRAME-3) restore ARG of the caller
-            writer.WriteLine("@LCL");
+            writer.WriteLine("@LCL //ARG =* (FRAME-3) restore ARG of the caller");
             writer.WriteLine("D=M");
             writer.WriteLine("@3");
             writer.WriteLine("A=D-A");
@@ -162,7 +162,7 @@ namespace Exe_2
             writer.WriteLine("M=D");
 
         //LCL =* (FRAME-4) restore LCL of the caller
-            writer.WriteLine("@LCL");
+            writer.WriteLine("@LCL //LCL =* (FRAME-4) restore LCL of the caller");
             writer.WriteLine("D=M");
             writer.WriteLine("@4");
             writer.WriteLine("A=D-A");
@@ -171,9 +171,9 @@ namespace Exe_2
             writer.WriteLine("M=D");
 
         //goto ret. jump to return address, in the caller cide
-            writer.WriteLine("@R14");
+            writer.WriteLine("@R14 //goto ret. jump to return address, in the caller cide");
             writer.WriteLine("A=M");
-            writer.WriteLine("0 ; JMP");
+            writer.WriteLine("0;JMP");
 
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
             writer.WriteLine();
@@ -181,7 +181,7 @@ namespace Exe_2
             fs.Close();
         }
 
-        public static call(fs:FileStream, funName:string, numArgs:string, flag:string) : void
+        public static call(fs:FileStream, funName:string, numArgs:string, flag:string, filenameWithoutPath:string) : void
         {
 
             if(flag.Equals("true"))
@@ -189,13 +189,21 @@ namespace Exe_2
                 mutable writer =  StreamWriter(fs);
                 writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + numArgs);
                 lableCounter++;
-                mutable label = "Lable_" + lableCounter;
+                mutable fname = filenameWithoutPath;
+                mutable label = "Lable_" + fname + lableCounter;
+                lableCounter++;
 
-        //push return address
-                Analyzer1.push(fs, "constant", label, "false");
+        //push return address              
+             
+                writer.WriteLine("@" + label + "  //start push return address");
+                writer.WriteLine("D=A");
+                writer.WriteLine("@SP");
+                writer.WriteLine("AM=M+1");
+                writer.WriteLine("A=A-1");
+                writer.WriteLine("M=D  //finish push return address\n");
 
         //Push LCL
-                writer.WriteLine("LCL");
+                writer.WriteLine("@LCL  //Push LCL");
                 writer.WriteLine("D=M");
                 writer.WriteLine("@SP");
                 writer.WriteLine("A=M");
@@ -203,8 +211,8 @@ namespace Exe_2
                 writer.WriteLine("@SP");
                 writer.WriteLine("M=M+1");
 
-        //Push ARG
-                writer.WriteLine("ARG");
+        //Push ARG 
+                writer.WriteLine("@ARG  //Push ARG");
                 writer.WriteLine("D=M");
                 writer.WriteLine("@SP");
                 writer.WriteLine("A=M");
@@ -213,7 +221,7 @@ namespace Exe_2
                 writer.WriteLine("M=M+1");
 
         //Push THIS
-                writer.WriteLine("@THIS");
+                writer.WriteLine("@THIS  //Push THIS");
                 writer.WriteLine("D=M");
                 writer.WriteLine("@SP");
                 writer.WriteLine("A=M");
@@ -222,7 +230,7 @@ namespace Exe_2
                 writer.WriteLine("M=M+1");
 
         //Push THAT
-                writer.WriteLine("@THAT");
+                writer.WriteLine("@THAT  //Push THAT");
                 writer.WriteLine("D=M");
                 writer.WriteLine("@SP");
                 writer.WriteLine("A=M");
@@ -231,7 +239,7 @@ namespace Exe_2
                 writer.WriteLine("M=M+1");
 
         //change the args to call args, mean that ARG = SP-n-5
-                writer.WriteLine("@"+ numArgs);
+                writer.WriteLine("@"+ numArgs + "  //change the args to call args, mean that ARG = SP-n-5");
                 writer.WriteLine("D=A");
                 writer.WriteLine("@5");
                 writer.WriteLine("D=D+A");
@@ -241,14 +249,14 @@ namespace Exe_2
                 writer.WriteLine("M=D");
 
         //chnage the lcl to cal lcl mean that LCL=SP
-                writer.WriteLine("@SP");
+                writer.WriteLine("@SP  //chnage the lcl to cal lcl mean that LCL=SP");
                 writer.WriteLine("D=M");
                 writer.WriteLine("@LCL");
                 writer.WriteLine("M=D");
 
         //goto f
-                writer.WriteLine("@"+funName);
-                writer.WriteLine("0 ; JMP");
+                writer.WriteLine("@"+funName + "  //goto f");
+                writer.WriteLine("0;JMP");
         //returen address
                 writer.WriteLine("("+label+")");
 
@@ -260,13 +268,15 @@ namespace Exe_2
             }
             else
             {
-                mutable writer =  StreamWriter(fs);
-                writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + numArgs);
+                //mutable writer =  StreamWriter(fs);
+                //writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + funName + " " + numArgs);
                 lableCounter++;
                 mutable label = "Lable_" + lableCounter;
 
         //push return address
-                Analyzer1.push(fs, "constant", label, "false");
+                Analyzer1.push(fs, "constant", label, "false", filenameWithoutPath);
+                
+                mutable writer =  StreamWriter(fs);
 
         //Push LCL
                 writer.WriteLine("LCL");
@@ -322,7 +332,7 @@ namespace Exe_2
 
         //goto f
                 writer.WriteLine("@"+funName);
-                writer.WriteLine("0 ; JMP");
+                writer.WriteLine("0;JMP");
         //returen address
                 writer.WriteLine("("+label+")");
                 
@@ -331,8 +341,6 @@ namespace Exe_2
                 writer.WriteLine();
 
             }
-
-
         }
     }
 }

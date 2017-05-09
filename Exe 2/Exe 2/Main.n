@@ -45,14 +45,14 @@ module Exe_2
                 | "lt"       => Analyzer1.lt(fs)
                 | "neg"      => Analyzer1.neg(fs)
                 | "not"      => Analyzer1.not(fs)
-                | "push"     => Analyzer1.push(fs, words[1], words[2], "true")
-                | "pop"      => Analyzer1.pop(fs, words[1], words[2], "true");
+                | "push"     => Analyzer1.push(fs, words[1], words[2], "true", filenameWithoutPath)
+                | "pop"      => Analyzer1.pop(fs, words[1], words[2], "true", filenameWithoutPath);
                 | "label"    => Analyzer2.label(fs, words[1], filenameWithoutPath)
                 | "goto"     => Analyzer2.goto(fs, words[1], filenameWithoutPath)
                 | "if-goto"  => Analyzer2.ifGoto(fs, words[1], filenameWithoutPath)
-                | "function" => Analyzer2.function(fs, words[1], words[2])
-                | "return"   => Analyzer2.returnn(fs);
-                | "call"     => Analyzer2.call(fs, words[1], words[2], "true")
+                | "function" => Analyzer2.function(fs, words[1], words[2], filenameWithoutPath)
+                | "return"   => Analyzer2.returnn(fs, filenameWithoutPath);
+                | "call"     => Analyzer2.call(fs, words[1], words[2], "true", filenameWithoutPath)
                 | _ => ();
             }
         }
@@ -61,12 +61,11 @@ module Exe_2
 
     Main() : void
     {
+        WriteLine("Pleas enter full directory path that you want to run");
+        def ConstPath : string = ReadLine();
 
-        def ConstPath : string = @"C:\Users\Lenovo\Documents\GitHub\Exe 2\folder\FunctionCalls\FibonacciElement";// the constPath is for the main directory path that we need to run
-
-        mutable contentsOfFile : string; //for the contents of all matching file
-        mutable path : string = ConstPath; // the path is for the all files in the main directory that we need to run
-        if(!Directory.Exists(ConstPath)) //if the main directory not exsist, so return
+        mutable path : string = ConstPath;
+        if(!Directory.Exists(path))
         {
             WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
             _ = ReadLine();
@@ -74,100 +73,88 @@ module Exe_2
         }
         else
         {
-            //befor we run the program we need to delete all asm file
-            foreach (file in Directory.EnumerateFiles(ConstPath, "*.asm")) 
-            {
-                mutable temp = Path.GetFullPath(file);
-                System.IO.File.Delete(temp);
-            }
+            mutable pathAsmFile : string = ConstPath + "\\" + Path.GetFileName(path) + ".asm";
+            mutable asm = File.Create(pathAsmFile);
+            asm.Close();
 
-            foreach (file in Directory.EnumerateFiles(ConstPath, "*.vm")) //we check for all VM files that in the main directory
-            {
-                if(Path.GetFileName(file).Equals("Sys.vm")) 
-                {
-                    System.IO.File.Move(path + "\\Sys.vm", path + "\\1-Sys.vm"); // we change the name of Sys.vm, because we must run this file first.
-                }
-                else
-                {
-                    continue;
-                }
-            }
+            //translate sys.vm FIRST (if exists) into the asm file, with initializing
             foreach (file in Directory.EnumerateFiles(path, "*.vm"))
             {
-                contentsOfFile = File.ReadAllText(file); //the contents of file
-                path = Path.GetFullPath(file);          //the path of specific file
-
-                def lines = File.ReadLines(path).Where(line => ! /*line.TrimStart.Equals("/") && !*/ line.Equals("")).ToArray(); // we using in macro NEMERLE that print all line if it NOT commend or empty line
-                path = Path.GetFullPath(file).Replace(".vm", ".asm");  //the path of asm file
-
-                /*if(Path.GetFileName(file).Equals("Sys.vm"))
+                if (Path.GetFileName(file).Equals("Sys.vm"))
                 {
-                    path = Path.GetFullPath(file).Replace(".vm", ".asm").Replace("Sys.asm",  "1-Sys.asm"); //the path of file for the whole file
+                    startAsmWithSys(file, pathAsmFile);
                 }
-                else
-                {
-
-                }*/
-                mutable filenameWithoutPath = Path.GetFileName(path).Replace(".asm", "");//the label must be unic so we sent the file name to seesion tata
-
-                foreach (line in lines)
-                {
-                    SeesionData(path, line, filenameWithoutPath); // any line that not contain commend, we can sen it to the switch to split the line
-                } 
+                else {}
             }
-            //after we run all the asm file we return to the Sys.vm
-            foreach (file in Directory.EnumerateFiles(ConstPath, "*.vm"))
+
+            //translate the rest of the files
+            foreach (file in Directory.EnumerateFiles(path, "*.vm"))
             {
-                path = Path.GetFullPath(file); 
-                if(Path.GetFileName(file).Equals("1-Sys.vm"))
+                if (!Path.GetFileName(file).Equals("Sys.vm"))
                 {
-                    System.IO.File.Move(ConstPath + "\\1-Sys.vm", ConstPath + "\\Sys.vm");
+                    translateFile(file, pathAsmFile);
                 }
-                else
-                {
-                }
+                else {}
             }
         }
-        def fCount = Directory.GetFiles(ConstPath, "*.asm", SearchOption.TopDirectoryOnly).Length; //if we hane some asm files, we need to sent all the file to become one file.
-
-        if(fCount > 1)
-        {
-            MergeASMFile(ConstPath, "*.asm", ConstPath  + "\\"+ Path.GetFileName( Path.GetDirectoryName(ConstPath+ @"\*.vm"))+".asm");
-        }
-        else //if we have only one asm file, so we don't nothing
-        {} 
-
-        //this loop for delete the temp files, if some file exsist we merge him to on file so we don't need them anymoor
-        foreach (file in Directory.EnumerateFiles(ConstPath, "*.asm")) 
-        {
-            path = Path.GetFullPath(file);
-
-            if(Path.GetFileName(file).Equals(Path.GetFileName(Path.GetDirectoryName(path)) +".asm"))
-            {
-                continue;
-            }
-            else
-            {
-                System.IO.File.Delete(path);
-            }
-        }
-        _ = ReadLine();
     }
 
-    private static  MergeASMFile(inputDirectoryPath:string, inputFileNamePattern:string, outputFilePath:string):void
+    private static startAsmWithSys (sysFile : string, asmFile : string) : void 
     {
-        mutable inputFilePaths = Directory.GetFiles(inputDirectoryPath, inputFileNamePattern);
-
-        using (mutable outputStream = File.Create(outputFilePath))
+        //start commands
+        initializing(sysFile, asmFile);
+        mutable fs : FileStream;
+        if(File.Exists(asmFile))
         {
-            foreach (inputFilePath in inputFilePaths)
-            {
-                using (inputStream = File.OpenRead(inputFilePath))
-                {
-                    inputStream.CopyTo(outputStream);
-                }
-
-            }
+            fs = FileStream(asmFile,FileMode.Append,FileAccess.Write);
         }
+        else
+        {
+            fs = FileStream(asmFile, FileMode.Create,FileAccess.Write);
+        }
+        Analyzer2.call(fs, "Sys.init", "0", "true", "Sys");
+        fs.Close();
+
+        translateFile(sysFile, asmFile);
+    }
+
+    private static translateFile(vmFile : string, asmFile : string) : void
+    {
+        //mutable contentsOfFile : string = File.ReadAllText(vmFile);
+        mutable vmPath : string = Path.GetFullPath(vmFile); 
+
+        def lines = File.ReadLines(vmPath).Where(line => ! /*line.TrimStart.Equals("/") && !*/ line.Equals("")).ToArray();
+        mutable filenameWithoutPath = Path.GetFileName(vmPath).Replace(".vm", "");
+
+        foreach (line in lines)
+        {
+            SeesionData(Path.GetFullPath(asmFile), line, filenameWithoutPath);
+        }
+    }
+
+    private static initializing(_vmFile:string, asmFile:string) : void 
+    {
+        mutable fs : FileStream;
+        if (File.Exists(asmFile))
+        {
+            fs = FileStream(asmFile,FileMode.Append,FileAccess.Write);
+        }
+        else
+        {
+            fs = FileStream(asmFile, FileMode.Create,FileAccess.Write);
+        }
+
+        mutable writer =  StreamWriter(fs);
+
+        writer.WriteLine("//Start of initializing");
+        writer.WriteLine("@256\n" + "D=A\n" + "@SP\n" + "M=D\n");
+        writer.WriteLine("@300\n" + "D=A\n" + "@LCL\n" + "M=D\n");
+        writer.WriteLine("@400\n" + "D=A\n" + "@ARG\n" + "M=D\n");
+        writer.WriteLine("@3000\n" + "D=A\n" + "@THIS\n" + "M=D\n");
+        writer.WriteLine("@3010\n" + "D=A\n" + "@THAT\n" + "M=D");
+        writer.WriteLine("//End of initializing\n");
+
+        writer.Close();
+        fs.Close();
     }
 }

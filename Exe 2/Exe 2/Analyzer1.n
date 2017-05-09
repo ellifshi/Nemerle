@@ -24,27 +24,28 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop first val to d");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //pop second val to a
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop second val to a");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //compute
-            writer.WriteLine("D=D+A"); 
+            writer.WriteLine("D=D+A  //compute"); 
 
         //push to stack
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //push to stack");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -54,27 +55,28 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //push first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //push first val to d");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //push second val to a
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //push second val to a");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //compute
-            writer.WriteLine("D=A-D"); 
+            writer.WriteLine("D=A-D  //compute"); 
 
         //push to stack
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP   //push to stack");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -84,28 +86,28 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);   
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //get first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //get first val to d");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //get second val to a
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //get second val to a");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //compute
-            writer.WriteLine("D=D&A"); 
+            writer.WriteLine("D=D&A  //compute"); 
 
         //push to stack
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //push to stack");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
-
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -115,28 +117,28 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //get first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //get first val to d");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
-        //ger second val to a
-            writer.WriteLine("@SP");
+        //get second val to a
+            writer.WriteLine("@SP  //get second val to a");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //compute
-            writer.WriteLine("D=D|A"); 
+            writer.WriteLine("D=D|A  //compute"); 
 
         //push to stack
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //push to stack");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
-
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -148,44 +150,44 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop to D
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop to D");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //pop to A
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop to A");
             writer.WriteLine("M=M-1");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //if a == d jump
-            writer.WriteLine("D=A-D");
-            mutable lable1 = "EQ_"+fname+lableCounter;
+            writer.WriteLine("D=A-D  //if a == d jump");
+            mutable lable1 = "EQ_" + fname + lableCounter;
             lableCounter++;
             writer.WriteLine("@"+lable1);
             writer.WriteLine("D;JEQ");
 
         //else  do d=0 and jump to the end
-            writer.WriteLine("D=0");
-            mutable lable2 = "END_"+fname+lableCounter;
+            writer.WriteLine("D=0  //else  do d=0 and jump to the end");
+            mutable lable2 = "END_" + fname + lableCounter;
             lableCounter++;
             writer.WriteLine("@"+lable2);
             writer.WriteLine("1;JMP");
 
         //if condition
-            writer.WriteLine("("+lable1+")");
+            writer.WriteLine("("+lable1+")  //if condition");
             writer.WriteLine("D=-1");
 
         //end - push d
-            writer.WriteLine("("+lable2+")");
+            writer.WriteLine("("+lable2+")  //end - push d");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
-
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -196,47 +198,47 @@ namespace Exe_2
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //generate lables
             mutable fname = "";
-            mutable lable1 = "Label_"+fname+lableCounter; //"D=A-D
+            mutable lable1 = "Label1_"+fname+lableCounter; 
             lableCounter++;
-            mutable lable2 = "Label_" + fname+lableCounter;
+            mutable lable2 = "Label1_" + fname+lableCounter;
             lableCounter++;
 
         //get first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //get first val to d");
             writer.WriteLine("M=M-1");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //get second val to a
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //get second val to a");
             writer.WriteLine("M=M-1");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //check if a > d
-            writer.WriteLine("D=A-D");
+            writer.WriteLine("D=A-D  //check if a > d");
             writer.WriteLine("@"+lable1);
             writer.WriteLine("D ; JGT");
 
         //else d=0
-            writer.WriteLine("@"+lable2);
+            writer.WriteLine("@"+lable2 + "  //else d=0");
             writer.WriteLine("D=0 ; JMP");
 
         //if true d=-1
-            writer.WriteLine("("+lable1+")");
+            writer.WriteLine("("+lable1+")  //if true d=-1");
             writer.WriteLine("D=-1");
 
         //end - push d to stack
-            writer.WriteLine("("+lable2+")");
+            writer.WriteLine("("+lable2+")  //end - push d to stack");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");  
-
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -247,47 +249,47 @@ namespace Exe_2
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //generate lables
             mutable fname = "";
-            mutable lable1 = "Label_"+fname+lableCounter;
+            mutable lable1 = "Label1_"+fname+lableCounter;
             lableCounter++;
-            mutable lable2 = "Label_" + fname+lableCounter;
+            mutable lable2 = "Label1_" + fname+lableCounter;
             lableCounter++;
 
         //pop first val to d
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP   //pop first value to D");
             writer.WriteLine("M=M-1");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("D=M");
 
         //pop second val to a
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop second value to A");
             writer.WriteLine("M=M-1");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("A=M");
 
         //check if d > a (a < d)
-            writer.WriteLine("D=D-A");
+            writer.WriteLine("D=D-A  //check if D > A (A < D)");
             writer.WriteLine("@"+lable1);
             writer.WriteLine("D ; JGT");
 
         //else d = 0, jmp to end
-            writer.WriteLine("@"+lable2);
+            writer.WriteLine("@"+lable2 + "  //else D = 0, jump to end");
             writer.WriteLine("D=0 ; JEQ");
 
         //if true, d = -1
-            writer.WriteLine("("+lable1+")");
+            writer.WriteLine("("+lable1+")  //if true, D = -1");
             writer.WriteLine("D=-1");
 
         //end - push to stack
-            writer.WriteLine("("+lable2+")");
+            writer.WriteLine("("+lable2+")  //end - push to stack");
             writer.WriteLine("@SP");
             writer.WriteLine("A=M");
             writer.WriteLine("M=D");
             writer.WriteLine("@SP");
             writer.WriteLine("M=M+1");
-
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -298,14 +300,14 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop");
             writer.WriteLine("A=M-1");
             writer.WriteLine("D=M");
 
         //compute and push
-            writer.WriteLine("M=-D");
-
+            writer.WriteLine("M=-D  //compute and push");
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
@@ -315,19 +317,19 @@ namespace Exe_2
             mutable writer =  StreamWriter(fs);
             writer.WriteLine("//Start " + System.Reflection.MethodBase.GetCurrentMethod().Name);
         //pop
-            writer.WriteLine("@SP");
+            writer.WriteLine("@SP  //pop");
             writer.WriteLine("A=M-1");
             writer.WriteLine("D=M");
 
         //compute and push
-            writer.WriteLine("M=!D");
-
+            writer.WriteLine("M=!D  //compute and push");
             writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            
             writer.WriteLine();
             writer.Close();
             fs.Close();
         }
-        public static push(fs:FileStream, seg:string, offset:string, flage:string) : void
+        public static push(fs:FileStream, seg:string, offset:string, flage:string, fileName:string) : void
         {
             if(flage.Equals("true"))
             {
@@ -338,12 +340,13 @@ namespace Exe_2
 
                 if (seg.Equals("constant"))
                 {
-                    writer.WriteLine("@SP");
+                    writer.WriteLine("@SP  // the segment equal to constant");
                     writer.WriteLine("A=M");
                     writer.WriteLine("M=D");
                     writer.WriteLine("@SP");
                     writer.WriteLine("M=M+1");
                     writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    
                     writer.WriteLine();
                     writer.Close();
                     fs.Close();
@@ -353,13 +356,13 @@ namespace Exe_2
                 {
                     match(seg)
                     {
-                        | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
-                        | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
-                        | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
+                        | "local" => writer.WriteLine("@LCL  //the segment equal to local" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "argument" => writer.WriteLine("@ARG  //the segment equal to ARG" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "this" => writer.WriteLine("@THIS  //the segment equal to THIS" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "that" => writer.WriteLine("@THAT  //the segment equal to THAT" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "static" => writer.WriteLine("@" + fileName + "." + offset + "  //the segment equal to static" + "\n" + "D=M")
+                        | "pointer" => writer.WriteLine("@3  //the segment equal to pointer" + "\n" + "A=A+D" + "\n" + "D=M")
+                        | "temp" => writer.WriteLine("@5  //the segment equal to temp" + "\n" + "A=A+D" + "\n" + "D=M") 
                         | _ => ();
                     }
 
@@ -368,8 +371,8 @@ namespace Exe_2
                     writer.WriteLine("M=D");
                     writer.WriteLine("@SP");
                     writer.WriteLine("M=M+1");
-
                     writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    
                     writer.WriteLine();
                     writer.Close();
                     fs.Close();
@@ -399,13 +402,13 @@ namespace Exe_2
                 {
                     match(seg)
                     {
-                        | "local" => writer.WriteLine("@LCL" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "argument" => writer.WriteLine("@ARG" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "this" => writer.WriteLine("@THIS" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "that" => writer.WriteLine("@THAT" + '\n' + "A=M+D" + '\n' + "D=M")
-                        | "static" => writer.WriteLine("@16" + '\n' + "A=A+D" + '\n' + "D=M")
-                        | "pointer" => writer.WriteLine("@3" + '\n' + "A=A+D" + '\n' + "D=M")
-                        | "temp" => writer.WriteLine("@5" + '\n' + "A=A+D" + '\n' + "D=M") 
+                        | "local" => writer.WriteLine("@LCL" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "argument" => writer.WriteLine("@ARG" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "this" => writer.WriteLine("@THIS" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "that" => writer.WriteLine("@THAT" + "\n" + "A=M+D" + "\n" + "D=M")
+                        | "static" => writer.WriteLine("@" + fileName + "." + offset + "\n" + "D=M")
+                        | "pointer" => writer.WriteLine("@3" + "\n" + "A=A+D" + "\n" + "D=M")
+                        | "temp" => writer.WriteLine("@5" + "\n" + "A=A+D" + "\n" + "D=M") 
                         | _ => ();
                     }
 
@@ -422,7 +425,7 @@ namespace Exe_2
             }
 
         }
-        public static pop(fs:FileStream, seg:string, offset:string, flage:string) : void
+        public static pop(fs:FileStream, seg:string, offset:string, flage:string, fileName:string) : void
         {
             if(flage.Equals("true"))
             {
@@ -433,6 +436,7 @@ namespace Exe_2
                 if (seg.Equals("constant"))
                 {
                     writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                    
                     writer.WriteLine();
                     writer.Close();
                     fs.Close();
@@ -444,13 +448,13 @@ namespace Exe_2
                     writer.WriteLine("D=A");
                     match(seg)
                     {
-                        | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
-                        | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
-                        | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
-                        | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
-                        | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
-                        | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
-                        | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
+                        | "local" => writer.WriteLine("@LCL   //the segment equal to LCL" + "\n" + "D=M+D")
+                        | "argument" => writer.WriteLine("@ARG  //the segment equal to argument" + "\n" + "D=M+D")
+                        | "this" => writer.WriteLine("@THIS  //the segment equal to THIS" + "\n" + "D=M+D")
+                        | "that" => writer.WriteLine("@THAT  //the segment equal to THAT" + "\n" + "D=M+D")
+                        | "static" => writer.WriteLine("@" + fileName + "." + offset + "  //the segment equal to static" + "\n" + "D=A")
+                        | "pointer" => writer.WriteLine("@3  //the segment equal to pointer" + "\n" + "D=A+D")
+                        | "temp" => writer.WriteLine("@5  //the segment equal to temp" + "\n" + "D=A+D") 
                         | _ => ();
                     }
                     writer.WriteLine("@R13");
@@ -463,6 +467,7 @@ namespace Exe_2
                     writer.WriteLine("M=D"); 
                 }
                 writer.WriteLine("//End " + System.Reflection.MethodBase.GetCurrentMethod().Name + " " + seg + " " + offset);
+                
                 writer.WriteLine();
                 writer.Close();
                 fs.Close();
@@ -486,13 +491,13 @@ namespace Exe_2
                     writer.WriteLine("D=A");
                     match(seg)
                     {
-                        | "local" => writer.WriteLine("@LCL" + '\n' + "D=M+D")
-                        | "argument" => writer.WriteLine("@ARG" + '\n' + "D=M+D")
-                        | "this" => writer.WriteLine("@THIS" + '\n' + "D=M+D")
-                        | "that" => writer.WriteLine("@THAT" + '\n' + "D=M+D")
-                        | "static" => writer.WriteLine("@16" + '\n' + "D=A+D")
-                        | "pointer" => writer.WriteLine("@3" + '\n' + "D=A+D")
-                        | "temp" => writer.WriteLine("@5" + '\n' + "D=A+D") 
+                        | "local" => writer.WriteLine("@LCL" + "\n" + "D=M+D")
+                        | "argument" => writer.WriteLine("@ARG" + "\n" + "D=M+D")
+                        | "this" => writer.WriteLine("@THIS" + "\n" + "D=M+D")
+                        | "that" => writer.WriteLine("@THAT" + "\n" + "D=M+D")
+                        | "static" => writer.WriteLine("@" + fileName + "." + offset + "\n" + "D=A")
+                        | "pointer" => writer.WriteLine("@3" + "\n" + "D=A+D")
+                        | "temp" => writer.WriteLine("@5" + "\n" + "D=A+D") 
                         | _ => ();
                     }
                     writer.WriteLine("@R13");
