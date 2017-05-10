@@ -1,5 +1,6 @@
 ﻿//אראל פלדמר 209374420
 //שניאור גלעדי 301739561
+//מס' קבוצה 150060.01.5777.25
 
 using Nemerle.Collections;
 using Nemerle.Text;
@@ -102,7 +103,7 @@ module Exe_2
     private static startAsmWithSys (sysFile : string, asmFile : string) : void 
     {
         //start commands
-        initializing(sysFile, asmFile);
+        initializing(asmFile);
         mutable fs : FileStream;
         if(File.Exists(asmFile))
         {
@@ -132,7 +133,7 @@ module Exe_2
         }
     }
 
-    private static initializing(_vmFile:string, asmFile:string) : void 
+    private static initializing(asmFile:string) : void 
     {
         mutable fs : FileStream;
         if (File.Exists(asmFile))
@@ -147,12 +148,40 @@ module Exe_2
         mutable writer =  StreamWriter(fs);
 
         writer.WriteLine("//Start of initializing");
-        writer.WriteLine("@256\n" + "D=A\n" + "@SP\n" + "M=D\n");
-        writer.WriteLine("@300\n" + "D=A\n" + "@LCL\n" + "M=D\n");
-        writer.WriteLine("@400\n" + "D=A\n" + "@ARG\n" + "M=D\n");
-        writer.WriteLine("@3000\n" + "D=A\n" + "@THIS\n" + "M=D\n");
-        writer.WriteLine("@3010\n" + "D=A\n" + "@THAT\n" + "M=D");
-        writer.WriteLine("//End of initializing\n");
+        writer.WriteLine();
+        
+        writer.WriteLine("@256");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@SP");
+        writer.WriteLine("M=D");
+        writer.WriteLine();
+        
+        writer.WriteLine("@300");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@LCL");
+        writer.WriteLine("M=D");
+        writer.WriteLine();
+        
+        writer.WriteLine("@400");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@ARG");
+        writer.WriteLine("M=D");
+        writer.WriteLine();
+        
+        writer.WriteLine("@3000");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@THIS");
+        writer.WriteLine("M=D");
+        writer.WriteLine();
+        
+        writer.WriteLine("@3010");
+        writer.WriteLine("D=A");
+        writer.WriteLine("@THAT");
+        writer.WriteLine("M=D");
+        writer.WriteLine();
+        
+        writer.WriteLine("//End of initializing");
+        writer.WriteLine();
 
         writer.Close();
         fs.Close();

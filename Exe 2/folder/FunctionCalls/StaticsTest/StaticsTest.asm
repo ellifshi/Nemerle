@@ -1,4 +1,5 @@
 //Start of initializing
+
 @256
 D=A
 @SP
@@ -23,6 +24,7 @@ M=D
 D=A
 @THAT
 M=D
+
 //End of initializing
 
 //Start call Sys.init 0
