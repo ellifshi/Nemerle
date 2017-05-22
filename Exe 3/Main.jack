@@ -1,0 +1,40 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/09/Square/Main.jack
+
+/**
+ * The Main class initializes a new Square Dance game and starts it.
+ */
+class Main {
+
+    function void clearScreen() {
+      do Screen.clearScreen();
+	  do Output.moveCursor(0,0);
+	  return;
+   }
+    function void main() {
+        var SquareGame game, game1;
+		var char key,enter;
+		do Output.printString("Welcome to our Square Game");
+		do Output.println();
+		do Output.printString("In this game yoe cane creat some of square, and play with them");
+		do Output.println();
+		do Output.printString("please insert 'enter' to start.");
+		let key = Keyboard.readChar();
+		let enter = 128;
+		if(key=enter){
+		   do Main.clearScreen();
+           let game = SquareGame.new();
+           let game1 = SquareGame1.new();
+           do game.run();
+           do game1.run();
+           do game.dispose();
+           do game1.dispose();
+		   do Output.printString("Yoe out from the game");
+		   do Output.println();
+		 }
+		
+        return;
+    }
+}
