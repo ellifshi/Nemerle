@@ -1,0 +1,211 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/09/Square/Square.jack
+
+/**
+ * The Square class implements a graphic square. A graphic square 
+ * has a location on the screen and a size. It also has methods 
+ * for drawing, erasing, moving on the screen, and changing its size.
+ */
+class Rectangle {
+
+    // Location on the screen
+    field int x, y;
+
+    // The size of the square
+    field int length, width;
+
+    /** Constructs a new square with a given location and size. */
+    constructor Rectangle new(int Ax, int Ay, int Alength, int Awidth) {
+        let x = Ax;
+        let y = Ay;
+        let length = Alength;
+		let width = Awidth;
+
+        do draw();
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the square on the screen. */
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + length, y + width);
+        return;
+    }
+
+    /** Erases the square from the screen. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, y, x + length, y + width);
+        return;
+    }
+
+    /** Increments the size by 2. */
+    method void incSize() {
+        if (((y + width) < 254) & ((x + length) < 510)) {
+            do erase();
+            let width = width + 2;
+			let length = length + 2;
+            do draw();
+        }
+        return;
+    }
+	
+	method void incLength() {
+        if ((x + length) < 510) {
+            do erase();
+			let length = length + 2;
+            do draw();
+        }
+        return;
+    }
+	
+	method void incWidth() {
+        if ((y + width) < 254) {
+            do erase();
+            let width = width + 2;
+            do draw();
+        }
+        return;
+    }
+
+    /** Decrements the size by 2. */
+    method void decSize() {
+        if ((length > 2) & (width > 2)) {
+            do erase();
+            let width = width - 2;
+			let length = length - 2;
+            do draw();
+        }
+        return;
+	}
+	
+	method void decLength() {
+        if (length > 2) {
+            do erase();
+			let length = length - 2;
+            do draw();
+        }
+        return;
+	}
+	
+	method void decWidth() {
+        if (width > 2) {
+            do erase();
+            let width = width - 2;
+            do draw();
+        }
+        return;
+	}
+
+    /** Moves up by 2. */
+    method int moveUp(bool toMark) {
+		var int i;
+		
+        if (y > 1) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, (y + width) - 1, x + length, y + width);
+			//do erase();
+			
+			if ((y > 0) & (toMark)) {
+				do Screen.setColor(toMark);	
+				
+				let i = x;
+				while (i < (x + length)) {
+					do Screen.drawRectangle(i, (y + width) - 1, i, y + width);
+					let i = i + 2;
+				}
+			}
+			
+            let y = y - 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + length, y + 1);
+			//do draw();
+			
+			return 1;
+        }
+        return 2;
+    }
+
+    /** Moves down by 2. */
+    method int moveDown(bool toMark) {
+		var int i;
+		
+        if ((y + width) < 254) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, y, x + length, y + 1);
+			//do erase();
+			
+			if ((y > 0) & (toMark)) {
+				do Screen.setColor(toMark);
+				
+				let i = x;
+				while (i < (x + length)) {
+					do Screen.drawRectangle(i, y, i, y + 1);
+					let i = i + 2;
+				}
+			}
+			
+            let y = y + 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, (y + width) - 1, x + length, y + width);
+			//do draw();
+			
+			return 2;
+        }
+        return 1;
+    }
+
+    /** Moves left by 2. */
+    method int moveLeft(bool toMark) {
+        if (x > 1) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle((x + length) - 1, y, x + length, y + width);
+			//do erase();
+			
+			if (x > 0) {
+				do Screen.setColor(toMark);
+				do Screen.drawRectangle((x + length) - 1, y, (x + length) - 1, y + width);
+			}
+			
+            let x = x - 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + 1, y + width);
+			//do draw();
+			
+			return 3;
+        }
+        return 4;
+    }
+
+    /** Moves right by 2. */
+    method int moveRight(bool toMark) {
+        if ((x + length) < 510) {
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, y, x + 1, y + width);
+			//do erase();
+			
+			if (x > 0) {
+				do Screen.setColor(toMark);
+				do Screen.drawRectangle(x - 1, y, x - 1, y + width);
+			}
+			
+            let x = x + 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle((x + length) - 1, y, x + length, y + width);
+			//do draw();
+			
+			return 4;
+        }
+        return 3;
+    }
+
+}

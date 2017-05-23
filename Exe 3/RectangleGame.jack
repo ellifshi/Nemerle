@@ -12,27 +12,26 @@
  * Use 'z' & 'x' to decrement & increment the size.
  * Use 'q' to quit.
  */
-class SquareGame {
+class RectangleGame {
 
     // The square
-    field Square square;
+    field Rectangle rect;
 
     // The square's movement direction
     field int direction; // 0=none,1=up,2=down,3=left,4=right
+	field bool toMark;
 
     /** Constructs a new Square Game. */
-    constructor SquareGame new() {
-        let square = Square.new(0, 0, 30);
+    constructor RectangleGame new() {
+        let rect = Rectangle.new(0, 0, 31, 31);
         let direction = 0;
+		let toMark = false;
 
         return this;
     }
 
     /** Deallocates the object's memory. */
     method void dispose() {
-      var SquareGame game;
-      let game = SquareGame.new();
-      do game.run();
         do square.dispose();
         do Memory.deAlloc(this);
         return;
@@ -50,20 +49,30 @@ class SquareGame {
             // waits for a key to be pressed.
             while (key = 0) {
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do moveRectangle();
             }
-			if (key = 80) {
-                do dispose();
-            }
+
             if (key = 81) {
                 let exit = true;
             }
             if (key = 90) {
-                do square.decSize();
+                do rect.decSize();
             }
             if (key = 88) {
-                do square.incSize();
+                do rect.incSize();
             }
+			if (key = 65) {
+				do rect.decLength();
+			}
+			if (key = 83) {
+				do rect.incLength();
+			}
+			if (key = 87) {
+				do rect.decWidth();
+			}
+			if (key = 69) {
+				do rect.incWidth();
+			}
             if (key = 131) {
                 let direction = 1;
             }
@@ -76,11 +85,20 @@ class SquareGame {
             if (key = 132) {
                 let direction = 4;
             }
+			if (key = 72) {
+				let toMark = ~toMark;
+			}
+			if (key = 70) {
+				do colorScreen(true);
+			}
+			if (key = 71) {
+				do colorScreen(false);
+			}
 
             // waits for the key to be released.
             while (~(key = 0)) {
                 let key = Keyboard.keyPressed();
-                do moveSquare();
+                do moveRectangle();
             }
         }
             
@@ -88,21 +106,48 @@ class SquareGame {
 	}
 
     /** Moves the square by 2 in the current direction. */
-    method void moveSquare() {
-        if (direction = 1) {
-            do square.moveUp();
+    method void moveRectangle() {
+		var int dir;
+		let dir = direction;
+		
+        if (dir = 1) {
+            let direction = rect.moveUp(toMark);
         }
-        if (direction = 2) {
-            do square.moveDown();
+        if (dir = 2) {
+            let direction = rect.moveDown(toMark);
         }
-        if (direction = 3) {
-            do square.moveLeft();
+        if (dir = 3) {
+            let direction = rect.moveLeft(toMark);
         }
-        if (direction = 4) {
-            do square.moveRight();
+        if (dir = 4) {
+            let direction = rect.moveRight(toMark);
         }
 
-        do Sys.wait(5); // Delays the next movement.
+        if ((((dir = 1) | (dir = 2)) & toMark)) {
+			do Sys.wait(5);
+		}
+		else {
+			do Sys.wait(10); // Delays the next movement.
+		}
         return;
     }
+	
+	method void colorScreen(bool mode) {
+		var int i;
+		
+		if (mode) {
+			do Screen.setColor(false);
+			do Screen.drawRectangle(0, 0, 510, 254);
+		}
+		if (~mode) {
+			do Screen.setColor(true);
+			let i = 0;
+			while (i < 512) {
+				do Screen.drawRectangle(i, 0, i, 254);
+				let i = i + 2;
+			}
+		}
+		
+		return;
+	}
 }
