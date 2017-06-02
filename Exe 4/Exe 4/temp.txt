@@ -1,0 +1,158 @@
+﻿//אראל פלדמר 209374420
+//שניאור גלעדי 301739561
+//מס' קבוצה 150060.01.5777.25
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+
+module Program
+{
+
+    public static ds():void
+    {
+        mutable keyWord = Dictionary();
+        def CLASS :int = 1;
+        def METHOD :int = 2;
+        def FUNCTION :int = 3;
+        def CONSTRUCTOR :int = 4;
+        def INT :int = 5;
+        def BOOLEAN :int = 6;
+        def CHAR :int = 7;
+        def VOID :int= 8;
+        def VAR :int = 9;
+        def STATIC :int = 10;
+        def FIELD :int = 11;
+        def LET :int = 12;
+        def DO :int = 13;
+        def IF :int = 14;
+        def ELSE :int = 15;
+        def WHILE :int = 16;
+        def RETURN :int = 17;
+        def TRUE :int = 18;
+        def FALSE :int = 19;
+        def NULL :int = 20;
+        def THIS :int = 21;
+
+        keyWord.Add("class",CLASS);
+        keyWord.Add("constructor",CONSTRUCTOR);
+        keyWord.Add("function",FUNCTION);
+        keyWord.Add("method",METHOD);
+        keyWord.Add("field",FIELD);
+        keyWord.Add("static",STATIC);
+        keyWord.Add("var",VAR);
+        keyWord.Add("int",INT);
+        keyWord.Add("char",CHAR);
+        keyWord.Add("boolean",BOOLEAN);
+        keyWord.Add("void",VOID);
+        keyWord.Add("true",TRUE);
+        keyWord.Add("false",FALSE);
+        keyWord.Add("null",NULL);
+        keyWord.Add("this",THIS);
+        keyWord.Add("let",LET);
+        keyWord.Add("do",DO);
+        keyWord.Add("if",IF);
+        keyWord.Add("else",ELSE);
+        keyWord.Add("while",WHILE);
+        keyWord.Add("return",RETURN);
+
+    }
+
+    private static translateFile(jackFile : string, vmFile : string) : void
+    {
+        mutable file : string = Path.GetFullPath(jackFile); 
+
+        def lines = File.ReadLines(file).Where(line => !line.TrimStart.Equals("/*")|| !line.TrimEnd.Equals("*/") || !line.TrimStart.Equals("//") || !line.Equals("")).ToArray() ;
+        mutable filenameWithoutPath = Path.GetFileName(file).Replace(".jack", "");
+
+        foreach (line in lines)
+        {
+            SeesionData(Path.GetFullPath(vmFile), line, filenameWithoutPath);
+        }
+    }
+    //SeesionData hendle all the line, by split the line 
+    public static SeesionData(path : string, line : string, filenameWithoutPath:string) : void
+    {
+
+        mutable fs : FileStream;
+        if (File.Exists(path))
+        {
+            fs = FileStream(path,FileMode.Append,FileAccess.Write);
+        }
+        else
+        {
+            fs =  FileStream(path, FileMode.Create,FileAccess.Write);
+        } 
+        mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+
+        for(mutable i = 0; i < words.Length; i++)
+        {
+            mutable word =  words[i];
+
+            mutable wo : array[string] = null;
+
+            if(word.Contains(","))
+            {
+                word = ",";
+                wo = word.Split(",".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+            }
+            else
+            {
+            }
+            if(word.Contains("."))
+            {
+                word = ".";
+                wo = word.Split(".".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+            }
+            else{}
+
+
+            if(wo != null)
+            {
+                for(mutable j = 0; j < wo.Length; j++)
+                {
+
+                }
+            }
+            else
+            {
+            }
+
+        }
+        fs.Close();
+    }
+    Main() : void
+    {
+        WriteLine("Pleas enter full directory path that you want to run");
+        def pathFromTheUser : string = ReadLine();
+
+        mutable path = pathFromTheUser;
+        if(!Directory.Exists(path))
+        {
+            WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
+            _ = ReadLine();
+            return;
+        }
+        else
+        {
+            mutable pathJACKFile = pathFromTheUser + "\\" + Path.GetFileName(path) + ".jack";
+
+            foreach (file in Directory.EnumerateFiles(path, "*.jack"))
+            {
+                translateFile(file, pathJACKFile);
+            }
+
+        }
+    }
+}
+

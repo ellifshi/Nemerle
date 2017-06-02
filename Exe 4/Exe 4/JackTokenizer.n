@@ -1,0 +1,76 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+namespace Exe_4
+{
+    module JackTokenizer
+    {
+        public static opKeyWord : Set [char];
+        public static KeyWords : Set [string];
+        static this ()
+        {
+            def tab = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
+            KeyWords = Set(tab);
+            def tab = array ['+', '-', '*', '/', '|', '&', '<', '>', '='];
+            opKeyWord = Set(tab);
+
+        }
+
+
+
+        public static sessionData(file :string, fileOut:FileStream):void
+        {
+            mutable d = "class";
+            if(d.Equals(keyword.Equals("constructor")))
+            {
+            }
+            else if(d.Equals(keyword))
+            {
+            }
+            else
+            {}
+           
+        }
+
+        public static JackTokenizer(inFile : string) :void
+        {
+
+        }
+        public static hasMoreTokens():void
+        {
+        }
+        public static advance():void
+        {
+
+        }
+        public static tokenType():void
+        {
+        }
+        public static keyword():void
+        {
+        }
+        public static symbol():void
+        {
+        }
+        public static identifier():void
+        {
+        }
+        public static intVal():void
+        {
+        }
+        public static stringVal():void
+        {
+        }
+    }
+}

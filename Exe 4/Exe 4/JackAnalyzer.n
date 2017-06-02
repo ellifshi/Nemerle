@@ -1,0 +1,76 @@
+﻿//אראל פלדמר 209374420
+//שניאור גלעדי 301739561
+//מס' קבוצה 150060.01.5777.25
+/*using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+using System.IO.File;
+
+
+module Program
+{
+    Main() : void
+    {
+       // WriteLine("Pleas enter full directory path that you want to run");
+        def pathFromTheUser : string = "C:\\Users\\Lenovo\\Documents\\GitHub\\Exe 4\\folder" ;//ReadLine();
+
+        mutable path = pathFromTheUser;
+        if(!Directory.Exists(path))
+        {
+            WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
+            _ = ReadLine();
+            return;
+        }
+        else//path = Path.GetFullPath(file).Replace(".vm", ".asm"); 
+        {
+           // mutable _pathJACKFile = pathFromTheUser + "\\" + Path.GetFileName(path) + ".jack";
+            foreach (file in Directory.EnumerateFiles(path, "*.jack"))
+            {
+            /// mutable fileOutPath : string = pathFromTheUser + "\\" + Path.GetFileName(file.Replace(".jack", ".xml"));
+            //   mutable tokenFileOutPath : string = pathFromTheUser + "\\" + Path.GetFileName(file.Replace(".jack", "T.xml"));
+
+            // mutable fileOut : FileStream = FileStream(fileOutPath,FileMode.Create,FileAccess.Write);
+                mutable pathJACKFile : string = pathFromTheUser + "\\" + Path.GetFileName(file.Replace(".jack", ".xml"));
+                translateFile(file, pathJACKFile);
+
+
+
+            // mutable outTokenFile : FileStream = FileStream(tokenFileOutPath,FileMode.Create,FileAccess.Write);
+                //mutable compilationEngine = Exe_4.CompilationEngine.CompilationEngine(file, fileOut, outTokenFile);
+            }
+        }
+    }
+    public static translateFile(file : string, pathJACKFile : string) : void
+    {
+       def lined = File.ReadAllLines(file);//.Where(line => line.EndsWith('c'));
+       def s = File.ReadAllLines(file);
+       foreach (line in lined)
+		{
+		    
+		    if(line.StartsWith("/") || line == "")
+		    {
+		        
+		    }
+		    else
+		    {
+		        
+		        s.Append(line);
+		    }
+		}
+        def lines = File.ReadLines(file).Where(line => !line.EndsWith("")|| !line.TrimEnd.Equals("") || !line.TrimStart.Equals("//") || !line.Equals("")).ToArray() ;
+        WriteLine(s);
+        mutable fs:FileStream;
+        Exe_4.JackTokenizer.sessionData(file, fs);
+    }
+}*/
+

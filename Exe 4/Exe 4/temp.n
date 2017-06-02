@@ -1,0 +1,151 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+namespace Exe_4
+{
+    module temp
+    {
+        public static opKeyWord : Set [string];
+        public static KeyWords : Set [string];
+
+        static this ()
+        {
+            def tab1 = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
+            KeyWords = Set(tab1);
+            def tab2 = array ["+", "-", "*", "/", "|", "&", "<", ">", "=", "(", ")", "}", "{", ";", ",", "."];
+            opKeyWord = Set(tab2);       
+        }
+        public static keyWordFunc(word:string, fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<keyword> " + word + " </keyword>");
+
+            writer.Close();
+            fs.Close();
+        }
+        public static symbolFunc(word:string, fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<symbol> " + word + " </symbol>");
+
+            writer.Close();
+            fs.Close();
+        }
+        public static identifierFunc(word:string, fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<identifier> " + word + " </identifier>");
+
+            writer.Close();
+            fs.Close();
+        }
+        public static printTokenIn(fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<tokens>");
+
+            writer.Close();
+            fs.Close();
+        }
+        public static printTokenOut(fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("</tokens>");
+
+            writer.Close();
+            fs.Close();
+        }
+
+        public static sessionData(line:string, pathXMLFile:string):void
+        {
+            mutable a = line.Replace(",", " , ").Replace("(", " ( ").Replace(")", " ) ").Replace(".", " . ").Replace(";", " ;").Replace("{", " { ").Replace("}", " } ").Replace("\t", " ").Replace("\\","");
+            mutable temp = a.Contains("\"");
+
+            if(a.Contains("\""))
+            {
+
+            }
+            else{}
+            mutable words = a.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
+
+            foreach(word in words)
+            {
+                mutable fs : FileStream;
+                if (File.Exists(pathXMLFile))
+                {
+                    fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                }
+                else
+                {
+                    fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                }
+                def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
+                def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
+
+                if(checkIfTheWordEqualToKeyWord)
+                {
+                    keyWordFunc(word, fs);
+                }
+                else if(checkIfTheWordEqualOPKeyWord)
+                     {
+                         symbolFunc(word, fs);
+                     }
+                     else
+                     {
+                         identifierFunc(word, fs);
+                     }
+            }
+        }
+        Main() : void
+        {
+            def pathJackFiles : string = "C:\\Users\\Lenovo\\Documents\\GitHub\\Exe 4\\folder";
+
+            foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
+            {
+                mutable pathXMLFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", "T.xml"));
+                mutable fs : FileStream;
+                if (File.Exists(pathXMLFile))
+                {
+                    fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                }
+                else
+                {
+                    fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                }
+                mutable writer =  StreamWriter(fs);  
+
+                writer.WriteLine("<tokens>");
+                fs.Close();
+            // writer.Close();
+
+                mutable lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
+                foreach (line in lines)
+                {
+                    sessionData(line, pathXMLFile); 
+                }
+
+                writer.WriteLine("</tokens>");
+            // writer.Close();
+            // fs.Close();
+
+            }
+
+        }
+    }
+}

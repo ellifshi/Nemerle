@@ -1,0 +1,74 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+namespace Exe_4
+{
+    module CompilationEngine
+    {
+        static mutable printWriter : FileStream;
+        static mutable tokenPrintWriter : FileStream;
+        static mutable tokenizer : Exe_4.JackTokenizer;
+      
+        public static CompilationEngine(file:string, fileOut:FileStream, outTokenFile:FileStream):void
+        {
+          
+            mutable  printWriter = fileOut;
+            mutable tokenPrintWriter = outTokenFile;
+        }
+        public static CompileClass():void
+        {
+
+        }
+        public static CompileClassVarDec():void
+        {
+
+        }
+        public static CompileSubroutine():void
+        {
+        }
+        public static compileParameterList():void
+        {
+        }
+        public static compileVarDec():void
+        {
+        }
+        public static compileStatements():void
+        {
+        }
+        public static compileDo():void
+        {
+        }
+        public static compileLet():void
+        {
+        }
+        public static compileWhile():void
+        {
+        }
+        public static compileReturn():void
+        {
+        }
+        public static compileIf():void
+        {
+        }
+        public static CompileExpression():void
+        {
+        }
+        public static CompileTerm():void
+        {
+        }
+        public static CompileExpressionList():void
+        {
+        }
+    }
+}
