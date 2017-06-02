@@ -1,0 +1,132 @@
+class RectangleArray {
+
+    field Array xS, yS, lengthS, widthS;
+	field int arraySize;
+	
+	/** Constructs a new Rectangle Array. */
+    constructor RectangleArray new(int size) {
+        let xS = Array.new(size);
+		let yS = Array.new(size);
+		let lengthS = Array.new(size);
+		let widthS = Array.new(size);
+		
+		let arraySize = size;
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do xS.dispose();
+		do yS.dispose();
+		do lengthS.dispose();
+		do widthS.dispose();
+		
+        do Memory.deAlloc(this);
+		
+        return;
+    }
+	
+	method void generateRandomly() {
+		return;
+	}
+
+    method Rectangle get(int index) {
+		var Rectangle rect;
+		var int x, y, l, w;
+		
+		let x = xS[index];
+		let y = yS[index];
+		let l = lengthS[index];
+		let w = widthS[index];
+		
+		let rect = Rectangle.new(x, y, l, w);
+        
+        return rect;
+	}
+	
+	method void insert(int index, Rectangle r) {
+		let xS[index] = r.getX();
+		let yS[index] = r.getY();
+		let lengthS[index] = r.getLength();
+		let widthS[index] = r.getWidth();
+		
+		return;
+	}
+	
+	method void drawAll() {
+		var Rectangle rect;
+		var int index;
+		
+		let index = 0;
+		while (index < arraySize) {
+			let rect = get(index);
+			do rect.draw();
+			
+			let index = index + 1;
+		}
+		
+		return;
+	}
+	
+	method void eraseAll() {
+		var Rectangle rect;
+		var int index;
+		
+		let index = 0;
+		while (index < arraySize) {
+			let rect = get(index);
+			do rect.erase();
+			
+			let index = index + 1;
+		}
+		
+		return;
+	}
+	
+	method boolean isGoingToCollide(Rectangle r, int direction) {
+		var int i;
+		var Rectangle rect;
+		var boolean res;
+		let res = false;
+		
+		if (direction = 0) {
+			return res;
+		}
+		
+		let i = 0;
+		while (i < arraySize) {
+			let rect = get(i);
+			if(r.isGoingToCollide(rect,direction)) {
+				let res = true;
+			}
+			
+			let i = i + 1;
+		}
+
+		return res;
+	}
+	
+	method boolean isGoingToCover(Rectangle r, int incWidth, int incLength) {
+		var int i;
+		var Rectangle rect;
+		var boolean res;
+		let res = false;
+		
+		let i = 0;
+		while (i < arraySize) {
+			let rect = get(i);
+			
+			if ((r.getX() < rect.getX()) & ((r.getX() + incLength) > rect.getX())) {
+				let res = true;
+			}
+			if ((r.getY() < rect.getY()) & ((r.getY() + incWidth) > rect.getY())) {
+				let res = true;
+			}
+			
+			let i = i + 1;
+		}
+		
+		return res;
+	}
+}

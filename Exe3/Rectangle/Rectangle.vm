@@ -1,0 +1,911 @@
+function Rectangle.new 0
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push argument 1
+pop this 1
+push argument 2
+pop this 2
+push argument 3
+pop this 3
+push pointer 0
+return
+function Rectangle.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Rectangle.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Rectangle.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Rectangle.getLength 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function Rectangle.getWidth 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Rectangle.setX 0
+push argument 0
+pop pointer 0
+push argument 1
+pop this 0
+push constant 0
+return
+function Rectangle.draw 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Rectangle.erase 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Rectangle.incSize 0
+push argument 0
+pop pointer 0
+push this 1
+push this 3
+add
+push constant 254
+lt
+push this 0
+push this 2
+add
+push constant 510
+lt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 3
+push constant 2
+add
+pop this 3
+push this 2
+push constant 2
+add
+pop this 2
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.incLength 0
+push argument 0
+pop pointer 0
+push this 0
+push this 2
+add
+push constant 510
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 2
+push constant 2
+add
+pop this 2
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.incWidth 0
+push argument 0
+pop pointer 0
+push this 1
+push this 3
+add
+push constant 254
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 3
+push constant 2
+add
+pop this 3
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.decSize 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 2
+gt
+push this 3
+push constant 2
+gt
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 3
+push constant 2
+sub
+pop this 3
+push this 2
+push constant 2
+sub
+pop this 2
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.decLength 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 2
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 2
+push constant 2
+sub
+pop this 2
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.decWidth 0
+push argument 0
+pop pointer 0
+push this 3
+push constant 2
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 3
+push constant 2
+sub
+pop this 3
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.moveUp 1
+push argument 0
+pop pointer 0
+push this 1
+push constant 1
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 3
+add
+push constant 1
+sub
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push this 1
+push constant 0
+gt
+push argument 1
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 1
+call Screen.setColor 1
+pop temp 0
+push this 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 0
+push this 2
+add
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 1
+push this 3
+add
+push constant 1
+sub
+push local 0
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push local 0
+push constant 2
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE1
+push this 1
+push constant 2
+sub
+pop this 1
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push constant 1
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 1
+return
+label IF_FALSE0
+push constant 2
+return
+function Rectangle.moveDown 1
+push argument 0
+pop pointer 0
+push this 1
+push this 3
+add
+push constant 254
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push constant 1
+add
+call Screen.drawRectangle 4
+pop temp 0
+push this 1
+push constant 0
+gt
+push argument 1
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 1
+call Screen.setColor 1
+pop temp 0
+push this 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 0
+push this 2
+add
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 1
+push local 0
+push this 1
+push constant 1
+add
+call Screen.drawRectangle 4
+pop temp 0
+push local 0
+push constant 2
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE1
+push this 1
+push constant 2
+add
+pop this 1
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 3
+add
+push constant 1
+sub
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 2
+return
+label IF_FALSE0
+push constant 1
+return
+function Rectangle.moveLeft 0
+push argument 0
+pop pointer 0
+push this 0
+push constant 1
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 2
+add
+push constant 1
+sub
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push this 0
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 1
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 2
+add
+push constant 1
+sub
+push this 1
+push this 0
+push this 2
+add
+push constant 1
+sub
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+label IF_FALSE1
+push this 0
+push constant 2
+sub
+pop this 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push constant 1
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 3
+return
+label IF_FALSE0
+push constant 4
+return
+function Rectangle.moveRight 0
+push argument 0
+pop pointer 0
+push this 0
+push this 2
+add
+push constant 510
+lt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 1
+push this 0
+push constant 1
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push this 0
+push constant 0
+gt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push argument 1
+call Screen.setColor 1
+pop temp 0
+push this 0
+push constant 1
+sub
+push this 1
+push this 0
+push constant 1
+sub
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+label IF_FALSE1
+push this 0
+push constant 2
+add
+pop this 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push this 0
+push this 2
+add
+push constant 1
+sub
+push this 1
+push this 0
+push this 2
+add
+push this 1
+push this 3
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 4
+return
+label IF_FALSE0
+push constant 3
+return
+function Rectangle.isGoingToCollide 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push constant 0
+pop local 1
+push argument 2
+push constant 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 1
+push constant 2
+sub
+pop local 0
+push this 0
+push argument 1
+call Rectangle.getX 1
+lt
+push this 0
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+gt
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+gt
+push local 0
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+lt
+and
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 0
+not
+pop local 1
+label IF_FALSE2
+label IF_FALSE1
+push argument 1
+call Rectangle.getX 1
+push this 0
+lt
+push argument 1
+call Rectangle.getX 1
+push argument 1
+call Rectangle.getLength 1
+add
+push this 0
+gt
+and
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 1
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+gt
+push local 0
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+lt
+and
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 0
+not
+pop local 1
+label IF_FALSE4
+label IF_FALSE3
+label IF_FALSE0
+push argument 2
+push constant 2
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 1
+push constant 2
+add
+pop local 0
+push this 0
+push argument 1
+call Rectangle.getX 1
+lt
+push this 0
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+gt
+and
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push this 1
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+lt
+push local 0
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+gt
+and
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push constant 0
+not
+pop local 1
+label IF_FALSE7
+label IF_FALSE6
+push argument 1
+call Rectangle.getX 1
+push this 0
+lt
+push argument 1
+call Rectangle.getX 1
+push argument 1
+call Rectangle.getLength 1
+add
+push this 0
+gt
+and
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push this 1
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+lt
+push local 0
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+gt
+and
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 0
+not
+pop local 1
+label IF_FALSE9
+label IF_FALSE8
+label IF_FALSE5
+push argument 2
+push constant 3
+eq
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
+push this 0
+push constant 2
+sub
+pop local 0
+push this 1
+push argument 1
+call Rectangle.getY 1
+lt
+push this 1
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+gt
+and
+if-goto IF_TRUE11
+goto IF_FALSE11
+label IF_TRUE11
+push this 0
+push argument 1
+call Rectangle.getX 1
+gt
+push argument 1
+call Rectangle.getLength 1
+add
+push local 0
+push argument 1
+call Rectangle.getX 1
+lt
+push argument 1
+call Rectangle.getLength 1
+add
+and
+if-goto IF_TRUE12
+goto IF_FALSE12
+label IF_TRUE12
+push constant 0
+not
+pop local 1
+label IF_FALSE12
+label IF_FALSE11
+push argument 1
+call Rectangle.getY 1
+push this 1
+lt
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+push this 1
+gt
+and
+if-goto IF_TRUE13
+goto IF_FALSE13
+label IF_TRUE13
+push this 0
+push argument 1
+call Rectangle.getX 1
+gt
+push argument 1
+call Rectangle.getLength 1
+add
+push local 0
+push argument 1
+call Rectangle.getX 1
+lt
+push argument 1
+call Rectangle.getLength 1
+add
+and
+if-goto IF_TRUE14
+goto IF_FALSE14
+label IF_TRUE14
+push constant 0
+not
+pop local 1
+label IF_FALSE14
+label IF_FALSE13
+label IF_FALSE10
+push argument 2
+push constant 4
+eq
+if-goto IF_TRUE15
+goto IF_FALSE15
+label IF_TRUE15
+push this 0
+push constant 2
+add
+pop local 0
+push this 1
+push argument 1
+call Rectangle.getY 1
+lt
+push this 1
+push this 3
+add
+push argument 1
+call Rectangle.getY 1
+gt
+and
+if-goto IF_TRUE16
+goto IF_FALSE16
+label IF_TRUE16
+push this 0
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+lt
+push local 0
+and
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+gt
+if-goto IF_TRUE17
+goto IF_FALSE17
+label IF_TRUE17
+push constant 0
+not
+pop local 1
+label IF_FALSE17
+label IF_FALSE16
+push argument 1
+call Rectangle.getY 1
+push this 1
+lt
+push argument 1
+call Rectangle.getY 1
+push argument 1
+call Rectangle.getWidth 1
+add
+push this 1
+gt
+and
+if-goto IF_TRUE18
+goto IF_FALSE18
+label IF_TRUE18
+push this 0
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+lt
+push local 0
+and
+push this 2
+add
+push argument 1
+call Rectangle.getX 1
+gt
+if-goto IF_TRUE19
+goto IF_FALSE19
+label IF_TRUE19
+push constant 0
+not
+pop local 1
+label IF_FALSE19
+label IF_FALSE18
+label IF_FALSE15
+push local 1
+return

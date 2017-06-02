@@ -1,0 +1,289 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/09/Square/SquareGame.jack
+
+/**
+ * The SquareDance class implements the Square Dance game.
+ * In this game you can move a black square around the screen and
+ * change its size during the movement.
+ * In the beggining, the square is located at the top left corner.
+ * Use the arrow keys to move the square.
+ * Use 'z' & 'x' to decrement & increment the size.
+ * Use 'q' to quit.
+ */
+class RectangleGame {
+
+    // The Rec and Paddle.
+    field Rectangle rect, paddle;
+	
+	//The obsticles for the paddles.
+	field RectangleArray obsticles;
+
+    // The square's movement direction
+    field int direction; // 0=none,1=up,2=down,3=left,4=right
+	field boolean toMark;
+
+    /** Constructs a new Square Game. */
+    constructor RectangleGame new() {
+		var int i;
+		
+        let rect = Rectangle.new(0, 0, 31, 31);
+		do rect.erase();
+		
+		let obsticles = RectangleArray.new(5);
+		let paddle = Rectangle.new(220, 244, 70, 10); 
+		do paddle.erase();
+		
+		let i = 0;
+		while (i < 5) {
+			do obsticles.insert(i, Rectangle.new(75*i, 0, 50, 50));
+			let i = i + 1;
+		}
+		
+		do obsticles.eraseAll();
+		
+        let direction = 0;
+		let toMark = false;
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do square.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Starts the game. Handles inputs from the user that controls
+     *  the square movement direction and size. */
+    method void run() {
+        var char key;
+        var boolean exit;
+		
+		let exit = false;
+		
+		let direction = 0;
+		
+		do Screen.clearScreen();
+		
+		do rect.draw();
+
+        while (~exit) {
+            // waits for a key to be pressed.
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do moveRectangle();
+            }
+
+            if (key = 81) {
+                let exit = true;
+            }
+            if (key = 90) {
+                do rect.decSize();
+            }
+            if (key = 88) {
+                do rect.incSize();
+            }
+			if (key = 65) {
+				do rect.decLength();
+			}
+			if (key = 83) {
+				do rect.incLength();
+			}
+			if (key = 87) {
+				do rect.decWidth();
+			}
+			if (key = 69) {
+				do rect.incWidth();
+			}
+            if (key = 131) {
+                let direction = 1;
+            }
+            if (key = 133) {
+                let direction = 2;
+            }
+            if (key = 130) {
+                let direction = 3;
+            }
+            if (key = 132) {
+                let direction = 4;
+            }
+			if (key = 72) {
+				let toMark = ~toMark;
+			}
+			if (key = 70) {
+				do colorScreen(true);
+			}
+			if (key = 71) {
+				do colorScreen(false);
+			}
+
+            // waits for the key to be released.
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveRectangle();
+            }
+        }
+            
+        return;
+	}
+	
+	method void run2() {
+        var char key;
+        var boolean exit;
+		
+		do Screen.clearScreen();
+		
+		do paddle.draw();
+		do obsticles.drawAll();
+		
+		let direction = 0;
+
+        let exit = false;
+
+        while (~exit) {
+            // waits for a key to be pressed.
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                let exit = movePaddle();
+            }
+
+            if (key = 81) {
+                let exit = true;
+            }
+            if (key = 90) {
+                do paddle.decSize();
+            }
+            if (key = 88) {
+                do paddle.incSize();
+            }
+			if (key = 65) {
+				do paddle.decLength();
+			}
+			if (key = 83) {
+				do paddle.incLength();
+			}
+			if (key = 87) {
+				do paddle.decWidth();
+			}
+			if (key = 69) {
+				do paddle.incWidth();
+			}
+            if (key = 131) {
+                let direction = 1;
+            }
+            if (key = 133) {
+                let direction = 2;
+            }
+            if (key = 130) {
+                let direction = 3;
+            }
+            if (key = 132) {
+                let direction = 4;
+            }
+			if (key = 72) {
+				let toMark = ~toMark;
+			}
+			if (key = 70) {
+				do colorScreen(true);
+			}
+			if (key = 71) {
+				do colorScreen(false);
+			}
+
+            // waits for the key to be released.
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                let exit = movePaddle();
+            }
+        }
+            
+        return;
+	}
+	
+
+    /** Moves the square by 2 in the current direction. */
+    method void moveRectangle() {
+		var int dir;
+		let dir = direction;
+		
+        if (dir = 1) {
+            let direction = rect.moveUp(toMark);
+        }
+        if (dir = 2) {
+            let direction = rect.moveDown(toMark);
+        }
+        if (dir = 3) {
+            let direction = rect.moveLeft(toMark);
+        }
+        if (dir = 4) {
+            let direction = rect.moveRight(toMark);
+        }
+
+        if ((((dir = 1) | (dir = 2)) & toMark)) {
+			do Sys.wait(2);
+		}
+		if (((dir = 3) | (dir = 4)) & toMark) {
+			do Sys.wait(50); // Delays the next movement.
+		}
+		if (~toMark) {
+			do Sys.wait(5);
+		}
+        return;
+    }
+	
+	method boolean movePaddle() {
+		var int dir;
+		
+		let dir = direction;
+		
+		if ((obsticles.isGoingToCollide(paddle, dir))) {
+			return true;
+		}
+		
+        if (dir = 1) {
+            let direction = paddle.moveUp(toMark);
+        }
+        if (dir = 2) {
+            let direction = paddle.moveDown(toMark);
+        }
+        if (dir = 3) {
+            let direction = paddle.moveLeft(toMark);
+        }
+        if (dir = 4) {
+            let direction = paddle.moveRight(toMark);
+        }
+
+        if ((((dir = 1) | (dir = 2)) & toMark)) {
+			do Sys.wait(2);
+		}
+		if (((dir = 3) | (dir = 4)) & toMark) {
+			do Sys.wait(50); // Delays the next movement.
+		}
+		if (~toMark) {
+			do Sys.wait(5);
+		}
+		
+        return false;
+	}
+	
+	method void colorScreen(bool mode) {
+		var int i;
+		
+		if (mode) {
+			do Screen.clearScreen();
+		}
+		if (~mode) {
+			do Screen.setColor(true);
+			let i = 0;
+			while (i < 512) {
+				do Screen.drawRectangle(i, 0, i, 254);
+				let i = i + 2;
+			}
+		}
+		
+		return;
+	}
+}
