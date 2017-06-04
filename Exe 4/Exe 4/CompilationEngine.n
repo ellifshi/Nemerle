@@ -16,15 +16,36 @@ namespace Exe_4
 {
     module CompilationEngine
     {
-        static mutable printWriter : FileStream;
-        static mutable tokenPrintWriter : FileStream;
-        static mutable tokenizer : Exe_4.JackTokenizer;
-      
-        public static CompilationEngine(file:string, fileOut:FileStream, outTokenFile:FileStream):void
+        public static printTokens(word:string, fs:FileStream):void
         {
-          
-            mutable  printWriter = fileOut;
-            mutable tokenPrintWriter = outTokenFile;
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine(word);
+
+            writer.Close();
+            fs.Close();
+        }
+        public static sessionData(lines:array[string], pathXMLFile:string):void
+        {
+            mutable fs : FileStream;
+            if (File.Exists(pathXMLFile))
+            {
+                fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+            }
+            else
+            {
+                fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+            }
+            foreach(line in lines)
+            {
+            }
+            if(lines.Contains("<keyword> do </keyword>"))
+            {
+                mutable start =5;
+            }
+            else
+            {
+            }
         }
         public static CompileClass():void
         {
@@ -46,8 +67,9 @@ namespace Exe_4
         public static compileStatements():void
         {
         }
-        public static compileDo():void
+        public static compileDo(word:string, fs:FileStream):void
         {
+
         }
         public static compileLet():void
         {

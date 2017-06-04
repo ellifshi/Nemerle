@@ -67,17 +67,9 @@
     <Compile Include="JackTokenizer.n">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="temp.n">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="temp.txt">
-      <SubType>Content</SubType>
-    </Content>
   </ItemGroup>
   <Import Project="$(Nemerle)\Nemerle.MSBuild.targets" />
   <!--

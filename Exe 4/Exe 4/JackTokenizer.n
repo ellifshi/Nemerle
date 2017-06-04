@@ -11,66 +11,171 @@ using System.Net.Sockets;
 using Nemerle.Imperative;
 using System.Collections.DictionaryEntry;
 using Nemerle.Extensions;
+using System.String;
 
 namespace Exe_4
 {
     module JackTokenizer
     {
-        public static opKeyWord : Set [char];
+        public static opKeyWord : Set [string];
         public static KeyWords : Set [string];
+
         static this ()
         {
-            def tab = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
-            KeyWords = Set(tab);
-            def tab = array ['+', '-', '*', '/', '|', '&', '<', '>', '='];
-            opKeyWord = Set(tab);
+            def tab1 = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
+            KeyWords = Set(tab1);
+            def tab2 = array ["+", "-", "*", "/", "|", "&", "<", ">", "=", "(", ")", "}", "{", ";", ",", ".", "[", "]"];
+            opKeyWord = Set(tab2);       
+        }
+         public static temp1(line:string) : string
+        {
+             mutable start = line.IndexOf("\"");
+             mutable dgf = line.Substring(start+1);
 
+             mutable end = dgf.IndexOf("\"") + 1 + start;
+
+             mutable temp1 = line.Substring(0, start);
+
+             mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"","");
+
+             mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", "");
+
+             mutable temp4 = temp1 + temp2 + temp3;
         }
 
-
-
-        public static sessionData(file :string, fileOut:FileStream):void
+        public static sessionData(line:string, pathXMLFile:string):void
         {
-            mutable d = "class";
-            if(d.Equals(keyword.Equals("constructor")))
+            mutable lineWithFilter = line.Replace(",", " , ").Replace("(", " ( ").Replace(")", " ) ").Replace(".", " . ").Replace(";", " ;").Replace("{", " { ").Replace("}", " } ").Replace("\t", " ").Replace("\\","").Replace("[", " [ ").Replace("]", " ] ");
+            mutable finalLine :string;
+            
+            // check if we got string at line 
+            if(lineWithFilter.Contains("\"")) 
             {
-            }
-            else if(d.Equals(keyword))
-            {
+                mutable start = lineWithFilter.IndexOf("\"");
+                mutable dgf = lineWithFilter.Substring(start+1);
+
+                mutable end = dgf.IndexOf("\"") + 1 + start;
+
+                mutable temp1 = lineWithFilter.Substring(0, start);
+
+                mutable temp2 = lineWithFilter.Substring(start, end - start).Replace(" ", "_").Replace("\"","");
+
+                mutable temp3 = lineWithFilter.Substring(end).Replace("\"", "").Replace("\\", "");
+
+                finalLine = temp1 + temp2 + temp3;
             }
             else
-            {}
-           
+            {
+                finalLine = lineWithFilter;
+            }
+
+            if(finalLine.Contains("//")) // check if we got commend in the middle of line
+            {
+                mutable end = lineWithFilter.IndexOf("//");
+                finalLine = finalLine.Substring(0, end);
+            }
+            else
+            {
+                finalLine = lineWithFilter;
+            }
+
+            mutable words = finalLine.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
+            mutable fs : FileStream;
+            
+            
+            foreach(word in words)
+            {   
+                if (File.Exists(pathXMLFile))
+                {
+                    fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                }
+                else
+                {
+                    fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                }
+                def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
+                def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
+                
+                mutable number : int; // check if char is a number
+                
+                if(checkIfTheWordEqualToKeyWord)
+                {
+                    keyWord(word, fs);
+                }
+                else if(checkIfTheWordEqualOPKeyWord)
+                     {
+                         symbol(word, fs);
+                     }
+                     else if (word.Contains("_"))
+                          {
+                              stringVal(word, fs);
+                          }
+                          else if(int.TryParse(word, out number))
+                               {
+                                   intVal(word, fs);
+                               }
+                               else
+                               {
+                                   identifier(word, fs);
+                               }
+            }
         }
 
-        public static JackTokenizer(inFile : string) :void
-        {
 
-        }
-        public static hasMoreTokens():void
+        public static printTokens(word:string, fs:FileStream):void
         {
-        }
-        public static advance():void
-        {
+            mutable writer =  StreamWriter(fs);  
 
+            writer.WriteLine(word);
+
+            writer.Close();
+            fs.Close();
         }
-        public static tokenType():void
+
+        public static keyWord(word:string, fs:FileStream):void
         {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<keyword> " + word + " </keyword>");
+
+            writer.Close();
+            fs.Close();
         }
-        public static keyword():void
+        public static symbol(word:string, fs:FileStream):void
         {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<symbol> " + word + " </symbol>");
+
+            writer.Close();
+            fs.Close();
         }
-        public static symbol():void
+        public static identifier(word:string, fs:FileStream):void
         {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<identifier> " + word + " </identifier>");
+
+            writer.Close();
+            fs.Close();
         }
-        public static identifier():void
+        public static intVal(word:string, fs:FileStream):void
         {
+            mutable writer =  StreamWriter(fs);  
+
+            writer.WriteLine("<integerConstant> " + word + " </integerConstant>");
+
+            writer.Close();
+            fs.Close();
         }
-        public static intVal():void
+        public static stringVal(word:string, fs:FileStream):void
         {
-        }
-        public static stringVal():void
-        {
+            mutable writer =  StreamWriter(fs);  
+            mutable words = word.Replace("_", " "); 
+            writer.WriteLine("<stringConstant> " + words + " </stringConstant>");
+
+            writer.Close();
+            fs.Close();
         }
     }
 }
