@@ -12,10 +12,13 @@ using Nemerle.Imperative;
 using System.Collections.DictionaryEntry;
 using Nemerle.Extensions;
 using System.String;
+using Nemerle;
+using Nemerle.Utility.NString;
+
 
 namespace Exe_4
 {
-    module JackTokenizer
+    class JackTokenizer
     {
         public static opKeyWord : Set [string];
         public static KeyWords : Set [string];
@@ -24,100 +27,146 @@ namespace Exe_4
         {
             def tab1 = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
             KeyWords = Set(tab1);
-            def tab2 = array ["+", "-", "*", "/", "|", "&", "<", ">", "=", "(", ")", "}", "{", ";", ",", ".", "[", "]"];
+            def tab2 = array ["+", "-", "*", "/", "|", "&amp;", "&lt;", "&gt;", "=", "(", ")", "}", "{", ";", ",", ".", "[", "]", "~"];
             opKeyWord = Set(tab2);       
         }
-         public static temp1(line:string) : string
+        
+        static public hendleWithString(line:string) : string
         {
-             mutable start = line.IndexOf("\"");
-             mutable dgf = line.Substring(start+1);
+            mutable start = line.IndexOf("\""); // what is the index of the first (") 
 
-             mutable end = dgf.IndexOf("\"") + 1 + start;
+            mutable subLine = line.Substring(start + 1); //get the sub string AFTER the first (")
 
-             mutable temp1 = line.Substring(0, start);
+            mutable end = subLine.IndexOf("\"") + 1 + start; // get the index of the secund (")
 
-             mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"","");
+            mutable temp1 = line.Substring(0, start); //get the subString from the beggining until the first (")
 
-             mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", "");
+            mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
 
-             mutable temp4 = temp1 + temp2 + temp3;
+            mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", ""); //get the subString from the secnd (") to the end.
+
+            mutable temp4 = temp1 + temp2 + temp3; //get the all line, but in the string we get instead of space (" ") the ("_").
+            temp4;      //return the line
         }
 
-        public static sessionData(line:string, pathXMLFile:string):void
+        static public returnArray(lines:array[string]) : array[string]
         {
-            mutable lineWithFilter = line.Replace(",", " , ").Replace("(", " ( ").Replace(")", " ) ").Replace(".", " . ").Replace(";", " ;").Replace("{", " { ").Replace("}", " } ").Replace("\t", " ").Replace("\\","").Replace("[", " [ ").Replace("]", " ] ");
             mutable finalLine :string;
-            
+            mutable count = 0;
             // check if we got string at line 
-            if(lineWithFilter.Contains("\"")) 
+            foreach(line in lines)
             {
-                mutable start = lineWithFilter.IndexOf("\"");
-                mutable dgf = lineWithFilter.Substring(start+1);
-
-                mutable end = dgf.IndexOf("\"") + 1 + start;
-
-                mutable temp1 = lineWithFilter.Substring(0, start);
-
-                mutable temp2 = lineWithFilter.Substring(start, end - start).Replace(" ", "_").Replace("\"","");
-
-                mutable temp3 = lineWithFilter.Substring(end).Replace("\"", "").Replace("\\", "");
-
-                finalLine = temp1 + temp2 + temp3;
-            }
-            else
-            {
-                finalLine = lineWithFilter;
-            }
-
-            if(finalLine.Contains("//")) // check if we got commend in the middle of line
-            {
-                mutable end = lineWithFilter.IndexOf("//");
-                finalLine = finalLine.Substring(0, end);
-            }
-            else
-            {
-                finalLine = lineWithFilter;
-            }
-
-            mutable words = finalLine.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
-            mutable fs : FileStream;
-            
-            
-            foreach(word in words)
-            {   
-                if (File.Exists(pathXMLFile))
-                {
-                    fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                mutable lineWithFilter = line.Replace(",", " , ").Replace("(", " ( ").Replace(")", " ) ").Replace(".", " . ").Replace(";", " ;").Replace("{", " { ").Replace("}", " } ").Replace("\t", " ").Replace("\\","").Replace("[", " [ ").Replace("]", " ] ").Replace("  ", " ").Replace("\\**", "\\").Replace("*\\", "\\").Replace("~", " ~ ").Replace("&", " &amp; ").Replace("<", " &lt; ").Replace(">", " &gt; ");
+                if(lineWithFilter.Contains("\"")) 
+                { 
+                    finalLine = hendleWithString(lineWithFilter);
+                    lines[count] = finalLine;
+                    count++;
                 }
                 else
                 {
-                    fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                    finalLine = lineWithFilter;
+                    lines[count] = finalLine;
+                    count++;
                 }
-                def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
-                def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
-                
-                mutable number : int; // check if char is a number
-                
-                if(checkIfTheWordEqualToKeyWord)
+            }
+            count = 0;
+            foreach(line in lines)
+            {
+                finalLine = line;
+                while(finalLine.StartsWith(" "))
                 {
-                    keyWord(word, fs);
+                    finalLine = finalLine.Remove(0, 1);
+                    lines[count] = finalLine;
                 }
-                else if(checkIfTheWordEqualOPKeyWord)
-                     {
-                         symbol(word, fs);
-                     }
-                     else if (word.Contains("_"))
-                          {
-                              stringVal(word, fs);
-                          }
-                          else if(int.TryParse(word, out number))
-                               {
-                                   intVal(word, fs);
-                               }
-                               else
-                               {
-                                   identifier(word, fs);
-                               }
+                if(line.Contains("//")) // check if we got commend in the middle of line
+                {
+                    mutable end = line.IndexOf("//");
+                    finalLine = finalLine.Substring(0, end); 
+                    
+                    while(finalLine.Contains("//"))
+                    {
+                        end = finalLine.IndexOf("//");
+                        finalLine = finalLine.Substring(0, end); 
+                    }
+                    lines[count] = finalLine;
+                    count++;
+                    
+                }
+                else if(line.Contains("   *")) // check if we got commend in the middle of line
+                {
+                    lines[count] = "";
+                    count++;       
+                }
+                else
+                {
+                    lines[count] = finalLine;
+                    count++;
+                }
+            }
+            //now we delete all empty line
+            count = 0;
+            mutable newLines = List();
+            
+            foreach(line in lines)
+            {
+                if(line.Equals(""))
+                {
+                    count++;
+                }
+                else 
+                {
+                    newLines.Add(line);
+                    count++;
+                }
+            }
+            newLines.ToArray();
+        }
+
+        static public sessionData(lines:array[string], pathXMLFile:string):void
+        {
+            returnArray(lines);
+            
+            foreach (line in lines)
+            {
+                mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
+                mutable fs : FileStream;
+                foreach(word in words)
+                {   
+                    if (File.Exists(pathXMLFile))
+                    {
+                        fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                    }
+                    else
+                    {
+                        fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                    }
+                    def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
+                    def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
+                
+                    mutable number : int; // check if char is a number
+                
+                    if(checkIfTheWordEqualToKeyWord)
+                    {
+                        keyWord(word, fs);
+                    }
+                    else if(checkIfTheWordEqualOPKeyWord)
+                    {
+                        symbol(word, fs);
+                    }
+                    else if (word.Contains("_"))
+                    {
+                        stringVal(word, fs);
+                    }
+                    else if(int.TryParse(word, out number))// check if char is a number
+                    {
+                        intVal(word, fs);
+                    }
+                    else
+                    {
+                        identifier(word, fs);
+                    }
+                }
             }
         }
 

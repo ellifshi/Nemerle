@@ -29,14 +29,12 @@ module Program
             Exe_4.JackTokenizer.printTokens("<tokens>", fs);
 
             mutable lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
-            foreach (line in lines)
-            {
-                Exe_4.JackTokenizer.sessionData(line, pathTxmlFile); 
-            }
+            Exe_4.JackTokenizer.sessionData(lines, pathTxmlFile);
+
             mutable fsTemp = FileStream(pathTxmlFile,FileMode.Append,FileAccess.Write);
             Exe_4.JackTokenizer.printTokens("</tokens>", fsTemp);       
         }
-        foreach (file in Directory.EnumerateFiles(pathJackFiles, "*T.xml"))
+        /*foreach (file in Directory.EnumerateFiles(pathJackFiles, "*T.xml"))
         {
             mutable pathXMLFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace("T.xml", ".xml"));
             mutable fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
@@ -45,14 +43,11 @@ module Program
             mutable lines = System.IO.File.ReadAllLines(file);
             Exe_4.CompilationEngine.sessionData(lines, pathXMLFile);
             
-            when(fs.Close())
-            {
-                WriteLine("F");
-            }
-            mutable fsTemp = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
-            Exe_4.CompilationEngine.printTokens("</class>", fsTemp);  
+
+            //mutable fsTemp = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+            //Exe_4.CompilationEngine.printTokens("</class>", fsTemp);  
             
-        }
+        }*/
     }
 }
 
