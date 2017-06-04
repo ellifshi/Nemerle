@@ -1,0 +1,153 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/09/Square/SquareGame.jack
+
+/**
+ * The SquareDance class implements the Square Dance game.
+ * In this game you can move a black square around the screen and
+ * change its size during the movement.
+ * In the beggining, the square is located at the top left corner.
+ * Use the arrow keys to move the square.
+ * Use 'z' & 'x' to decrement & increment the size.
+ * Use 'q' to quit.
+ */
+class RectangleGame {
+
+    // The square
+    field Rectangle rect;
+
+    // The square's movement direction
+    field int direction; // 0=none,1=up,2=down,3=left,4=right
+	field bool toMark;
+
+    /** Constructs a new Square Game. */
+    constructor RectangleGame new() {
+        let rect = Rectangle.new(0, 0, 31, 31);
+        let direction = 0;
+		let toMark = false;
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do square.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Starts the game. Handles inputs from the user that controls
+     *  the square movement direction and size. */
+    method void run() {
+        var char key;
+        var boolean exit;
+
+        let exit = false;
+
+        while (~exit) {
+            // waits for a key to be pressed.
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do moveRectangle();
+            }
+
+            if (key = 81) {
+                let exit = true;
+            }
+            if (key = 90) {
+                do rect.decSize();
+            }
+            if (key = 88) {
+                do rect.incSize();
+            }
+			if (key = 65) {
+				do rect.decLength();
+			}
+			if (key = 83) {
+				do rect.incLength();
+			}
+			if (key = 87) {
+				do rect.decWidth();
+			}
+			if (key = 69) {
+				do rect.incWidth();
+			}
+            if (key = 131) {
+                let direction = 1;
+            }
+            if (key = 133) {
+                let direction = 2;
+            }
+            if (key = 130) {
+                let direction = 3;
+            }
+            if (key = 132) {
+                let direction = 4;
+            }
+			if (key = 72) {
+				let toMark = ~toMark;
+			}
+			if (key = 70) {
+				do colorScreen(true);
+			}
+			if (key = 71) {
+				do colorScreen(false);
+			}
+
+            // waits for the key to be released.
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do moveRectangle();
+            }
+        }
+            
+        return;
+	}
+
+    /** Moves the square by 2 in the current direction. */
+    method void moveRectangle() {
+		var int dir;
+		let dir = direction;
+		
+        if (dir = 1) {
+            let direction = rect.moveUp(toMark);
+        }
+        if (dir = 2) {
+            let direction = rect.moveDown(toMark);
+        }
+        if (dir = 3) {
+            let direction = rect.moveLeft(toMark);
+        }
+        if (dir = 4) {
+            let direction = rect.moveRight(toMark);
+        }
+
+        if ((((dir = 1) | (dir = 2)) & toMark)) {
+			do Sys.wait(5);
+		}
+		else {
+			do Sys.wait(10); // Delays the next movement.
+		}
+        return;
+    }
+	
+	method void colorScreen(bool mode) {
+		var int i;
+		
+		if (mode) {
+			do Screen.setColor(false);
+			do Screen.drawRectangle(0, 0, 510, 254);
+		}
+		if (~mode) {
+			do Screen.setColor(true);
+			let i = 0;
+			while (i < 512) {
+				do Screen.drawRectangle(i, 0, i, 254);
+				let i = i + 2;
+			}
+		}
+		
+		return;
+	}
+}
