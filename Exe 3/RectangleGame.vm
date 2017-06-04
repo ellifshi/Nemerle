@@ -1,0 +1,517 @@
+function RectangleGame.new 0
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push constant 10
+call Array.new 1
+pop this 0
+push constant 0
+push constant 0
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop this 1
+push constant 0
+push this 0
+add
+push constant 0
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+push this 0
+add
+push constant 50
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 2
+push this 0
+add
+push constant 100
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 3
+push this 0
+add
+push constant 150
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 4
+push this 0
+add
+push constant 200
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 5
+push this 0
+add
+push constant 250
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 6
+push this 0
+add
+push constant 300
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 7
+push this 0
+add
+push constant 350
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 8
+push this 0
+add
+push constant 400
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 9
+push this 0
+add
+push constant 450
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+return
+function RectangleGame.newd 0
+push constant 4
+call Memory.alloc 1
+pop pointer 0
+push constant 5
+call Array.new 1
+pop this 0
+push constant 0
+push this 0
+add
+push constant 0
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+push this 0
+add
+push constant 100
+push constant 200
+push constant 31
+push constant 50
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 2
+push this 0
+add
+push constant 200
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 3
+push this 0
+add
+push constant 300
+push constant 200
+push constant 31
+push constant 50
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 4
+push this 0
+add
+push constant 400
+push constant 200
+push constant 31
+push constant 31
+call Rectangle.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push pointer 0
+return
+function RectangleGame.dispose 0
+push argument 0
+pop pointer 0
+call square.dispose 0
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function RectangleGame.run 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+label WHILE_EXP0
+push local 1
+not
+not
+if-goto WHILE_END0
+label WHILE_EXP1
+push local 0
+push constant 0
+eq
+not
+if-goto WHILE_END1
+call Keyboard.keyPressed 0
+pop local 0
+push pointer 0
+call RectangleGame.moveRectangle 1
+pop temp 0
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 81
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop local 1
+label IF_FALSE0
+push local 0
+push constant 90
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+call Rectangle.decSize 1
+pop temp 0
+label IF_FALSE1
+push local 0
+push constant 88
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 1
+call Rectangle.incSize 1
+pop temp 0
+label IF_FALSE2
+push local 0
+push constant 65
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 1
+call Rectangle.decLength 1
+pop temp 0
+label IF_FALSE3
+push local 0
+push constant 83
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 1
+call Rectangle.incLength 1
+pop temp 0
+label IF_FALSE4
+push local 0
+push constant 87
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 1
+call Rectangle.decWidth 1
+pop temp 0
+label IF_FALSE5
+push local 0
+push constant 69
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push this 1
+call Rectangle.incWidth 1
+pop temp 0
+label IF_FALSE6
+push local 0
+push constant 131
+eq
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push constant 1
+pop this 2
+label IF_FALSE7
+push local 0
+push constant 133
+eq
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
+push constant 2
+pop this 2
+label IF_FALSE8
+push local 0
+push constant 130
+eq
+if-goto IF_TRUE9
+goto IF_FALSE9
+label IF_TRUE9
+push constant 3
+pop this 2
+label IF_FALSE9
+push local 0
+push constant 132
+eq
+if-goto IF_TRUE10
+goto IF_FALSE10
+label IF_TRUE10
+push constant 4
+pop this 2
+label IF_FALSE10
+push local 0
+push constant 72
+eq
+if-goto IF_TRUE11
+goto IF_FALSE11
+label IF_TRUE11
+push this 3
+not
+pop this 3
+label IF_FALSE11
+push local 0
+push constant 70
+eq
+if-goto IF_TRUE12
+goto IF_FALSE12
+label IF_TRUE12
+push pointer 0
+push constant 0
+not
+call RectangleGame.colorScreen 2
+pop temp 0
+label IF_FALSE12
+push local 0
+push constant 71
+eq
+if-goto IF_TRUE13
+goto IF_FALSE13
+label IF_TRUE13
+push pointer 0
+push constant 0
+call RectangleGame.colorScreen 2
+pop temp 0
+label IF_FALSE13
+label WHILE_EXP2
+push local 0
+push constant 0
+eq
+not
+not
+if-goto WHILE_END2
+call Keyboard.keyPressed 0
+pop local 0
+push pointer 0
+call RectangleGame.moveRectangle 1
+pop temp 0
+goto WHILE_EXP2
+label WHILE_END2
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function RectangleGame.moveRectangle 1
+push argument 0
+pop pointer 0
+push this 2
+pop local 0
+push local 0
+push constant 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 1
+push this 3
+call Rectangle.moveUp 2
+pop this 2
+label IF_FALSE0
+push local 0
+push constant 2
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 1
+push this 3
+call Rectangle.moveDown 2
+pop this 2
+label IF_FALSE1
+push local 0
+push constant 3
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 1
+push this 3
+call Rectangle.moveLeft 2
+pop this 2
+label IF_FALSE2
+push local 0
+push constant 4
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 1
+push this 3
+call Rectangle.moveRight 2
+pop this 2
+label IF_FALSE3
+push local 0
+push constant 1
+eq
+push local 0
+push constant 2
+eq
+or
+push this 3
+and
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push constant 5
+call Sys.wait 1
+pop temp 0
+goto IF_END4
+label IF_FALSE4
+push constant 10
+call Sys.wait 1
+pop temp 0
+label IF_END4
+push constant 0
+return
+function RectangleGame.colorScreen 2
+push argument 0
+pop pointer 0
+push argument 1
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 0
+push constant 0
+push constant 510
+push constant 254
+call Screen.drawRectangle 4
+pop temp 0
+call RectangleGame.newd 0
+pop local 1
+label IF_FALSE0
+push argument 1
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 512
+lt
+not
+if-goto WHILE_END0
+push local 0
+push constant 0
+push local 0
+push constant 254
+call Screen.drawRectangle 4
+pop temp 0
+push local 0
+push constant 2
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+label IF_FALSE1
+push constant 0
+return
