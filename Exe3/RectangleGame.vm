@@ -1,5 +1,5 @@
 function RectangleGame.new 0
-push constant 4
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push constant 0
@@ -131,79 +131,12 @@ pop temp 0
 pop pointer 1
 push temp 0
 pop that 0
-push pointer 0
-return
-function RectangleGame.newd 0
-push constant 4
-call Memory.alloc 1
-pop pointer 0
-push constant 5
-call Array.new 1
-pop this 0
 push constant 0
-push this 0
-add
-push constant 0
-push constant 200
-push constant 31
-push constant 31
-call Rectangle.new 4
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 1
-push this 0
-add
-push constant 100
-push constant 200
-push constant 31
-push constant 50
-call Rectangle.new 4
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 2
-push this 0
-add
-push constant 200
-push constant 200
-push constant 31
-push constant 31
-call Rectangle.new 4
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 3
-push this 0
-add
-push constant 300
-push constant 200
-push constant 31
-push constant 50
-call Rectangle.new 4
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
-push constant 4
-push this 0
-add
-push constant 400
-push constant 200
-push constant 31
-push constant 31
-call Rectangle.new 4
-pop temp 0
-pop pointer 1
-push temp 0
-pop that 0
+pop this 3
 push pointer 0
 return
 function RectangleGame.afterDelte 0
-push constant 4
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push constant 10
@@ -361,6 +294,9 @@ call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
 call RectangleGame.moveRectangle 1
+pop local 1
+push pointer 0
+call RectangleGame.moveArray 1
 pop temp 0
 goto WHILE_EXP1
 label WHILE_END1
@@ -375,134 +311,152 @@ not
 pop local 1
 label IF_FALSE0
 push local 0
-push constant 90
+push constant 73
 eq
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 1
-call Rectangle.decSize 1
-pop temp 0
+push constant 0
+pop this 3
 label IF_FALSE1
 push local 0
-push constant 88
+push constant 74
 eq
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
-push this 1
-call Rectangle.incSize 1
-pop temp 0
+push constant 1
+pop this 3
 label IF_FALSE2
 push local 0
-push constant 65
+push constant 90
 eq
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
 push this 1
-call Rectangle.decLength 1
+call Rectangle.decSize 1
 pop temp 0
 label IF_FALSE3
 push local 0
-push constant 83
+push constant 88
 eq
 if-goto IF_TRUE4
 goto IF_FALSE4
 label IF_TRUE4
 push this 1
-call Rectangle.incLength 1
+call Rectangle.incSize 1
 pop temp 0
 label IF_FALSE4
 push local 0
-push constant 87
+push constant 65
 eq
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
 push this 1
-call Rectangle.decWidth 1
+call Rectangle.decLength 1
 pop temp 0
 label IF_FALSE5
 push local 0
-push constant 69
+push constant 83
 eq
 if-goto IF_TRUE6
 goto IF_FALSE6
 label IF_TRUE6
 push this 1
-call Rectangle.incWidth 1
+call Rectangle.incLength 1
 pop temp 0
 label IF_FALSE6
 push local 0
-push constant 131
+push constant 87
 eq
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
-push constant 1
-pop this 2
+push this 1
+call Rectangle.decWidth 1
+pop temp 0
 label IF_FALSE7
 push local 0
-push constant 133
+push constant 69
 eq
 if-goto IF_TRUE8
 goto IF_FALSE8
 label IF_TRUE8
-push constant 2
-pop this 2
+push this 1
+call Rectangle.incWidth 1
+pop temp 0
 label IF_FALSE8
 push local 0
-push constant 130
+push constant 131
 eq
 if-goto IF_TRUE9
 goto IF_FALSE9
 label IF_TRUE9
-push constant 3
+push constant 1
 pop this 2
 label IF_FALSE9
 push local 0
-push constant 132
+push constant 133
 eq
 if-goto IF_TRUE10
 goto IF_FALSE10
 label IF_TRUE10
-push constant 4
+push constant 2
 pop this 2
 label IF_FALSE10
 push local 0
-push constant 72
+push constant 130
 eq
 if-goto IF_TRUE11
 goto IF_FALSE11
 label IF_TRUE11
-push this 3
-not
-pop this 3
+push constant 3
+pop this 2
 label IF_FALSE11
 push local 0
-push constant 70
+push constant 132
 eq
 if-goto IF_TRUE12
 goto IF_FALSE12
 label IF_TRUE12
+push constant 4
+pop this 2
+label IF_FALSE12
+push local 0
+push constant 72
+eq
+if-goto IF_TRUE13
+goto IF_FALSE13
+label IF_TRUE13
+push this 4
+not
+pop this 4
+label IF_FALSE13
+push local 0
+push constant 70
+eq
+if-goto IF_TRUE14
+goto IF_FALSE14
+label IF_TRUE14
 push pointer 0
 push constant 0
 not
 call RectangleGame.colorScreen 2
 pop temp 0
-label IF_FALSE12
+label IF_FALSE14
 push local 0
 push constant 71
 eq
-if-goto IF_TRUE13
-goto IF_FALSE13
-label IF_TRUE13
+if-goto IF_TRUE15
+goto IF_FALSE15
+label IF_TRUE15
 push pointer 0
 push constant 0
 call RectangleGame.colorScreen 2
 pop temp 0
-label IF_FALSE13
+label IF_FALSE15
 label WHILE_EXP2
 push local 0
 push constant 0
@@ -514,6 +468,9 @@ call Keyboard.keyPressed 0
 pop local 0
 push pointer 0
 call RectangleGame.moveRectangle 1
+pop local 1
+push pointer 0
+call RectangleGame.moveArray 1
 pop temp 0
 goto WHILE_EXP2
 label WHILE_END2
@@ -521,55 +478,221 @@ goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
-function RectangleGame.moveRectangle 1
+function RectangleGame.moveRectangle 4
 push argument 0
 pop pointer 0
 push this 2
 pop local 0
-push local 0
-push constant 1
-eq
+push constant 0
+pop local 2
+push constant 0
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 10
+lt
+not
+if-goto WHILE_END0
+push local 1
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 3
+push local 3
+call Rectangle.getX 1
+push this 1
+call Rectangle.getX 1
+lt
+push local 3
+call Rectangle.getX 1
+push local 3
+call Rectangle.getL 1
+add
+push this 1
+call Rectangle.getX 1
+gt
+and
+push local 3
+call Rectangle.getY 1
+push this 1
+call Rectangle.getY 1
+lt
+and
+push local 3
+call Rectangle.getY 1
+push local 3
+call Rectangle.getW 1
+add
+push this 1
+call Rectangle.getY 1
+gt
+and
 if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
-push this 1
-push this 3
-call Rectangle.moveUp 2
-pop this 2
+push constant 0
+not
+pop local 2
 label IF_FALSE0
-push local 0
-push constant 2
-eq
+push this 1
+call Rectangle.getX 1
+push local 3
+call Rectangle.getX 1
+lt
+push this 1
+call Rectangle.getX 1
+push this 1
+call Rectangle.getL 1
+add
+push local 3
+call Rectangle.getX 1
+gt
+and
+push local 3
+call Rectangle.getY 1
+push this 1
+call Rectangle.getY 1
+lt
+and
+push local 3
+call Rectangle.getY 1
+push local 3
+call Rectangle.getW 1
+add
+push this 1
+call Rectangle.getY 1
+gt
+and
 if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
-push this 1
-push this 3
-call Rectangle.moveDown 2
-pop this 2
+push constant 0
+not
+pop local 2
 label IF_FALSE1
-push local 0
-push constant 3
-eq
+push local 3
+call Rectangle.getX 1
+push this 1
+call Rectangle.getX 1
+lt
+push local 3
+call Rectangle.getX 1
+push local 3
+call Rectangle.getL 1
+add
+push this 1
+call Rectangle.getX 1
+gt
+and
+push this 1
+call Rectangle.getY 1
+push local 3
+call Rectangle.getY 1
+lt
+and
+push this 1
+call Rectangle.getY 1
+push this 1
+call Rectangle.getW 1
+add
+push local 3
+call Rectangle.getY 1
+gt
+and
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
-push this 1
-push this 3
-call Rectangle.moveLeft 2
-pop this 2
+push constant 0
+not
+pop local 2
 label IF_FALSE2
-push local 0
-push constant 4
-eq
+push this 1
+call Rectangle.getX 1
+push local 3
+call Rectangle.getX 1
+lt
+push this 1
+call Rectangle.getX 1
+push this 1
+call Rectangle.getL 1
+add
+push local 3
+call Rectangle.getX 1
+gt
+and
+push this 1
+call Rectangle.getY 1
+push local 3
+call Rectangle.getY 1
+lt
+and
+push this 1
+call Rectangle.getY 1
+push this 1
+call Rectangle.getW 1
+add
+push local 3
+call Rectangle.getY 1
+gt
+and
 if-goto IF_TRUE3
 goto IF_FALSE3
 label IF_TRUE3
+push constant 0
+not
+pop local 2
+label IF_FALSE3
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+push constant 1
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
 push this 1
-push this 3
+push this 4
+call Rectangle.moveUp 2
+pop this 2
+label IF_FALSE4
+push local 0
+push constant 2
+eq
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push this 1
+push this 4
+call Rectangle.moveDown 2
+pop this 2
+label IF_FALSE5
+push local 0
+push constant 3
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push this 1
+push this 4
+call Rectangle.moveLeft 2
+pop this 2
+label IF_FALSE6
+push local 0
+push constant 4
+eq
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push this 1
+push this 4
 call Rectangle.moveRight 2
 pop this 2
-label IF_FALSE3
+label IF_FALSE7
 push local 0
 push constant 1
 eq
@@ -577,20 +700,67 @@ push local 0
 push constant 2
 eq
 or
-push this 3
+push this 4
 and
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
+if-goto IF_TRUE8
+goto IF_FALSE8
+label IF_TRUE8
 push constant 5
 call Sys.wait 1
 pop temp 0
-goto IF_END4
-label IF_FALSE4
+goto IF_END8
+label IF_FALSE8
 push constant 10
 call Sys.wait 1
 pop temp 0
-label IF_END4
+label IF_END8
+push local 2
+return
+function RectangleGame.moveArray 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 10
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push this 3
+push constant 1
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 1
+push this 4
+call Rectangle.moveUp 2
+pop this 3
+label IF_FALSE0
+push this 3
+push constant 2
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 1
+push this 4
+call Rectangle.moveDown 2
+pop this 3
+label IF_FALSE1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
 push constant 0
 return
 function RectangleGame.colorScreen 2
@@ -603,14 +773,8 @@ label IF_TRUE0
 push constant 0
 call Screen.setColor 1
 pop temp 0
-push constant 0
-push constant 0
-push constant 510
-push constant 254
-call Screen.drawRectangle 4
+call Screen.clearScreen 0
 pop temp 0
-call RectangleGame.newd 0
-pop local 1
 label IF_FALSE0
 push argument 1
 not

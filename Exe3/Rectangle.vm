@@ -15,6 +15,26 @@ call Rectangle.draw 1
 pop temp 0
 push pointer 0
 return
+function Rectangle.getX 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Rectangle.getY 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Rectangle.getL 0
+push argument 0
+pop pointer 0
+push this 3
+return
+function Rectangle.getW 0
+push argument 0
+pop pointer 0
+push this 4
+return
 function Rectangle.dispose 0
 push argument 0
 pop pointer 0
@@ -219,8 +239,6 @@ return
 function Rectangle.printNewRect 0
 push argument 0
 pop pointer 0
-call RectangleGame.afterDelte 0
-pop this 2
 push constant 0
 return
 function Rectangle.moveUp 1

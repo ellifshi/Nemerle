@@ -21,6 +21,7 @@ class RectangleGame {
     
     // The square's movement direction
     field int direction; // 0=none,1=up,2=down,3=left,4=right
+	field int arrDir;
 	field bool toMark;
 	
 	
@@ -41,26 +42,11 @@ class RectangleGame {
 			let arr[7] = Rectangle.new(350,224,31, 31);
 			let arr[8] = Rectangle.new(400,224,31, 31);
 			let arr[9] = Rectangle.new(450,224,31, 31);
+			
+			let arrDir = 0;
 
 
 		return this;      
-    }
-        constructor RectangleGame newd() {
-       
-        let arr = Array.new(5);
-           
-    	let arr[0] = Rectangle.new(0,200,31, 31);
-    	let arr[1] = Rectangle.new(100,200,31, 50);
-    	let arr[2] = Rectangle.new(200,200, 31, 31);
-    	let arr[3] = Rectangle.new(300,200,31, 50);
-    	let arr[4] = Rectangle.new(400,200,31, 31);
-
-    
-    
-    		
-    		
-            
-            return this;
     }
 	
 	constructor RectangleGame afterDelte(){
@@ -98,12 +84,19 @@ class RectangleGame {
             // waits for a key to be pressed.
             while (key = 0) {
                 let key = Keyboard.keyPressed();
-                do moveRectangle();
+                let exit = moveRectangle();
+				do moveArray();
             }
 
             if (key = 81) {
                 let exit = true;
             }
+			if (key = 73) {
+				let arrDir = 0;
+			}
+			if (key = 74) {
+				let arrDir = 1;
+			}
             if (key = 90) {
                 do rect.decSize();
             }
@@ -147,7 +140,8 @@ class RectangleGame {
             // waits for the key to be released.
             while (~(key = 0)) {
                 let key = Keyboard.keyPressed();
-                do moveRectangle();
+                let exit = moveRectangle();
+				do moveArray();
             }
         }
             
@@ -155,9 +149,72 @@ class RectangleGame {
 	}
 
     /** Moves the square by 2 in the current direction. */
-    method void moveRectangle() {
+    method boolean moveRectangle() {
 		var int dir;
+		var int i;
+		var boolean ret;
+		var Rectangle temp;
 		let dir = direction;
+		
+		let ret  = false;
+		
+		let i = 0;
+		while (i < 10) {
+			let temp = arr[i];
+			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (temp.getY() < rect.getY()) & (temp.getY() + temp.getW() > rect.getY())) {
+				/**if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();*/
+				
+				let ret = true;
+			}
+			
+			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (temp.getY() < rect.getY()) & ((temp.getY() + temp.getW()) > rect.getY())) {
+				/**if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();*/
+				
+				let ret = true;
+			}
+			
+			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
+				/**if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();*/
+				
+				let ret = true;
+			}
+			
+			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
+				/**if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();*/
+				
+				let ret = true;
+			}
+			
+			let i = i + 1;
+		}
 		
         if (dir = 1) {
             let direction = rect.moveUp(toMark);
@@ -178,8 +235,27 @@ class RectangleGame {
 		else {
 			do Sys.wait(10); // Delays the next movement.
 		}
-        return;
+        return ret;
     }
+	
+	method void moveArray() {
+		var int i;
+		var Rectangle temp;
+		
+		let i = 0;
+		while (i < 10) {
+			let temp = arr[i];
+			
+			if (arrDir = 1) {
+				let arrDir = temp.moveUp(toMark);
+			}
+			if (arrDir = 2) {
+				let arrDir = temp.moveDown(toMark);
+			}
+			let i = i + 1;
+		}
+		return;
+	}
 	
 	method void colorScreen(bool mode) {
 		var int i;
@@ -187,8 +263,9 @@ class RectangleGame {
 		
 		if (mode) {
 			do Screen.setColor(false);
-			do Screen.drawRectangle(0, 0, 510, 254);
-			let game = RectangleGame.newd();
+			//do Screen.drawRectangle(0, 0, 510, 254);
+			//let game = RectangleGame.newd();
+			do Screen.clearScreen();
 		}
 		if (~mode) {
 			do Screen.setColor(true);
