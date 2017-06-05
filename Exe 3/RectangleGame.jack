@@ -22,24 +22,28 @@ class RectangleGame {
     // The square's movement direction
     field int direction; // 0=none,1=up,2=down,3=left,4=right
 	field bool toMark;
-
+	
+	
     /** Constructs a new Square Game. */
     constructor RectangleGame new() {
-        let arr = Array.new(10);
-        
-        let rect   = Rectangle.new(0,0, 31, 31);
-	let arr[0] = Rectangle.new(0,200,31, 31);
-	let arr[1] = Rectangle.new(50,200,31, 31);
-	let arr[2] = Rectangle.new(100,200, 31, 31);
-	let arr[3] = Rectangle.new(150,200,31, 31);
-	let arr[4] = Rectangle.new(200,200,31, 31);
-	let arr[5] = Rectangle.new(250,200,31, 31);
-	let arr[6] = Rectangle.new(300,200, 31, 31);
-	let arr[7] = Rectangle.new(350,200,31, 31);
-	let arr[8] = Rectangle.new(400,200,31, 31);
-	let arr[9] = Rectangle.new(450,200,31, 31);
+	
+		
+		    //do Output.printString("start");
+			let rect   = Rectangle.new(0,0, 31, 31);
+			let arr = Array.new(10);
+			let arr[0] = Rectangle.new(0,224,31, 31);
+			let arr[1] = Rectangle.new(50,224,31, 31);
+			let arr[2] = Rectangle.new(100,224, 31, 31);
+			let arr[3] = Rectangle.new(150,224,31, 31);
+			let arr[4] = Rectangle.new(200,224,31, 31);
+			let arr[5] = Rectangle.new(250,224,31, 31);
+			let arr[6] = Rectangle.new(300,224, 31, 31);
+			let arr[7] = Rectangle.new(350,224,31, 31);
+			let arr[8] = Rectangle.new(400,224,31, 31);
+			let arr[9] = Rectangle.new(450,224,31, 31);
 
-        return this;
+
+		return this;      
     }
         constructor RectangleGame newd() {
        
@@ -58,6 +62,22 @@ class RectangleGame {
             
             return this;
     }
+	
+	constructor RectangleGame afterDelte(){
+			let arr = Array.new(10);
+			let arr[0] = Rectangle.new(0,224,31, 31);
+			let arr[1] = Rectangle.new(50,224,31, 31);
+			let arr[2] = Rectangle.new(100,224, 31, 31);
+			let arr[3] = Rectangle.new(150,224,31, 31);
+			let arr[4] = Rectangle.new(200,224,31, 31);
+			let arr[5] = Rectangle.new(250,224,31, 31);
+			let arr[6] = Rectangle.new(300,224, 31, 31);
+			let arr[7] = Rectangle.new(350,224,31, 31);
+			let arr[8] = Rectangle.new(400,224,31, 31);
+			let arr[9] = Rectangle.new(450,224,31, 31);
+			return this;
+
+	}
 
     /** Deallocates the object's memory. */
     method void dispose() {

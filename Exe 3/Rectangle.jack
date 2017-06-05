@@ -12,6 +12,7 @@ class Rectangle {
 
     // Location on the screen
     field int x, y;
+	field Rectangle game;
 
     // The size of the square
     field int length, width;
@@ -105,11 +106,18 @@ class Rectangle {
         }
         return;
 	}
-
+	method void printNewRect(){
+	    //do Output.printString(" start constructor ");
+		let game = RectangleGame.afterDelte();
+		//let rect = Rectangle.new(Ax, Ay, Alength, Awidth);
+		//do Output.printString(" end constructor ");
+	return;
+	}
+	/**0,200,31, 31*/
     /** Moves up by 2. */
     method int moveUp(bool toMark) {
 		var int i;
-		
+				
         if (y > 1) {
             do Screen.setColor(false);
             do Screen.drawRectangle(x, (y + width) - 1, x + length, y + width);
@@ -129,7 +137,10 @@ class Rectangle {
             do Screen.setColor(true);
             do Screen.drawRectangle(x, y, x + length, y + 1);
 			//do draw();
-			
+			if( ((x = 0) & (y > 200)) | ((x = 50) & (y > 200)) | ((x = 100) & (y > 200)) | ((x = 150) & (y > 200)) |((x = 200) & (y > 200)) | ((x = 250) & (y > 200)) | ((x = 300) & (y > 200)) | ((x = 350) & (y > 200)) | ((x = 400) & (y > 200)) |((x = 450) & (y > 200)) ){
+				//do Output.printString(" moveUp ");
+			    do printNewRect();
+		    }
 			return 1;
         }
         return 2;
@@ -158,7 +169,10 @@ class Rectangle {
             do Screen.setColor(true);
             do Screen.drawRectangle(x, (y + width) - 1, x + length, y + width);
 			//do draw();
-			
+			if( ((x = 0) & (y > 200)) | ((x = 50) & (y > 200)) | ((x = 100) & (y > 200)) | ((x = 150) & (y > 200)) |((x = 200) & (y > 200)) | ((x = 250) & (y > 200)) | ((x = 300) & (y > 200)) | ((x = 350) & (y > 200)) | ((x = 400) & (y > 200)) |((x = 450) & (y > 200)) ){
+			   // do Output.printString(" moveDown ");
+			    do printNewRect();
+		    }
 			return 2;
         }
         return 1;
@@ -180,7 +194,10 @@ class Rectangle {
             do Screen.setColor(true);
             do Screen.drawRectangle(x, y, x + 1, y + width);
 			//do draw();
-			
+			if( ((x = 0) & (y > 200)) | ((x = 50) & (y > 200)) | ((x = 100) & (y > 200)) | ((x = 150) & (y > 200)) |((x = 200) & (y > 200)) | ((x = 250) & (y > 200)) | ((x = 300) & (y > 200)) | ((x = 350) & (y > 200)) | ((x = 400) & (y > 200)) |((x = 450) & (y > 200)) ){
+				//do Output.printString(" moveLeft ");
+			    do printNewRect();
+		    }
 			return 3;
         }
         return 4;
@@ -202,7 +219,10 @@ class Rectangle {
             do Screen.setColor(true);
             do Screen.drawRectangle((x + length) - 1, y, x + length, y + width);
 			//do draw();
-			
+			if( ((x = 0) & (y > 200)) | ((x = 50) & (y > 200)) | ((x = 100) & (y > 200)) | ((x = 150) & (y > 200)) |((x = 200) & (y > 200)) | ((x = 250) & (y > 200)) | ((x = 300) & (y > 200)) | ((x = 350) & (y > 200)) | ((x = 400) & (y > 200)) |((x = 450) & (y > 200)) ){
+				//do Output.printString(" moveRight ");
+			    do printNewRect();
+		    }
 			return 4;
         }
         return 3;

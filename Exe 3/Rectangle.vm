@@ -1,5 +1,5 @@
 function Rectangle.new 0
-push constant 4
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -7,9 +7,9 @@ pop this 0
 push argument 1
 pop this 1
 push argument 2
-pop this 2
-push argument 3
 pop this 3
+push argument 3
+pop this 4
 push pointer 0
 call Rectangle.draw 1
 pop temp 0
@@ -33,10 +33,10 @@ pop temp 0
 push this 0
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -51,10 +51,10 @@ pop temp 0
 push this 0
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -64,12 +64,12 @@ function Rectangle.incSize 0
 push argument 0
 pop pointer 0
 push this 1
-push this 3
+push this 4
 add
 push constant 254
 lt
 push this 0
-push this 2
+push this 3
 add
 push constant 510
 lt
@@ -80,14 +80,14 @@ label IF_TRUE0
 push pointer 0
 call Rectangle.erase 1
 pop temp 0
+push this 4
+push constant 2
+add
+pop this 4
 push this 3
 push constant 2
 add
 pop this 3
-push this 2
-push constant 2
-add
-pop this 2
 push pointer 0
 call Rectangle.draw 1
 pop temp 0
@@ -98,7 +98,7 @@ function Rectangle.incLength 0
 push argument 0
 pop pointer 0
 push this 0
-push this 2
+push this 3
 add
 push constant 510
 lt
@@ -108,10 +108,10 @@ label IF_TRUE0
 push pointer 0
 call Rectangle.erase 1
 pop temp 0
-push this 2
+push this 3
 push constant 2
 add
-pop this 2
+pop this 3
 push pointer 0
 call Rectangle.draw 1
 pop temp 0
@@ -122,7 +122,7 @@ function Rectangle.incWidth 0
 push argument 0
 pop pointer 0
 push this 1
-push this 3
+push this 4
 add
 push constant 254
 lt
@@ -132,10 +132,10 @@ label IF_TRUE0
 push pointer 0
 call Rectangle.erase 1
 pop temp 0
-push this 3
+push this 4
 push constant 2
 add
-pop this 3
+pop this 4
 push pointer 0
 call Rectangle.draw 1
 pop temp 0
@@ -145,10 +145,10 @@ return
 function Rectangle.decSize 0
 push argument 0
 pop pointer 0
-push this 2
+push this 3
 push constant 2
 gt
-push this 3
+push this 4
 push constant 2
 gt
 and
@@ -158,14 +158,14 @@ label IF_TRUE0
 push pointer 0
 call Rectangle.erase 1
 pop temp 0
+push this 4
+push constant 2
+sub
+pop this 4
 push this 3
 push constant 2
 sub
 pop this 3
-push this 2
-push constant 2
-sub
-pop this 2
 push pointer 0
 call Rectangle.draw 1
 pop temp 0
@@ -175,28 +175,6 @@ return
 function Rectangle.decLength 0
 push argument 0
 pop pointer 0
-push this 2
-push constant 2
-gt
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push pointer 0
-call Rectangle.erase 1
-pop temp 0
-push this 2
-push constant 2
-sub
-pop this 2
-push pointer 0
-call Rectangle.draw 1
-pop temp 0
-label IF_FALSE0
-push constant 0
-return
-function Rectangle.decWidth 0
-push argument 0
-pop pointer 0
 push this 3
 push constant 2
 gt
@@ -214,6 +192,35 @@ push pointer 0
 call Rectangle.draw 1
 pop temp 0
 label IF_FALSE0
+push constant 0
+return
+function Rectangle.decWidth 0
+push argument 0
+pop pointer 0
+push this 4
+push constant 2
+gt
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push pointer 0
+call Rectangle.erase 1
+pop temp 0
+push this 4
+push constant 2
+sub
+pop this 4
+push pointer 0
+call Rectangle.draw 1
+pop temp 0
+label IF_FALSE0
+push constant 0
+return
+function Rectangle.printNewRect 0
+push argument 0
+pop pointer 0
+call RectangleGame.afterDelte 0
+pop this 2
 push constant 0
 return
 function Rectangle.moveUp 1
@@ -230,15 +237,15 @@ call Screen.setColor 1
 pop temp 0
 push this 0
 push this 1
-push this 3
+push this 4
 add
 push constant 1
 sub
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -258,20 +265,20 @@ pop local 0
 label WHILE_EXP0
 push local 0
 push this 0
-push this 2
+push this 3
 add
 lt
 not
 if-goto WHILE_END0
 push local 0
 push this 1
-push this 3
+push this 4
 add
 push constant 1
 sub
 push local 0
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -293,13 +300,99 @@ pop temp 0
 push this 0
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
 push constant 1
 add
 call Screen.drawRectangle 4
 pop temp 0
+push this 0
+push constant 0
+eq
+push this 1
+push constant 200
+gt
+and
+push this 0
+push constant 50
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 100
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 150
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 200
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 250
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 300
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 350
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 400
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 450
+eq
+push this 1
+push constant 200
+gt
+and
+or
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Rectangle.printNewRect 1
+pop temp 0
+label IF_FALSE2
 push constant 1
 return
 label IF_FALSE0
@@ -309,7 +402,7 @@ function Rectangle.moveDown 1
 push argument 0
 pop pointer 0
 push this 1
-push this 3
+push this 4
 add
 push constant 254
 lt
@@ -322,7 +415,7 @@ pop temp 0
 push this 0
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
 push constant 1
@@ -345,7 +438,7 @@ pop local 0
 label WHILE_EXP0
 push local 0
 push this 0
-push this 2
+push this 3
 add
 lt
 not
@@ -375,18 +468,104 @@ call Screen.setColor 1
 pop temp 0
 push this 0
 push this 1
-push this 3
+push this 4
 add
 push constant 1
 sub
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
+push this 0
+push constant 0
+eq
+push this 1
+push constant 200
+gt
+and
+push this 0
+push constant 50
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 100
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 150
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 200
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 250
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 300
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 350
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 400
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 450
+eq
+push this 1
+push constant 200
+gt
+and
+or
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Rectangle.printNewRect 1
+pop temp 0
+label IF_FALSE2
 push constant 2
 return
 label IF_FALSE0
@@ -405,16 +584,16 @@ push constant 0
 call Screen.setColor 1
 pop temp 0
 push this 0
-push this 2
+push this 3
 add
 push constant 1
 sub
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -428,18 +607,18 @@ push argument 1
 call Screen.setColor 1
 pop temp 0
 push this 0
-push this 2
+push this 3
 add
 push constant 1
 sub
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push constant 1
 sub
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -458,10 +637,96 @@ push this 0
 push constant 1
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
+push this 0
+push constant 0
+eq
+push this 1
+push constant 200
+gt
+and
+push this 0
+push constant 50
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 100
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 150
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 200
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 250
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 300
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 350
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 400
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 450
+eq
+push this 1
+push constant 200
+gt
+and
+or
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Rectangle.printNewRect 1
+pop temp 0
+label IF_FALSE2
 push constant 3
 return
 label IF_FALSE0
@@ -471,7 +736,7 @@ function Rectangle.moveRight 0
 push argument 0
 pop pointer 0
 push this 0
-push this 2
+push this 3
 add
 push constant 510
 lt
@@ -487,7 +752,7 @@ push this 0
 push constant 1
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -508,7 +773,7 @@ push this 0
 push constant 1
 sub
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
@@ -522,19 +787,105 @@ not
 call Screen.setColor 1
 pop temp 0
 push this 0
-push this 2
+push this 3
 add
 push constant 1
 sub
 push this 1
 push this 0
-push this 2
+push this 3
 add
 push this 1
-push this 3
+push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
+push this 0
+push constant 0
+eq
+push this 1
+push constant 200
+gt
+and
+push this 0
+push constant 50
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 100
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 150
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 200
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 250
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 300
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 350
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 400
+eq
+push this 1
+push constant 200
+gt
+and
+or
+push this 0
+push constant 450
+eq
+push this 1
+push constant 200
+gt
+and
+or
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push pointer 0
+call Rectangle.printNewRect 1
+pop temp 0
+label IF_FALSE2
 push constant 4
 return
 label IF_FALSE0
