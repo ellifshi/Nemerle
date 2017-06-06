@@ -515,11 +515,25 @@ call Rectangle.getX 1
 gt
 and
 push local 3
+call Rectangle.getX 1
+push this 1
+call Rectangle.getX 1
+eq
+push local 3
+call Rectangle.getX 1
+push local 3
+call Rectangle.getL 1
+add
+push this 1
+call Rectangle.getX 1
+eq
+and
+or
+push local 3
 call Rectangle.getY 1
 push this 1
 call Rectangle.getY 1
 lt
-and
 push local 3
 call Rectangle.getY 1
 push local 3
@@ -528,6 +542,22 @@ add
 push this 1
 call Rectangle.getY 1
 gt
+and
+push local 3
+call Rectangle.getY 1
+push this 1
+call Rectangle.getY 1
+eq
+push local 3
+call Rectangle.getY 1
+push local 3
+call Rectangle.getW 1
+add
+push this 1
+call Rectangle.getY 1
+eq
+and
+or
 and
 if-goto IF_TRUE0
 goto IF_FALSE0
@@ -586,12 +616,26 @@ push local 3
 call Rectangle.getX 1
 gt
 and
+push this 1
+call Rectangle.getX 1
+push local 3
+call Rectangle.getX 1
+eq
+push this 1
+call Rectangle.getX 1
+push this 1
+call Rectangle.getL 1
+add
+push local 3
+call Rectangle.getX 1
+eq
+and
+or
 push local 3
 call Rectangle.getY 1
 push this 1
 call Rectangle.getY 1
 lt
-and
 push local 3
 call Rectangle.getY 1
 push local 3
@@ -600,6 +644,22 @@ add
 push this 1
 call Rectangle.getY 1
 gt
+and
+push local 3
+call Rectangle.getY 1
+push this 1
+call Rectangle.getY 1
+eq
+push local 3
+call Rectangle.getY 1
+push local 3
+call Rectangle.getW 1
+add
+push this 1
+call Rectangle.getY 1
+eq
+and
+or
 and
 if-goto IF_TRUE3
 goto IF_FALSE3
@@ -658,12 +718,26 @@ push this 1
 call Rectangle.getX 1
 gt
 and
+push local 3
+call Rectangle.getX 1
+push this 1
+call Rectangle.getX 1
+eq
+push local 3
+call Rectangle.getX 1
+push local 3
+call Rectangle.getL 1
+add
+push this 1
+call Rectangle.getX 1
+eq
+and
+or
 push this 1
 call Rectangle.getY 1
 push local 3
 call Rectangle.getY 1
 lt
-and
 push this 1
 call Rectangle.getY 1
 push this 1
@@ -672,6 +746,22 @@ add
 push local 3
 call Rectangle.getY 1
 gt
+and
+push this 1
+call Rectangle.getY 1
+push local 3
+call Rectangle.getY 1
+eq
+push this 1
+call Rectangle.getY 1
+push this 1
+call Rectangle.getW 1
+add
+push local 3
+call Rectangle.getY 1
+eq
+and
+or
 and
 if-goto IF_TRUE6
 goto IF_FALSE6
@@ -731,11 +821,25 @@ call Rectangle.getX 1
 gt
 and
 push this 1
+call Rectangle.getX 1
+push local 3
+call Rectangle.getX 1
+eq
+push this 1
+call Rectangle.getX 1
+push this 1
+call Rectangle.getL 1
+add
+push local 3
+call Rectangle.getX 1
+eq
+and
+or
+push this 1
 call Rectangle.getY 1
 push local 3
 call Rectangle.getY 1
 lt
-and
 push this 1
 call Rectangle.getY 1
 push this 1
@@ -744,6 +848,22 @@ add
 push local 3
 call Rectangle.getY 1
 gt
+and
+push this 1
+call Rectangle.getY 1
+push local 3
+call Rectangle.getY 1
+eq
+push this 1
+call Rectangle.getY 1
+push this 1
+call Rectangle.getW 1
+add
+push local 3
+call Rectangle.getY 1
+eq
+and
+or
 and
 if-goto IF_TRUE9
 goto IF_FALSE9
