@@ -28,46 +28,44 @@ class RectangleGame {
     /** Constructs a new Square Game. */
     constructor RectangleGame new() {
 	
+		//do Output.printString("start");
+		let rect   = Rectangle.new(0,0, 31, 31);		
+		let arr = Array.new(10);
 		
-		    //do Output.printString("start");
-			let rect   = Rectangle.new(0,0, 31, 31);
-			let arr = Array.new(10);
-			let arr[0] = Rectangle.new(0,224,31, 31);
-			let arr[1] = Rectangle.new(50,224,31, 31);
-			let arr[2] = Rectangle.new(100,224, 31, 31);
-			let arr[3] = Rectangle.new(150,224,31, 31);
-			let arr[4] = Rectangle.new(200,224,31, 31);
-			let arr[5] = Rectangle.new(250,224,31, 31);
-			let arr[6] = Rectangle.new(300,224, 31, 31);
-			let arr[7] = Rectangle.new(350,224,31, 31);
-			let arr[8] = Rectangle.new(400,224,31, 31);
-			let arr[9] = Rectangle.new(450,224,31, 31);
-			
-			let arrDir = 0;
-
-
+		let arr[0] = Rectangle.new(0,224,31, 31);
+		let arr[1] = Rectangle.new(50,224,31, 31);
+		let arr[2] = Rectangle.new(100,224, 31, 31);
+		let arr[3] = Rectangle.new(150,224,31, 31);
+		let arr[4] = Rectangle.new(200,224,31, 31);
+		let arr[5] = Rectangle.new(250,224,31, 31);
+		let arr[6] = Rectangle.new(300,224, 31, 31);
+		let arr[7] = Rectangle.new(350,224,31, 31);
+		let arr[8] = Rectangle.new(400,224,31, 31);
+		let arr[9] = Rectangle.new(450,224,31, 31);
+		
+		let arrDir = 0;
 		return this;      
     }
 	
 	constructor RectangleGame afterDelte(){
-			let arr = Array.new(10);
-			let arr[0] = Rectangle.new(0,224,31, 31);
-			let arr[1] = Rectangle.new(50,224,31, 31);
-			let arr[2] = Rectangle.new(100,224, 31, 31);
-			let arr[3] = Rectangle.new(150,224,31, 31);
-			let arr[4] = Rectangle.new(200,224,31, 31);
-			let arr[5] = Rectangle.new(250,224,31, 31);
-			let arr[6] = Rectangle.new(300,224, 31, 31);
-			let arr[7] = Rectangle.new(350,224,31, 31);
-			let arr[8] = Rectangle.new(400,224,31, 31);
-			let arr[9] = Rectangle.new(450,224,31, 31);
-			return this;
+		let arr = Array.new(10);
+		let arr[0] = Rectangle.new(0,224,31, 31);
+		let arr[1] = Rectangle.new(50,224,31, 31);
+		let arr[2] = Rectangle.new(100,224, 31, 31);
+		let arr[3] = Rectangle.new(150,224,31, 31);
+		let arr[4] = Rectangle.new(200,224,31, 31);
+		let arr[5] = Rectangle.new(250,224,31, 31);
+		let arr[6] = Rectangle.new(300,224, 31, 31);
+		let arr[7] = Rectangle.new(350,224,31, 31);
+		let arr[8] = Rectangle.new(400,224,31, 31);
+		let arr[9] = Rectangle.new(450,224,31, 31);
+		return this;
 
 	}
 
     /** Deallocates the object's memory. */
     method void dispose() {
-        do square.dispose();
+        do rect.dispose();
         do Memory.deAlloc(this);
         return;
     }
@@ -160,61 +158,67 @@ class RectangleGame {
 		
 		let i = 0;
 		while (i < 10) {
+	
+
+		//do Output.printString(arr[i]);
 			let temp = arr[i];
 			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (temp.getY() < rect.getY()) & (temp.getY() + temp.getW() > rect.getY())) {
-				/**if (dir = 1 | dir = 3) {
+				if (dir = 1 | dir = 3) {
 					let direction = direction + 1;
 				}
 				if (dir = 2 | dir = 4) {
 					let direction = direction - 1;
 				}
 				
-				do temp.draw();*/
+				do temp.draw();
 				
 				let ret = true;
+				
 			}
-			
+			do Sys.wait(0);
 			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (temp.getY() < rect.getY()) & ((temp.getY() + temp.getW()) > rect.getY())) {
-				/**if (dir = 1 | dir = 3) {
+				if (dir = 1 | dir = 3) {
 					let direction = direction + 1;
 				}
 				if (dir = 2 | dir = 4) {
 					let direction = direction - 1;
 				}
 				
-				do temp.draw();*/
+				do temp.draw();
 				
 				let ret = true;
 			}
-			
+			do Sys.wait(0);
 			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
-				/**if (dir = 1 | dir = 3) {
+				if (dir = 1 | dir = 3) {
 					let direction = direction + 1;
 				}
 				if (dir = 2 | dir = 4) {
 					let direction = direction - 1;
 				}
 				
-				do temp.draw();*/
+				do temp.draw();
 				
 				let ret = true;
 			}
-			
+			do Sys.wait(0);
 			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
-				/**if (dir = 1 | dir = 3) {
+				if (dir = 1 | dir = 3) {
 					let direction = direction + 1;
 				}
 				if (dir = 2 | dir = 4) {
 					let direction = direction - 1;
 				}
 				
-				do temp.draw();*/
+				do temp.draw();
 				
 				let ret = true;
 			}
-			
+			do Sys.wait(0);
 			let i = i + 1;
+
 		}
+
 		
         if (dir = 1) {
             let direction = rect.moveUp(toMark);

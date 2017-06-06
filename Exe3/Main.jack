@@ -7,24 +7,29 @@
  * The Main class initializes a new Square Dance game and starts it.
  */
 class Main {
+     	static char enter;
+	 
+    /** Initializes a new game and starts it. */   
 
-    /** Initializes a new game and starts it. */    
     function void main() {
-        var RectangleGame game;
-        //do Main.print();
 
-        let game = RectangleGame.new();
+        var RectangleGame game;
+		var char key;
+		let enter = 128;
+		while(~(key=enter)){
+			do Output.printString("Welcome to RectangleGame !");
+			do Output.println();
+			do Output.printString("pleas press on enter to contnue");
+			let key = Keyboard.readChar();
+		}
+		do Screen.clearScreen();
+		let game = RectangleGame.new();
         do game.run();
         
-	do game.dispose();
-
+		do game.dispose();
+		do Screen.clearScreen();
         do Output.printString("Your out from the RectangleGame");
-	do Output.printString("see you next time !");
-	return;
+		do Output.printString(", see you next time !");
+		return;
     }
-    function void print() {
-    	
-    		do Output.printString("Welcome to RectangleGame !");
-    		return;
-	}
 }
