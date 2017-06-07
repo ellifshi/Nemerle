@@ -36,60 +36,281 @@ namespace Exe_4
             {
                 fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
             }
+            CompileClass(lines, fs);
+            /*
+            foreach (line in lines)
+            {
+                mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
+                foreach(word in words)
+                {   
+                    if (File.Exists(pathXMLFile))
+                    {
+                        fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                    }
+                    else
+                    {
+                        fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                    }
+                    //def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
+                    //def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
+                
+                    if(words[0].Equals("class"))
+                    {
+                        CompilationEngine.CompileClass(line, fs);
+                    }
+                    else if(words[0].Equals("static") || words[0].Equals("field"))
+                    {
+                        CompilationEngine.CompileClassVarDec(line, fs);
+                    }
+                    else if(words[0].Equals("constructor") || words[0].Equals("function") || words[0].Equals("method"))
+                    {
+                        CompilationEngine.CompileClassVarDec(line, fs);
+                    }
+                     else if(words[0].Equals("static") || words[0].Equals("field"))
+                    {
+                        CompilationEngine.CompileClassVarDec(line, fs);
+                    }
+                     else if(words[0].Equals("static") || words[0].Equals("field"))
+                    {
+                        CompilationEngine.CompileClassVarDec(line, fs);
+                    }
+                    else
+                    {
+                        ;
+                    }
+                }
+            }
+
+            */
+        }
+        
+        // 'class' className '{' classVarDec* subroutineDec* '}' 
+        public static CompileClass(lines:array[string], fs:FileStream):void
+        {
+            mutable newLines = List();
             foreach(line in lines)
             {
+                newLines.Add(line);
             }
-            if(lines.Contains("<keyword> do </keyword>"))
+            
+            mutable writer =  StreamWriter(fs);
+ 
+            if(lines[0].StartsWith("class"))
             {
-                mutable start =5;
+                writer.WriteLine("<class>");
+                mutable words = lines[0].Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
+                
+                writer.WriteLine("  <keyword> " + words[0] + " </keyword>");
+                writer.WriteLine("  <identifier> " + words[1] + " </identifier>");
+                writer.WriteLine("  <symbol> " + words[2] + " </symbol>");
+            }
+            else{}
+            if(lines[1].StartsWith("static") || lines[1].StartsWith("field"))
+            {    
+                newLines.RemoveAt(0);
+                CompileClassVarDec(newLines, fs);
+            }
+            else if(lines[1].StartsWith("constructor") || lines[1].StartsWith("function") || lines[1].StartsWith("method"))
+            {
+                newLines.RemoveAt(0);
+                CompileSubroutineDec(newLines, fs);
             }
             else
             {
             }
+            writer.WriteLine("  <symbol> " + "}" + " </symbol>");
+            writer.WriteLine("</class>");
+            //writer.Close();
+            fs.Close();
         }
-        public static CompileClass():void
+        
+        // ('static' | 'field' ) type varName (',' varName)* ';'
+        public static CompileClassVarDec(newlines:List[string], fs:FileStream):void
         {
-
+            mutable writer =  StreamWriter(fs);
+            mutable words = newlines[0].Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
+            writer.WriteLine("  <keyword> " + words[0] + " </keyword>");
+            foreach(word in words)
+            {
+                if(word.Equals(","))
+                {
+                    writer.WriteLine("  <symbol> " + word + " </symbol>");
+                }
+                else
+                {
+                }
+                if(!word.Equals(","))
+                {
+                    CompileType(word, fs);
+                }
+                else if(word.Equals(";"))
+                {
+                    writer.WriteLine("  <symbol> " + word + " </symbol>");
+                }
+                else
+                {
+                }                 
+            }
+            writer.Close();
+            fs.Close();
         }
-        public static CompileClassVarDec():void
+        
+        // 'int' | 'char' | 'boolean' | className 
+        public static CompileType(word:string, fs:FileStream):void
         {
-
+            mutable writer =  StreamWriter(fs);
+            def checkIfTheWordEqualToKeyWord = JackTokenizer.KeyWords.Contains(word); //bool
+            if(checkIfTheWordEqualToKeyWord)         
+            {
+                writer.WriteLine("  <keyword> " + word + " </keyword>");
+            }
+            else
+            {
+                writer.WriteLine("  <identifier> " + word + " </identifier>");
+            }
+            writer.Close();
+            fs.Close();
+            
         }
-        public static CompileSubroutine():void
+        
+        // ('constructor' | 'function' | 'method') ('void' | type) subroutineName '(' parameterList ')' subroutineBody
+        public static CompileSubroutineDec(newlines:List[string], fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);
+            mutable words = newlines[0].Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
+            writer.WriteLine("  <keyword> " + words[0] + " </keyword>");
+            writer.WriteLine("  <keyword> " + words[1] + " </keyword>");
+            mutable parameterList = newlines[0].Substring(2);
+            compileSubroutineName(parameterList, fs);
+            writer.WriteLine("  <symbol> " + words[3] + " </symbol>");
+            writer.Close();
+            fs.Close();
+            
+        }
+        
+        // ((type varName) (',' type varName)*)?
+        public static compileParameterList(word:string, fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);
+            mutable words = word.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries); 
+            writer.WriteLine("<parameterList>");
+            foreach(word in words)
+            {
+                if(word.Equals("int") || word.Equals("char") || word.Equals("boolean"))
+                {
+                    CompileType(word, fs);
+                    
+                }
+                else if(word.Equals(","))
+                {
+                    writer.WriteLine("  <symbol> " + word + " </symbol>");
+                }
+                else
+                {
+                    compileVarName(word, fs);
+                }
+            }
+                
+            writer.WriteLine("</parameterList>");
+            writer.Close();
+            fs.Close();
+            
+        }
+        
+        // '{' varDec* statements '}' 
+        public static compileSubroutineBody(word:string, fs:FileStream):void
         {
         }
-        public static compileParameterList():void
+        
+        // 'var' type varName (',' varName)* ';'
+        public static compileVarDec(word:string, fs:FileStream):void
         {
         }
-        public static compileVarDec():void
+        
+        // identifier
+        public static compileClassName(word:string, fs:FileStream):void
         {
         }
-        public static compileStatements():void
+        
+        // identifier
+        public static compileSubroutineName(word:string, fs:FileStream):void
+        {
+            mutable writer =  StreamWriter(fs);
+            writer.WriteLine("  <identifier> " + word + " </identifier>");
+            
+        }
+        
+        // identifier
+        public static compileVarName(word:string, fs:FileStream):void
+        {
+            mutable writer = StreamWriter(fs);
+            writer.WriteLine("  <identifier> " + word + " </identifier>")
+        }
+        
+        // statement* 
+        public static compileStatements(word:string, fs:FileStream):void
         {
         }
-        public static compileDo(word:string, fs:FileStream):void
-        {
-
-        }
-        public static compileLet():void
+        
+         // letStatement | ifStatement | whileStatement | doStatement | returnStatement 
+        public static compileStatement(word:string, fs:FileStream):void
         {
         }
-        public static compileWhile():void
+        // 'let' varName ('[' expression ']')? '=' expression ';'
+        public static compileLetStatement(word:string, fs:FileStream):void
         {
         }
-        public static compileReturn():void
+        
+        // 'if' '(' expression ')' '{' statements '}' ( 'else' '{' statements '}' )?
+        public static compileIfStatement(word:string, fs:FileStream):void
         {
         }
-        public static compileIf():void
+        
+        // 'while' '(' expression ')' '{' statements '}' 
+        public static compileWhileStatement(word:string, fs:FileStream):void
         {
         }
-        public static CompileExpression():void
+        
+        // 'do' subroutineCall ';'
+        public static compileDoStatement(word:string, fs:FileStream):void
         {
         }
-        public static CompileTerm():void
+        
+        // 'return' expression? ';' 
+        public static compileReturnStatement(word:string, fs:FileStream):void
         {
         }
-        public static CompileExpressionList():void
+        
+        // term (op term)* 
+        public static CompileExpression(word:string, fs:FileStream):void
+        {
+        }
+        
+        // integerConstant | stringConstant | keywordConstant | varName | varName '[' expression ']' | subroutineCall | '(' expression ')' | unaryOp term
+        public static CompileTerm(word:string, fs:FileStream):void
+        {
+        }
+        
+        // subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
+        public static CompileSubroutineCall(word:string, fs:FileStream):void
+        {
+        }
+        
+        // (expression (',' expression)* )?
+        public static CompileExpressionList(word:string, fs:FileStream):void
+        {
+        }
+        
+        // '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '=' 
+        public static CompileOp(word:string, fs:FileStream):void
+        {
+        }
+         // '-' | '~' 
+        public static CompileUnaryOp(word:string, fs:FileStream):void
+        {
+        }
+         // 'true' | 'false' | 'null' | 'this' 
+        public static CompileKeywordConstant(word:string, fs:FileStream):void
         {
         }
     }

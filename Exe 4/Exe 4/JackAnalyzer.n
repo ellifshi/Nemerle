@@ -21,33 +21,19 @@ module Program
     Main() : void
     {
         def pathJackFiles : string = "C:\\Users\\Lenovo\\Documents\\GitHub\\Exe 4\\folder";
-
+        mutable lines :array[string];
         foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
         {
             mutable pathTxmlFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", "T.xml"));
+            mutable pathXMLFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", ".xml"));
             mutable fs =  FileStream(pathTxmlFile, FileMode.Create,FileAccess.Write);
             Exe_4.JackTokenizer.printTokens("<tokens>", fs);
 
-            mutable lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
-            Exe_4.JackTokenizer.sessionData(lines, pathTxmlFile);
+            lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
+            Exe_4.JackTokenizer.sessionData(lines, pathTxmlFile, pathXMLFile);
 
             mutable fsTemp = FileStream(pathTxmlFile,FileMode.Append,FileAccess.Write);
             Exe_4.JackTokenizer.printTokens("</tokens>", fsTemp);       
         }
-        /*foreach (file in Directory.EnumerateFiles(pathJackFiles, "*T.xml"))
-        {
-            mutable pathXMLFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace("T.xml", ".xml"));
-            mutable fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
-            Exe_4.CompilationEngine.printTokens("<class>", fs);
-
-            mutable lines = System.IO.File.ReadAllLines(file);
-            Exe_4.CompilationEngine.sessionData(lines, pathXMLFile);
-            
-
-            //mutable fsTemp = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
-            //Exe_4.CompilationEngine.printTokens("</class>", fsTemp);  
-            
-        }*/
     }
 }
-

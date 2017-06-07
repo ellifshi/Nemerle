@@ -112,34 +112,35 @@ namespace Exe_4
             {
                 if(line.Equals(""))
                 {
-                    count++;
+                    //count++;
                 }
                 else 
                 {
                     newLines.Add(line);
-                    count++;
+                    //count++;
                 }
             }
             newLines.ToArray();
         }
 
-        static public sessionData(lines:array[string], pathXMLFile:string):void
+        static public sessionData(lines:array[string], pathTXMLFile:string, pathXMLFIle:string):void
         {
-            returnArray(lines);
-            
-            foreach (line in lines)
+            //mutable newLines = List();
+            mutable newLines = returnArray(lines);
+           
+            foreach (line in newLines)
             {
                 mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
                 mutable fs : FileStream;
                 foreach(word in words)
                 {   
-                    if (File.Exists(pathXMLFile))
+                    if (File.Exists(pathTXMLFile))
                     {
-                        fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                        fs = FileStream(pathTXMLFile,FileMode.Append,FileAccess.Write);
                     }
                     else
                     {
-                        fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                        fs =  FileStream(pathTXMLFile, FileMode.Create,FileAccess.Write);
                     }
                     def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
                     def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
@@ -166,10 +167,12 @@ namespace Exe_4
                     {
                         identifier(word, fs);
                     }
-                }
+                }  
+                
             }
+            
+            Exe_4.CompilationEngine.sessionData(newLines, pathXMLFIle); 
         }
-
 
         public static printTokens(word:string, fs:FileStream):void
         {
