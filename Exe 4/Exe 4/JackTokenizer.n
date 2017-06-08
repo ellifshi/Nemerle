@@ -167,10 +167,8 @@ namespace Exe_4
                     {
                         identifier(word, fs);
                     }
-                }  
-                
+                }             
             }
-            
             Exe_4.CompilationEngine.sessionData(newLines, pathXMLFIle); 
         }
 

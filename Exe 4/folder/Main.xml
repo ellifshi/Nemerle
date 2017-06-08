@@ -1,3 +1,192 @@
-  <keyword> function </keyword>
-  <keyword> void </keyword>
-  <symbol> ( </symbol>
+<class>
+<keyword> class </keyword>
+<identifier> Main </identifier>
+<symbol> { </symbol>
+<subroutineDec>
+<keyword> function </keyword>
+<keyword> void </keyword>
+<identifier> main </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<varDec> 
+<keyword> var </keyword>
+<keyword> var </keyword>
+<identifier> SquareGame </identifier>
+<identifier> game </identifier>
+<identifier> ; </identifier>
+</varDec> 
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> game </identifier>
+<symbol>= </symbol>
+<identifier> SquareGame </identifier>
+<identifier> . </identifier>
+<identifier> new </identifier>
+<identifier> ( </identifier>
+<identifier> ) </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<symbol> }  </symbol>
+</class>
+<class>
+<keyword> class </keyword>
+<identifier> Main </identifier>
+<symbol> { </symbol>
+<subroutineDec>
+<keyword> function </keyword>
+<keyword> void </keyword>
+<identifier> main </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<varDec> 
+<keyword> var </keyword>
+<keyword> var </keyword>
+<identifier> SquareGame </identifier>
+<identifier> game </identifier>
+<identifier> ; </identifier>
+</varDec> 
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> game </identifier>
+<symbol>= </symbol>
+<identifier> SquareGame </identifier>
+<identifier> . </identifier>
+<identifier> new </identifier>
+<identifier> ( </identifier>
+<identifier> ) </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<symbol> }  </symbol>
+</class>
+<class>
+<keyword> class </keyword>
+<identifier> Main </identifier>
+<symbol> { </symbol>
+<subroutineDec>
+<keyword> function </keyword>
+<keyword> void </keyword>
+<identifier> main </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<varDec> 
+<keyword> var </keyword>
+<keyword> var </keyword>
+<identifier> SquareGame </identifier>
+<identifier> game </identifier>
+<identifier> ; </identifier>
+</varDec> 
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> game </identifier>
+<symbol>= </symbol>
+<identifier> SquareGame </identifier>
+<identifier> . </identifier>
+<identifier> new </identifier>
+<identifier> ( </identifier>
+<identifier> ) </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<symbol> }  </symbol>
+</class>

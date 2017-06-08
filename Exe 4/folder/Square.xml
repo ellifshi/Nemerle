@@ -1,0 +1,651 @@
+<class>
+<keyword> class </keyword>
+<identifier> Square </identifier>
+<symbol> { </symbol>
+<classVarDec>
+<keyword> class </keyword>
+<keyword> class </keyword>
+<identifier> Square </identifier>
+<identifier> { </identifier>
+</classVarDec>
+<classVarDec>
+<keyword> class </keyword>
+<keyword> class </keyword>
+<identifier> Square </identifier>
+<identifier> { </identifier>
+</classVarDec>
+<subroutineDec>
+<keyword> constructor </keyword>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<symbol> ( </symbol>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<symbol> ) </symbol>
+<parameterList>
+<keyword> int </keyword>
+<identifier> Ax </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Ay </identifier>
+<symbol> , </symbol>
+<keyword> int </keyword>
+<identifier> Asize </identifier>
+</parameterList>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> x </identifier>
+<symbol>= </symbol>
+<identifier> Ax </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> y </identifier>
+<symbol>= </symbol>
+<identifier> Ay </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> size </identifier>
+<symbol>= </symbol>
+<identifier> Asize </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return this ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> dispose </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> draw </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> erase </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> incSize </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> size </identifier>
+<symbol>= </symbol>
+<identifier> size </identifier>
+<identifier> + </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> decSize </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> size </identifier>
+<symbol>= </symbol>
+<identifier> size </identifier>
+<identifier> - </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> moveUp </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> y </identifier>
+<symbol>= </symbol>
+<identifier> y </identifier>
+<identifier> - </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> moveDown </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> y </identifier>
+<symbol>= </symbol>
+<identifier> y </identifier>
+<identifier> + </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> moveLeft </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> x </identifier>
+<symbol>= </symbol>
+<identifier> x </identifier>
+<identifier> - </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<subroutineDec>
+<keyword> method </keyword>
+<keyword> void </keyword>
+<identifier> moveRight </identifier>
+<symbol> ( </symbol>
+<symbol> ) </symbol>
+<identifier> { </identifier>
+<subroutineBody>
+<symbol> { </symbol>
+<statements>
+<returnStatement>
+<keyword></keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> } </symbol>
+</subroutineBody>
+</subroutineDec>
+<statements>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<letStatement>
+<keyword> let </keyword>
+<identifier> let </identifier>
+<identifier> x </identifier>
+<symbol>= </symbol>
+<identifier> x </identifier>
+<identifier> + </identifier>
+<identifier> 2 </identifier>
+<symbol>; </symbol>
+</letStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<statements>
+<doStatement>
+<keyword> do </keyword>
+<symbol> ; </symbol>
+</doStatement>
+</statements>
+<symbol> }  </symbol>
+<statements>
+<returnStatement>
+<keyword>return ;</keyword>
+<symbol>;</symbol>
+</returnStatement>
+</statements>
+<symbol> }  </symbol>
+<symbol> }  </symbol>
+</class>
