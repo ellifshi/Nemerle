@@ -20,7 +20,7 @@ module Program
     Main() : void
     {
         WriteLine("Pleas enter full directory path that you want to run");
-        def pathJackFiles : string = ReadLine();
+        def pathJackFiles : string = ReadLine(); // @"C:\Users\Lenovo\Documents\GitHub\Exe 4\folder";
 
         mutable path : string = pathJackFiles;
         when(!Directory.Exists(path))
