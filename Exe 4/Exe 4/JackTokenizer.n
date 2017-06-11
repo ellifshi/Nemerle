@@ -169,9 +169,17 @@ namespace Exe_4
                     }
                 }             
             }
-            Exe_4.CompilationEngine.sessionData(newLines, pathXMLFIle); 
+            
+          //mutable jef = fromTxmlToList(pathTXMLFile);
+          //WriteLine(jef);
         }
-
+        public static fromTxmlToList(pathTXMLFile:string):List[string]
+        {
+            
+            mutable allLinesText = List();
+            allLinesText = File.ReadAllLines(pathTXMLFile).ToList();
+            allLinesText;
+        }
         public static printTokens(word:string, fs:FileStream):void
         {
             mutable writer =  StreamWriter(fs);  

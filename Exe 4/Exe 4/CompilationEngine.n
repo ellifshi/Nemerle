@@ -11,433 +11,555 @@ using System.Net.Sockets;
 using Nemerle.Imperative;
 using System.Collections.DictionaryEntry;
 using Nemerle.Extensions;
+using System.Text.RegularExpressions;
+using System.IO.FileAttributes;
 
 namespace Exe_4
 {
     class CompilationEngine
     {
-        public static returnIfKeyWord(word:string): bool
-        {
-            JackTokenizer.KeyWords.Contains(word); //bool      
-        }
-        public static returnIfOpKeword(word:string):bool
-        {
-            JackTokenizer.opKeyWord.Contains(word); 
-        }
+        mutable toXMLFile:StreamWriter;
+        public mutable token:string;
+        public mutable tokesFromTxmlFile:StreamReader;
         
-        public static printTokens(word:string, fs:FileStream):void
+        public this(pathTxmlFile:string ,pathXmlFile:string)             
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine(word);
-
+            tokesFromTxmlFile = fromTxmlToList(pathTxmlFile);
+            toXMLFile = StreamWriter(pathXmlFile);
+            CompileClass();
+            toXMLFile.Close();
         }
-        public static sessionData(lines:array[string], pathXMLFile:string):void
+        public static fromTxmlToList(pathTXMLFile:string):StreamReader
         {
-            mutable fs : FileStream;
-            
-            
-            mutable theFullLIst = List();
-            if (File.Exists(pathXMLFile))
+            mutable allLinesText:StreamReader;
+            allLinesText = StreamReader(pathTXMLFile);
+            allLinesText;
+        }
+        public hasMoreTokens():bool
+        {
+            tokesFromTxmlFile.EndOfStream
+        }
+        public advance():void
+        {
+            when(!hasMoreTokens())           
             {
-                fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                token = tokesFromTxmlFile.ReadLine();
+            }         
+        }
+        public returnTypeToken():string
+        {
+            mutable line = token.Split(' ');
+            line[0] = line[0].TrimEnd('>');
+            line[0] = line[0].TrimStart('<');
+            line[0]; //return the token type : keyword/symbol etc
+        }   
+        public returnKeywordToken():string
+        {
+            mutable line = token.Split(' ');
+            line[1]; //retorn the keyword token : class/function etc
+        }
+        public returnSymbolToken():string
+        {
+            mutable line = token.Split(' ');
+            line[1]; //return the symbol token : '=', '<' etc.
+        }
+        public returnIdentifierToken():string
+        {
+            mutable line = token.Split(' ');
+            line[1]; //return the identifier token : main/SquareGame
+        }
+        public returnIntegerConstantValue():int
+        {
+            mutable line = token.Split(' ');
+            Int32.Parse(line[1]); //return the integer value token : 254, 5 etc.
+        }
+        public returnStringConstantValue():string
+        {
+            mutable line = token;
+            line = line.Replace("<stringConstant>", "");
+            line = line.Replace("</stringConstant>", "");
+            line; //return the String Constant Value token : hello world!  
+        }
+        public isOperandToken():bool
+        {
+            match(returnSymbolToken())
+            {
+                | "+"|"-"|"*"|"/"|"&"|"|"|"&lt;"|"&gt;"|"="|"&amp;" =>  true;
+                | _=> false;
+            }
+        }     
+        public printXmlPattrenToken(word:string):void
+        {
+            if(word.Equals("class") || word.Equals("/class")) //we don't neet to space for "class"
+            {
+                toXMLFile.WriteLine("<" + word + ">");
             }
             else
             {
-                fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                countOfIndention ++;
+                toXMLFile.WriteLine(Tabs(countOfIndention) + "<" + word + ">");
+                countOfIndention --;
             }
-            mutable writer = StreamWriter(fs);  
-            CompileClass(lines, theFullLIst);
-            foreach(line in theFullLIst)
-            {
-                writer.WriteLine(line);
-            }
-            
-            writer.Close();
-            fs.Close();
-  
+        }
+        public printXmlPattrenKeyword(word:string):void
+        {
+            countOfIndention ++;
+            toXMLFile.WriteLine(Tabs(countOfIndention) + "<keyword> " + word + " </keyword>"); 
+            countOfIndention --;
+        }
+        public printXmlPattrenIdentifier(word:string):void
+        {
+            countOfIndention ++;
+            toXMLFile.WriteLine(Tabs(countOfIndention) + "<identifier> " + word + " </identifier>"); 
+            countOfIndention --;
+        }
+        public printXmlPattreSymbol(word:string):void
+        {
+            countOfIndention ++;
+            toXMLFile.WriteLine(Tabs(countOfIndention) + "<symbol> " + word + " </symbol>");
+            countOfIndention --;
+        }
+        public printXmlPattrenIntegerConstant(word:int):void
+        {
+            countOfIndention ++;
+            toXMLFile.WriteLine(Tabs(countOfIndention) + "<integerConstant> " + word + " </integerConstant>"); 
+            countOfIndention --;
+        }
+        public printXmlPattreStringConstant(word:string):void
+        {
+            countOfIndention ++;
+            toXMLFile.WriteLine(Tabs(countOfIndention) + "<stringConstant> " + word + " </stringConstant>");
+            countOfIndention --;
+        }
+        public static mutable countOfIndention = 0;
+        public static Tabs(countOfIndention:int):string
+        {
+            mutable tabs :string = string(' ', countOfIndention);
+            tabs;
         }
         
-        // 'class' className '{' classVarDec* subroutineDec* '}' 
-        public static CompileClass(lines:array[string], theFullLIst:List[String]):void
+        // class:'class' className '{' classVarDec* subroutineDec* '}'
+        public CompileClass():void
         {
-            mutable newLines = List();
-            foreach(line in lines)
+            printXmlPattrenToken("class");
+            advance(); //'tokens'
+            advance(); //'class'
+            when(returnKeywordToken().Equals("class"))
             {
-                newLines.Add(line);
+               printXmlPattrenKeyword(returnKeywordToken());
             }  
-
-            foreach(line in newLines)
+            advance(); //className
+            when(returnTypeToken().Equals( "identifier"))
             {
-                if(line.StartsWith("class"))
-                {
-                    theFullLIst.Add("<class>");
-                    mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
-                    theFullLIst.Add("<keyword> " + words[0] + " </keyword>");
-                    theFullLIst.Add("<identifier> " + words[1] + " </identifier>");
-                    theFullLIst.Add("<symbol> " + words[2] + " </symbol>");
-                    //newLines.RemoveAt(line.IndexOf(line));          
-                }
-                else if(line.StartsWith("static") || line.StartsWith("field"))
-                {     
-                    CompileClassVarDec(newLines, theFullLIst);
-                }
-                else if(line.StartsWith("constructor") || line.StartsWith("function") || line.StartsWith("method"))
-                {
-                    CompileSubroutineDec(line, theFullLIst);
-
-                    //newLines.RemoveAt(line.IndexOf(line));
-                }
-                else if(line.StartsWith("var"))
-                { 
-                    compileVarDec(line, theFullLIst);
-                    //newLines.RemoveAt(line.IndexOf(line));
-                }
-                else if(line.StartsWith("let") || line.StartsWith("while") ||line.StartsWith("do") ||line.StartsWith("return") ||line.StartsWith("if"))
-                {
-                    compileStatements(line, theFullLIst);
-                } 
-                else if(line.StartsWith("}"))
-                {
-                   theFullLIst.Add("<symbol> " + line + " </symbol>");
-                }
-                else
-                {}         
-            }       
-            theFullLIst.Add("</class>");   
-        }
-        
-        
-        // ('static' | 'field' ) type varName (',' varName)* ';'
-        public static CompileClassVarDec(newlines:List[string], theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<classVarDec>");
-            mutable words = newlines[0].Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
-            theFullLIst.Add("<keyword> " + words[0] + " </keyword>");
-            foreach(word in words)
+                printXmlPattrenIdentifier(returnIdentifierToken());
+            } 
+            advance();//'{'
+            when(returnSymbolToken().Equals("{"))
             {
-                if(returnIfKeyWord(word))//for type
-                {
-                    CompileType(word, theFullLIst);
-                }
-                else if(word.Equals(","))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(!returnIfKeyWord(word))//varName
-                {
-                    theFullLIst.Add("<identifier> " + word + " </identifier>");
-                }
-                else if(word.Equals(")"))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(!word.Equals("("))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(word.Equals(";"))
-                {
-                    theFullLIst.Add("  <symbol> " + word + " </symbol>");
-                }
-                else
-                {
-                }                 
+                printXmlPattreSymbol(returnSymbolToken());
+            } 
+            advance();//classVarDec*
+            while(returnKeywordToken().Equals( "static")  || returnKeywordToken().Equals("field"))
+            {
+                CompileClassVarDec();
+                advance();//next token for classVarDec
             }
-            theFullLIst.Add("</classVarDec>");
-        }
-        
-        // 'int' | 'char' | 'boolean' | className 
-        public static CompileType(word:string, theFullLIst:List[String]):void
-        {
-            if(returnIfKeyWord(word))         
+            //subroutineDec*
+            while(returnKeywordToken().Equals("constructor")  || returnKeywordToken().Equals("function") || returnKeywordToken().Equals( "method"))
             {
-                theFullLIst.Add("<keyword> " + word + " </keyword>");
+                CompileSubroutineDec();
+            }
+
+            when(returnSymbolToken().Equals( "}"))//'}'
+            {
+                printXmlPattreSymbol(returnSymbolToken());
+                advance();
+            }
+            printXmlPattrenToken("/class");
+        }
+        //'int' | 'char' | 'boolean' | className 
+        public CompileType():void
+        {
+            if(returnTypeToken().Equals("keyword"))
+            {
+                printXmlPattrenKeyword(returnKeywordToken());
             }
             else
             {
-                theFullLIst.Add("<identifier> " + word + " </identifier>");
+                printXmlPattrenIdentifier(returnIdentifierToken());
             }
+            advance();    
         }
-        
-        
-        //TODO subRoutinsBody   
-        // ('constructor' | 'function' | 'method') ('void' | type) subroutineName '(' parameterList ')' subroutineBody
-        public static CompileSubroutineDec(line:string, theFullLIst:List[String]):void
+        //classVarDec:('static' | 'field' ) type varName (',' varName)* ';' 
+        public CompileClassVarDec():void
         {
-            theFullLIst.Add("<subroutineDec>");
-            mutable start = line.IndexOf("(");
-            mutable end = line.IndexOf(")");
-            mutable parameterList = line.Substring(start + 1, end - start - 1);
-            
-            mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);  
-            foreach(word in words)
-            {
-                if(word.Equals("constructor") || word.Equals("function") || word.Equals("method"))
-                {
-                    theFullLIst.Add("<keyword> " + word + " </keyword>");
-                }
-                else if (word.Equals("void") || word.Equals("type"))
-                {
-                    theFullLIst.Add("<keyword> " + word + " </keyword>");
-                }
-                else if(word.Equals("("))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");                    
-                }
-                 else if(word.Equals(")"))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");                   
-                }
-                else if(!parameterList.Equals(" "))
-                {
-                    compileParameterList(parameterList, theFullLIst);               
-                }
-                else if(!returnIfKeyWord(word))
-                {
-                    compileSubroutineName(word, theFullLIst);               
-                }
-                else
-                {}
-            }
-            compileSubroutineBody("", theFullLIst:List[string]);
-            theFullLIst.Add("</subroutineDec>");
-            
-        }
-        
-        // ((type varName) (',' type varName)*)?
-        public static compileParameterList(word:string, theFullLIst:List[String]):void
-        {
-            mutable words = word.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries); 
-            theFullLIst.Add("<parameterList>");
-            foreach(word in words)
-            {
-                if(word.Equals("int") || word.Equals("char") || word.Equals("boolean"))
-                {
-                    CompileType(word, theFullLIst);
-                    
-                }
-                else if(word.Equals(","))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else
-                {
-                    compileVarName(word, theFullLIst);
-                }
-            }
-                
-            theFullLIst.Add("</parameterList>");
-            
-        }
-        
-        // '{' varDec* statements '}' 
-        public static compileSubroutineBody(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<subroutineBody>");
-            theFullLIst.Add("<symbol> { </symbol>");
-            while(word.Equals("var"))
-            {
-                compileVarDec(word, theFullLIst);
-            }
-            compileStatements(word:string, theFullLIst:List[String]);
-            theFullLIst.Add("<symbol> } </symbol>");
-            theFullLIst.Add("</subroutineBody>");
-        }
-        
-        // 'var' type varName (',' varName)* ';'
-        public static compileVarDec(line:string, theFullLIst:List[String]):void
-        {
+            countOfIndention ++;
+            printXmlPattrenToken("classVarDec");
+            printXmlPattrenKeyword(returnKeywordToken());//('static' | 'field' )
+            advance();
+            CompileType();//type
 
-            mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries); 
-            theFullLIst.Add("<varDec> ");
-            theFullLIst.Add("<keyword> " + "var" + " </keyword>");
-            
-            foreach(word in words)
+            when(returnTypeToken().Equals("identifier"))//varName
             {
-                if(returnIfKeyWord(word))
-                {
-                    CompileType(word, theFullLIst);//type
-                }
-                else if(!returnIfKeyWord(word))
-                {
-                    compileVarName(word, theFullLIst);
-                }
-                else if(word.Equals("("))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(word.Equals(","))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(word.Equals(")"))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else if(word.Equals(";"))
-                {
-                    theFullLIst.Add("<symbol> " + word + " </symbol>");
-                }
-                else
-                {
-                }
-            }       
-            theFullLIst.Add("</varDec> ");     
-        }
-        
-        // identifier
-        public static compileClassName(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<identifier> " + word + " </identifier>");
-        }
-        
-        // identifier
-        public static compileSubroutineName(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<identifier> " + word + " </identifier>");       
-        }
-        
-        // identifier
-        public static compileVarName(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<identifier> " + word + " </identifier>");
-        }
-        
-        // statement* 
-        public static compileStatements(line:string,theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<statements>");
-            
-            compileStatement(line, theFullLIst);
-            
-            theFullLIst.Add("</statements>");    
-        }
-        
-         // letStatement | ifStatement | whileStatement | doStatement | returnStatement 
-        public static compileStatement(line:string, theFullLIst:List[String]):void
-        {
-            if(line.StartsWith("let"))
-            {
-                compileLetStatement(line, theFullLIst);
-            }
-            else if(line.StartsWith("if"))
-            {
-                compileIfStatement(line, theFullLIst);
-            }
-            else if(line.StartsWith("while"))
-            {
-                compileWhileStatement(line, theFullLIst);
-            }
-            else if(line.StartsWith("do"))
-            {
-                compileDoStatement(line, theFullLIst);
-            }
-            else
-            {
-                compileReturnStatement(line, theFullLIst);
-            }
-        }
-        
-        // 'let' varName ('[' expression ']')? '=' expression ';'
-        public static compileLetStatement(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<letStatement>");
-            theFullLIst.Add("<keyword> let </keyword>");
+                printXmlPattrenIdentifier(returnIdentifierToken());
+            }    
 
-            mutable words = word.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries); 
-
-            foreach(word in words)
+            advance();//(',' varName)* ';'
+            while(returnSymbolToken().Equals(",")) //','
             {
-                if(word.Equals("[") || word.Equals("]") || word.Equals("=") ||word.Equals(";"))
+                printXmlPattreSymbol(returnSymbolToken());
+                advance();//varName
+                when(returnTypeToken().Equals("identifier"))
                 {
-                    theFullLIst.Add("<symbol>" + word +  " </symbol>");           
+                    printXmlPattrenIdentifier(returnIdentifierToken());
                 }
-                else if(!returnIfKeyWord(word))
+                advance();
+            }
+            when(returnSymbolToken().Equals(";")) //';'
+            {
+                printXmlPattreSymbol(returnSymbolToken());
+            }
+
+            printXmlPattrenToken("/classVarDec");
+            countOfIndention --;
+        }
+        //subroutineDec:('constructor' | 'function' | 'method') ('void' | type) subroutineName '(' parameterList ')' subroutineBody
+        public CompileSubroutineDec():void
+        { 
+            countOfIndention ++;
+            printXmlPattrenToken("subroutineDec");
+            printXmlPattrenKeyword(returnKeywordToken()); //('constructor' | 'function' | 'method')
+
+            advance();        
+            CompileType();//('void' | type)
+
+            printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName
+            advance();
+            printXmlPattreSymbol(returnSymbolToken()); //'('
+            advance();
+            CompileParameterList();//parameterList
+            printXmlPattreSymbol(returnSymbolToken()); //')'
+            advance();
+            CompileSuroutineBody();//subroutineBody
+            printXmlPattrenToken("/subroutineDec");
+            countOfIndention --;
+        }
+        //subroutineBody:'{' varDec* statements '}' 
+        public CompileSuroutineBody():void
+        {
+            countOfIndention ++;
+            printXmlPattrenToken("subroutineBody");
+            printXmlPattreSymbol(returnSymbolToken());
+            advance();
+            while(returnKeywordToken().Equals("var")) //varDec
+            {
+                CompileVarDec();  
+            }
+            CompileStatements();//statements
+            printXmlPattreSymbol(returnSymbolToken());
+            advance();
+            printXmlPattrenToken("/subroutineBody");
+            countOfIndention --;
+        }
+        //parameterList:( (type varName) (',' type varName)*)? 
+        public CompileParameterList():void
+        {
+            countOfIndention ++;
+            printXmlPattrenToken("parameterList");
+            when(returnSymbolToken() != ")" )//if its not equal,its mean there are parameters ,ex' where its equal:"function main()"
+            {
+                CompileType();//type
+                printXmlPattrenIdentifier(returnIdentifierToken());
+                advance();
+                while(returnSymbolToken().Equals(",")) //(',' type varName)*
                 {
-                    theFullLIst.Add("<identifier> " + word + " </identifier>");
-                }
-                else
-                {
-                    compileVarName(word, theFullLIst);
+                    printXmlPattreSymbol(returnSymbolToken());
+                    advance();
+                    CompileType();
+                    printXmlPattrenIdentifier(returnIdentifierToken());//varName
+                    advance();
                 }
             }
-            //TODO  expression 
-            theFullLIst.Add("</letStatement>");
-            
+            printXmlPattrenToken("/parameterList");
+            countOfIndention --;
         }
-        
-        // 'if' '(' expression ')' '{' statements '}' ( 'else' '{' statements '}' )?
-        public static compileIfStatement(word:string, theFullLIst:List[String]):void
+        //varDec: 'var' type varName (',' varName)* ';'
+        public CompileVarDec():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("varDec");
+            printXmlPattrenKeyword(returnKeywordToken());//'var'
+            advance();
+            CompileType();//type
+            printXmlPattrenIdentifier(returnIdentifierToken());//varName
+            advance();
+
+            while(returnSymbolToken().Equals(",")) //(',' varName)*
+            {
+                printXmlPattreSymbol(returnSymbolToken());
+                advance();
+                printXmlPattrenIdentifier(returnIdentifierToken());
+                advance();
+            }
+            printXmlPattreSymbol(returnSymbolToken());//;
+            advance();
+            printXmlPattrenToken("/varDec");
+            countOfIndention --;
         }
-        
-        // 'while' '(' expression ')' '{' statements '}' 
-        public static compileWhileStatement(word:string, theFullLIst:List[String]):void
+        //statements: (letStatement | ifStatement | whileStatement | doStatement | returnStatement)*
+        public CompileStatements():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("statements");
+            while(returnTypeToken().Equals("keyword")) 
+            {
+                match(returnKeywordToken())
+                {
+                    |"let" => CompileLet();
+                    |"if" => CompileIf();
+                    |"while" => CompileWhile();
+                    |"do" => CompileDo();
+                    |"return" => CompileReturn();
+                    |_=>()
+                }
+            }
+            printXmlPattrenToken("/statements");
+            countOfIndention --;
         }
-        
-        // 'do' subroutineCall ';'
-        public static compileDoStatement(word:string, theFullLIst:List[String]):void
+        //*doStatement:'do' subroutineCall ';'
+        public CompileDo():void
         {
-            theFullLIst.Add("<doStatement>");
-            theFullLIst.Add("<keyword> do </keyword>");
-            CompileSubroutineCall(word, theFullLIst);
-            theFullLIst.Add("<symbol> ; </symbol>");
-            theFullLIst.Add("</doStatement>");   
+            countOfIndention ++;
+            printXmlPattrenToken("doStatement");
+            printXmlPattrenKeyword(returnKeywordToken());//'do'
+            advance();
+            CompileSubroutineCall();//subroutineCall
+            printXmlPattreSymbol(returnSymbolToken()); //;
+            advance();
+            printXmlPattrenToken("/doStatement");
+            countOfIndention --;
         }
-        
-        // 'return' expression? ';' 
-        public static compileReturnStatement(word:string, theFullLIst:List[String]):void
+        //letStatement:'let' varName ('[' expression ']')? '=' expression ';'
+        public CompileLet():void
         {
-            theFullLIst.Add("<returnStatement>");
-            theFullLIst.Add("<keyword>" + word + "</keyword>");
-            theFullLIst.Add("<symbol>" ";" "</symbol>");
-            theFullLIst.Add("</returnStatement>");
+            countOfIndention ++;
+            printXmlPattrenToken("letStatement");
+            printXmlPattrenKeyword(returnKeywordToken());//let
+            advance();
+            printXmlPattrenIdentifier(returnIdentifierToken());//varName
+
+            advance();
+            when(returnSymbolToken().Equals("[")) //('[' expression ']')?
+            {
+                printXmlPattreSymbol(returnSymbolToken());//[
+                advance();
+                CompileExpression();
+                printXmlPattreSymbol(returnSymbolToken());//]
+                advance();
+            }
+            printXmlPattreSymbol(returnSymbolToken());//'='
+            advance();
+            CompileExpression();//expression
+            printXmlPattreSymbol(returnSymbolToken());//';'
+            advance();
+            printXmlPattrenToken("/letStatement");
+            countOfIndention --;
         }
-        
-        // term (op term)* 
-        public static CompileExpression(word:string, theFullLIst:List[String]):void
+        //whileStatement: 'while' '(' expression ')' '{' statements '}'  
+        public CompileWhile():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("whileStatement");
+            printXmlPattrenKeyword(returnKeywordToken()); //'while'
+            advance();
+            printXmlPattreSymbol(returnSymbolToken()); //'('
+            advance();
+            CompileExpression();//expression
+            printXmlPattreSymbol(returnSymbolToken()); //')'
+            advance();
+            printXmlPattreSymbol(returnSymbolToken()); //'{'
+            advance();
+            CompileStatements();//statements
+            printXmlPattreSymbol(returnSymbolToken()); //'}'
+            advance();
+            printXmlPattrenToken("/whileStatement"); 
+            countOfIndention --;
         }
-        
-        // integerConstant | stringConstant | keywordConstant | varName | varName '[' expression ']' | subroutineCall | '(' expression ')' | unaryOp term
-        public static CompileTerm(word:string, theFullLIst:List[String]):void
+        //returnStatement:'return' expression? ';' 
+        public CompileReturn():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("returnStatement");
+            printXmlPattrenKeyword(returnKeywordToken()); //'return'
+            advance();
+            when(returnSymbolToken() != ";")
+            {
+                CompileExpression();//expression
+            }
+            printXmlPattreSymbol(returnSymbolToken()); //';'
+            advance();
+            printXmlPattrenToken("/returnStatement");  
+            countOfIndention --;
         }
-        
-        // subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
-        public static CompileSubroutineCall(word:string, theFullLIst:List[String]):void
+        public CompileIf():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("ifStatement");
+            printXmlPattrenKeyword(returnKeywordToken()); //if
+            advance();
+            printXmlPattreSymbol(returnSymbolToken()); //'('
+            advance();
+            CompileExpression();
+            printXmlPattreSymbol(returnSymbolToken()); // ')'
+            advance();
+            printXmlPattreSymbol(returnSymbolToken()); //'{'
+            advance();
+            CompileStatements();
+            printXmlPattreSymbol(returnSymbolToken()); //'}'
+            advance();
+            when(returnKeywordToken().Equals("else"))
+            {
+                printXmlPattrenKeyword(returnKeywordToken());
+                advance();
+                CompileStatements();
+                printXmlPattreSymbol(returnSymbolToken());
+                advance();
+            }
+            printXmlPattrenToken("/ifStatement");
+            countOfIndention --;
         }
-        
-        // (expression (',' expression)* )?
-        public static CompileExpressionList(word:string, theFullLIst:List[String]):void
+        //expression:term (op term)* 
+        public CompileExpression():void
         {
+            countOfIndention ++;
+            printXmlPattrenToken("expression");
+            CompileTerm();//term
+            when(isOperandToken())
+            {
+                printXmlPattreSymbol(returnSymbolToken());
+                advance();
+            }
+            when(!returnSymbolToken().Equals(")") && !returnSymbolToken().Equals(";") && !returnSymbolToken().Equals("]")  && !returnSymbolToken().Equals(","))
+            {
+                CompileTerm();
+            }
+            printXmlPattrenToken("/expression");  
+            countOfIndention --;
         }
-        
-        // '+' | '-' | '*' | '/' | '&' | '|' | '<' | '>' | '=' 
-        public static CompileOp(word:string, theFullLIst:List[String]):void
+        //term:integerConstant | stringConstant | keywordConstant | varName | varName '[' expression ']' |identifier>subroutineCall | '(' expression ')' | unaryOp term
+        public CompileTerm():void
         {
-            theFullLIst.Add("<symbol> " + word + " </symbol>");
+            countOfIndention ++;
+            printXmlPattrenToken("term");
+            match(returnTypeToken())
+            {
+                |"integerConstant" =>
+                {
+                    printXmlPattrenIntegerConstant(returnIntegerConstantValue());
+                    advance();
+                }
+                |"stringConstant"=>
+                {
+                    printXmlPattreStringConstant(returnStringConstantValue());
+                    advance();
+                }
+                |"keyword" =>
+                {
+                    printXmlPattrenKeyword(returnKeywordToken());
+                    advance();
+                }
+                |"identifier" =>
+                {
+                    printXmlPattrenIdentifier(returnIdentifierToken());
+                    advance();
+                    match(returnSymbolToken())
+                    {
+                        |"[" =>
+                        {
+                            printXmlPattreSymbol(returnSymbolToken()); //'['
+                            advance();
+                            CompileExpression();//
+                            printXmlPattreSymbol(returnSymbolToken());
+                            advance();
+                        }
+                        |"("|"." =>
+                        {
+                            printXmlPattreSymbol(returnSymbolToken()); //'.' OR '('
+                            advance();                        
+                            CompileSubroutineCall();
+                        }
+                        |_=>()
+                    }
+                }
+                |"symbol" =>
+                {
+                    match(returnSymbolToken())
+                    {
+                        |"(" =>
+                        {
+                            printXmlPattreSymbol(returnSymbolToken());
+                            advance();
+                            CompileExpression();//
+                            printXmlPattreSymbol(returnSymbolToken());
+                            advance();
+                        }
+                        |"-"|"~" =>
+                        {
+                            printXmlPattreSymbol(returnSymbolToken());
+                            advance();
+                            CompileTerm();
+                        }
+                        |_ =>()
+                    }
+                }
+            } 
+            printXmlPattrenToken("/term");
+            countOfIndention --;
+        } 
+        //subroutineCall:subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
+        public CompileSubroutineCall():void
+        {
+            printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName || ( className | varName)
+            advance();
+            when(returnSymbolToken().Equals("("))
+            {
+                printXmlPattreSymbol(returnSymbolToken());//'('
+                advance();
+                CompileExpressionList();//expressionList
+                printXmlPattreSymbol(returnSymbolToken());//')'
+                advance();           
+            }
+            when(returnSymbolToken().Equals("."))
+            {
+                printXmlPattreSymbol(returnSymbolToken());//'.'
+                advance();
+                printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName
+                advance();
+                printXmlPattreSymbol(returnSymbolToken());//'('
+                advance();
+                CompileExpressionList();//expressionList
+                printXmlPattreSymbol(returnSymbolToken());//')'
+                advance();       
+            }
         }
-         // '-' | '~' 
-        public static CompileUnaryOp(word:string, theFullLIst:List[String]):void
+        //expressionList:(expression (',' expression)* )? 
+        public CompileExpressionList():void
         {
-            theFullLIst.Add("<expression>");
-            theFullLIst.Add("<term>");
-            theFullLIst.Add("<symbol> " + word + " </symbol>");
-            theFullLIst.Add("</term>");
-            theFullLIst.Add("</expression>");
-        }
-         // 'true' | 'false' | 'null' | 'this' 
-        public static CompileKeywordConstant(word:string, theFullLIst:List[String]):void
-        {
-            theFullLIst.Add("<expression>");
-            theFullLIst.Add("<term>");
-            theFullLIst.Add("<keyword> " + word + " </keyword>");
-            theFullLIst.Add("</term>");
-            theFullLIst.Add("</expression>");
+            countOfIndention ++;
+            printXmlPattrenToken("expressionList");
+            when(returnSymbolToken() != ")")
+            {
+                CompileExpression();//expression
+
+                while(returnSymbolToken().Equals(","))
+                {
+                    printXmlPattreSymbol(returnSymbolToken());//','
+                    advance();
+                    CompileExpression();//expression
+                }
+            }
+            printXmlPattrenToken("/expressionList");     
+            countOfIndention --;
         }
     }
 }

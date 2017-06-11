@@ -15,12 +15,20 @@ using Nemerle.Imperative;
 using System.Collections.DictionaryEntry;
 using Nemerle.Extensions;
 
-
 module Program
 {
     Main() : void
     {
-        def pathJackFiles : string = "C:\\Users\\Lenovo\\Documents\\GitHub\\Exe 4\\folder";
+        WriteLine("Pleas enter full directory path that you want to run");
+        def pathJackFiles : string = ReadLine();
+
+        mutable path : string = pathJackFiles;
+        when(!Directory.Exists(path))
+        {
+            WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
+            _ = ReadLine();
+            return;
+        }
         mutable lines :array[string];
         foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
         {
@@ -34,6 +42,7 @@ module Program
 
             mutable fsTemp = FileStream(pathTxmlFile,FileMode.Append,FileAccess.Write);
             Exe_4.JackTokenizer.printTokens("</tokens>", fsTemp);       
+            Exe_4.CompilationEngine(pathTxmlFile, pathXMLFile); 
         }
     }
 }
