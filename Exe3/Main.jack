@@ -16,11 +16,9 @@ class Main {
         let game = RectangleGame.new();
         do game.run();
         
-	do game.dispose();
-
-        do Output.printString("Your out from the RectangleGame");
-	do Output.printString("see you next time !");
-	return;
+		do game.dispose();
+		
+		return;
     }
     function void print() {
     	

@@ -67,8 +67,21 @@ class RectangleGame {
 
     /** Deallocates the object's memory. */
     method void dispose() {
-        do square.dispose();
+        do rect.dispose();
+		do Memory.deAlloc(arr);
         do Memory.deAlloc(this);
+		
+		
+        do Output.printString("Your out from the RectangleGame");
+		do Output.printString("see you next time !");
+		
+		do Screen.clearScreen();
+		do Screen.setColor(true);
+		do Screen.drawCircle(255, 127, 30);
+		do Screen.setColor(false);
+		do Screen.drawLine(128, 0, 382, 254);
+		do Screen.drawLine(382, 0, 128, 254);
+		
         return;
     }
 
@@ -82,10 +95,10 @@ class RectangleGame {
 
         while (~exit) {
             // waits for a key to be pressed.
-            while (key = 0) {
+            while ((key = 0) & (~exit)) {
                 let key = Keyboard.keyPressed();
                 let exit = moveRectangle();
-				do moveArray();
+				let exit = moveArray();
             }
 
             if (key = 81) {
@@ -138,10 +151,10 @@ class RectangleGame {
 			}
 
             // waits for the key to be released.
-            while (~(key = 0)) {
+            while ((~(key = 0)) & (~exit)) {
                 let key = Keyboard.keyPressed();
                 let exit = moveRectangle();
-				do moveArray();
+				let exit = moveArray();
             }
         }
             
@@ -158,64 +171,6 @@ class RectangleGame {
 		
 		let ret  = false;
 		
-		let i = 0;
-		while (i < 10) {
-			let temp = arr[i];
-			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (temp.getY() < rect.getY()) & (temp.getY() + temp.getW() > rect.getY())) {
-				/**if (dir = 1 | dir = 3) {
-					let direction = direction + 1;
-				}
-				if (dir = 2 | dir = 4) {
-					let direction = direction - 1;
-				}
-				
-				do temp.draw();*/
-				
-				let ret = true;
-			}
-			
-			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (temp.getY() < rect.getY()) & ((temp.getY() + temp.getW()) > rect.getY())) {
-				/**if (dir = 1 | dir = 3) {
-					let direction = direction + 1;
-				}
-				if (dir = 2 | dir = 4) {
-					let direction = direction - 1;
-				}
-				
-				do temp.draw();*/
-				
-				let ret = true;
-			}
-			
-			if ((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
-				/**if (dir = 1 | dir = 3) {
-					let direction = direction + 1;
-				}
-				if (dir = 2 | dir = 4) {
-					let direction = direction - 1;
-				}
-				
-				do temp.draw();*/
-				
-				let ret = true;
-			}
-			
-			if ((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX()) & (rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) {
-				/**if (dir = 1 | dir = 3) {
-					let direction = direction + 1;
-				}
-				if (dir = 2 | dir = 4) {
-					let direction = direction - 1;
-				}
-				
-				do temp.draw();*/
-				
-				let ret = true;
-			}
-			
-			let i = i + 1;
-		}
-		
         if (dir = 1) {
             let direction = rect.moveUp(toMark);
         }
@@ -228,6 +183,39 @@ class RectangleGame {
         if (dir = 4) {
             let direction = rect.moveRight(toMark);
         }
+		
+		let i = 0;
+		while (i < 10) {
+			let temp = arr[i];
+			
+			if (rect.isPointIn(temp.getX(), temp.getY())) {
+				let ret = true;
+			}
+			if (rect.isPointIn((temp.getX() + temp.getL()), temp.getY())) {
+				let ret = true;
+			}
+			if (rect.isPointIn(temp.getX(), (temp.getY() + temp.getW()))) {
+				let ret = true;
+			}
+			if (rect.isPointIn((temp.getX() + temp.getL()), (temp.getY() + temp.getW()))) {
+				let ret = true;
+			}
+			
+			if (temp.isPointIn(rect.getX(), rect.getY())) {
+				let ret = true;
+			}
+			if (temp.isPointIn((rect.getX() + rect.getL()), rect.getY())) {
+				let ret = true;
+			}
+			if (temp.isPointIn(rect.getX(), (rect.getY() + rect.getW()))) {
+				let ret = true;
+			}
+			if (temp.isPointIn((rect.getX() + rect.getL()), (rect.getY() + rect.getW()))) {
+				let ret = true;
+			}
+			
+			let i = i + 1;
+		}
 
         if ((((dir = 1) | (dir = 2)) & toMark)) {
 			do Sys.wait(5);
@@ -238,23 +226,53 @@ class RectangleGame {
         return ret;
     }
 	
-	method void moveArray() {
+	method boolean moveArray() {
 		var int i;
 		var Rectangle temp;
+		var boolean ret;
+		
+		let ret = false;
 		
 		let i = 0;
 		while (i < 10) {
 			let temp = arr[i];
 			
 			if (arrDir = 1) {
-				let arrDir = temp.moveUp(toMark);
+				let arrDir = temp.moveUp(false);
 			}
 			if (arrDir = 2) {
-				let arrDir = temp.moveDown(toMark);
+				let arrDir = temp.moveDown(false);
 			}
+			
+			if (rect.isPointIn(temp.getX(), temp.getY())) {
+				let ret = true;
+			}
+			if (rect.isPointIn((temp.getX() + temp.getL()), temp.getY())) {
+				let ret = true;
+			}
+			if (rect.isPointIn(temp.getX(), (temp.getY() + temp.getW()))) {
+				let ret = true;
+			}
+			if (rect.isPointIn((temp.getX() + temp.getL()), (temp.getY() + temp.getW()))) {
+				let ret = true;
+			}
+			
+			if (temp.isPointIn(rect.getX(), rect.getY())) {
+				let ret = true;
+			}
+			if (temp.isPointIn((rect.getX() + rect.getL()), rect.getY())) {
+				let ret = true;
+			}
+			if (temp.isPointIn(rect.getX(), (rect.getY() + rect.getW()))) {
+				let ret = true;
+			}
+			if (temp.isPointIn((rect.getX() + rect.getL()), (rect.getY() + rect.getW()))) {
+				let ret = true;
+			}
+			
 			let i = i + 1;
 		}
-		return;
+		return ret;
 	}
 	
 	method void colorScreen(bool mode) {

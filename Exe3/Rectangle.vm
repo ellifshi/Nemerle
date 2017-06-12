@@ -325,92 +325,6 @@ push constant 1
 add
 call Screen.drawRectangle 4
 pop temp 0
-push this 0
-push constant 0
-eq
-push this 1
-push constant 200
-gt
-and
-push this 0
-push constant 50
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 100
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 150
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 200
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 250
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 300
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 350
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 400
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 450
-eq
-push this 1
-push constant 200
-gt
-and
-or
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push pointer 0
-call Rectangle.printNewRect 1
-pop temp 0
-label IF_FALSE2
 push constant 1
 return
 label IF_FALSE0
@@ -498,92 +412,6 @@ push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
-push this 0
-push constant 0
-eq
-push this 1
-push constant 200
-gt
-and
-push this 0
-push constant 50
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 100
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 150
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 200
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 250
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 300
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 350
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 400
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 450
-eq
-push this 1
-push constant 200
-gt
-and
-or
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push pointer 0
-call Rectangle.printNewRect 1
-pop temp 0
-label IF_FALSE2
 push constant 2
 return
 label IF_FALSE0
@@ -659,92 +487,6 @@ push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
-push this 0
-push constant 0
-eq
-push this 1
-push constant 200
-gt
-and
-push this 0
-push constant 50
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 100
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 150
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 200
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 250
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 300
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 350
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 400
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 450
-eq
-push this 1
-push constant 200
-gt
-and
-or
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push pointer 0
-call Rectangle.printNewRect 1
-pop temp 0
-label IF_FALSE2
 push constant 3
 return
 label IF_FALSE0
@@ -818,94 +560,46 @@ push this 4
 add
 call Screen.drawRectangle 4
 pop temp 0
-push this 0
-push constant 0
-eq
-push this 1
-push constant 200
-gt
-and
-push this 0
-push constant 50
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 100
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 150
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 200
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 250
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 300
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 350
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 400
-eq
-push this 1
-push constant 200
-gt
-and
-or
-push this 0
-push constant 450
-eq
-push this 1
-push constant 200
-gt
-and
-or
-if-goto IF_TRUE2
-goto IF_FALSE2
-label IF_TRUE2
-push pointer 0
-call Rectangle.printNewRect 1
-pop temp 0
-label IF_FALSE2
 push constant 4
 return
 label IF_FALSE0
 push constant 3
+return
+function Rectangle.isPointIn 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push argument 1
+push this 0
+lt
+push argument 1
+push this 0
+push this 3
+add
+gt
+or
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push argument 2
+push this 1
+lt
+push argument 2
+push this 1
+push this 4
+add
+gt
+or
+not
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop local 0
+label IF_FALSE1
+label IF_FALSE0
+push local 0
 return
