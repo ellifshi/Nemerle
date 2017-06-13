@@ -31,6 +31,7 @@ namespace Exe_4
             opKeyWord = Set(tab2);       
         }
         
+        //in the string, we have sevelrle of words, whith space. so we need to hendle in string diffrently.
         static public hendleWithString(line:string) : string
         {
             mutable start = line.IndexOf("\""); // what is the index of the first (") 
@@ -41,14 +42,15 @@ namespace Exe_4
 
             mutable temp1 = line.Substring(0, start); //get the subString from the beggining until the first (")
 
-            mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
+            mutable temp2 = line.Substring(start, end - start).Replace(" ", "@").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
 
             mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", ""); //get the subString from the secnd (") to the end.
 
             mutable temp4 = temp1 + temp2 + temp3; //get the all line, but in the string we get instead of space (" ") the ("_").
             temp4;      //return the line
         }
-
+        
+        //in returnArray we change the lines from the jack files for any relevent char with space, delte some line withe commend, and returne to array.
         static public returnArray(lines:array[string]) : array[string]
         {
             mutable finalLine :string;
@@ -76,13 +78,13 @@ namespace Exe_4
                 finalLine = line;
                 while(finalLine.StartsWith(" "))
                 {
-                    finalLine = finalLine.Remove(0, 1);
+                    finalLine = finalLine.Remove(0, 1); //delete some space in the start of the word
                     lines[count] = finalLine;
                 }
                 if(line.Contains("//")) // check if we got commend in the middle of line
                 {
                     mutable end = line.IndexOf("//");
-                    finalLine = finalLine.Substring(0, end); 
+                    finalLine = finalLine.Substring(0, end); //we get line without commend
                     
                     while(finalLine.Contains("//"))
                     {
@@ -93,7 +95,12 @@ namespace Exe_4
                     count++;
                     
                 }
-                else if(line.Contains("   *")) // check if we got commend in the middle of line
+                else if(line.Contains("   *")) // check if we got commend in the middle of line, ****need to be checked!!!***
+                {
+                    lines[count] = "";
+                    count++;       
+                }
+                else if(line.StartsWith("*")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
@@ -110,68 +117,76 @@ namespace Exe_4
             
             foreach(line in lines)
             {
-                if(line.Equals(""))
+                if(line.Equals(""))//we don't need empty line.
                 {
-                    count++;
+                    //count++;
                 }
                 else 
                 {
                     newLines.Add(line);
-                    count++;
+                    //count++;
                 }
             }
             newLines.ToArray();
         }
 
-        static public sessionData(lines:array[string], pathXMLFile:string):void
+        static public sessionData(lines:array[string], pathTXMLFile:string, pathXMLFIle:string):void
         {
-            returnArray(lines);
-            
-            foreach (line in lines)
+            //mutable newLines = List();
+            mutable newLines = returnArray(lines);
+           
+            foreach (line in newLines)
             {
                 mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
                 mutable fs : FileStream;
                 foreach(word in words)
                 {   
-                    if (File.Exists(pathXMLFile))
+                    if (File.Exists(pathTXMLFile))
                     {
-                        fs = FileStream(pathXMLFile,FileMode.Append,FileAccess.Write);
+                        fs = FileStream(pathTXMLFile,FileMode.Append,FileAccess.Write);
                     }
                     else
                     {
-                        fs =  FileStream(pathXMLFile, FileMode.Create,FileAccess.Write);
+                        fs =  FileStream(pathTXMLFile, FileMode.Create,FileAccess.Write);
                     }
                     def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
                     def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
                 
                     mutable number : int; // check if char is a number
                 
-                    if(checkIfTheWordEqualToKeyWord)
+                    if(checkIfTheWordEqualToKeyWord) 
                     {
-                        keyWord(word, fs);
+                        keyWord(word, fs); // if the word is keyword, so wo print the word
                     }
                     else if(checkIfTheWordEqualOPKeyWord)
                     {
-                        symbol(word, fs);
+                        symbol(word, fs); // if the word is opernd keyword, so wo print the word
                     }
-                    else if (word.Contains("_"))
+                    else if (word.Contains("@")) 
                     {
                         stringVal(word, fs);
                     }
                     else if(int.TryParse(word, out number))// check if char is a number
                     {
-                        intVal(word, fs);
+                        intVal(word, fs); // if the word is number, so wo print the word
                     }
                     else
                     {
-                        identifier(word, fs);
+                        identifier(word, fs); // if the word is identifier, so wo print the word
                     }
-                }
+                }             
             }
+            
+          //mutable jef = fromTxmlToList(pathTXMLFile);
+          //WriteLine(jef);
         }
-
-
-        public static printTokens(word:string, fs:FileStream):void
+        public static fromTxmlToList(pathTXMLFile:string):List[string]//sometime we more esiaer to hendle with list
+        {       
+            mutable allLinesText = List();
+            allLinesText = File.ReadAllLines(pathTXMLFile).ToList();
+            allLinesText;
+        }
+        public static printTokens(word:string, fs:FileStream):void //print token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
 
@@ -181,7 +196,7 @@ namespace Exe_4
             fs.Close();
         }
 
-        public static keyWord(word:string, fs:FileStream):void
+        public static keyWord(word:string, fs:FileStream):void //print keyWord token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
 
@@ -190,7 +205,7 @@ namespace Exe_4
             writer.Close();
             fs.Close();
         }
-        public static symbol(word:string, fs:FileStream):void
+        public static symbol(word:string, fs:FileStream):void //print symbol token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
 
@@ -199,7 +214,7 @@ namespace Exe_4
             writer.Close();
             fs.Close();
         }
-        public static identifier(word:string, fs:FileStream):void
+        public static identifier(word:string, fs:FileStream):void //print identifier token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
 
@@ -208,7 +223,7 @@ namespace Exe_4
             writer.Close();
             fs.Close();
         }
-        public static intVal(word:string, fs:FileStream):void
+        public static intVal(word:string, fs:FileStream):void //print intVal token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
 
@@ -217,10 +232,10 @@ namespace Exe_4
             writer.Close();
             fs.Close();
         }
-        public static stringVal(word:string, fs:FileStream):void
+        public static stringVal(word:string, fs:FileStream):void //print stringVal token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
-            mutable words = word.Replace("_", " "); 
+            mutable words = word.Replace("@", " "); 
             writer.WriteLine("<stringConstant> " + words + " </stringConstant>");
 
             writer.Close();

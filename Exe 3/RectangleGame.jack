@@ -28,47 +28,48 @@ class RectangleGame {
     /** Constructs a new Square Game. */
     constructor RectangleGame new() {
 	
+		//do Output.printString("start");
+		let rect   = Rectangle.new(0,0, 31, 31);		
+		let arr = Array.new(10);
 		
-		    //do Output.printString("start");
-			let rect   = Rectangle.new(0,0, 31, 31);
-			let arr = Array.new(10);
-			let arr[0] = Rectangle.new(0,224,31, 31);
-			let arr[1] = Rectangle.new(50,224,31, 31);
-			let arr[2] = Rectangle.new(100,224, 31, 31);
-			let arr[3] = Rectangle.new(150,224,31, 31);
-			let arr[4] = Rectangle.new(200,224,31, 31);
-			let arr[5] = Rectangle.new(250,224,31, 31);
-			let arr[6] = Rectangle.new(300,224, 31, 31);
-			let arr[7] = Rectangle.new(350,224,31, 31);
-			let arr[8] = Rectangle.new(400,224,31, 31);
-			let arr[9] = Rectangle.new(450,224,31, 31);
-			
-			let arrDir = 0;
-
-
+		let arr[0] = Rectangle.new(0,224,31, 31);
+		let arr[1] = Rectangle.new(50,224,31, 31);
+		let arr[2] = Rectangle.new(100,224, 31, 31);
+		let arr[3] = Rectangle.new(150,224,31, 31);
+		let arr[4] = Rectangle.new(200,224,31, 31);
+		let arr[5] = Rectangle.new(250,224,31, 31);
+		let arr[6] = Rectangle.new(300,224, 31, 31);
+		let arr[7] = Rectangle.new(350,224,31, 31);
+		let arr[8] = Rectangle.new(400,224,31, 31);
+		let arr[9] = Rectangle.new(450,224,31, 31);
+		
+		let arrDir = 0;
 		return this;      
     }
 	
 	constructor RectangleGame afterDelte(){
-			let arr = Array.new(10);
-			let arr[0] = Rectangle.new(0,224,31, 31);
-			let arr[1] = Rectangle.new(50,224,31, 31);
-			let arr[2] = Rectangle.new(100,224, 31, 31);
-			let arr[3] = Rectangle.new(150,224,31, 31);
-			let arr[4] = Rectangle.new(200,224,31, 31);
-			let arr[5] = Rectangle.new(250,224,31, 31);
-			let arr[6] = Rectangle.new(300,224, 31, 31);
-			let arr[7] = Rectangle.new(350,224,31, 31);
-			let arr[8] = Rectangle.new(400,224,31, 31);
-			let arr[9] = Rectangle.new(450,224,31, 31);
-			return this;
+		let arr = Array.new(10);
+		let arr[0] = Rectangle.new(0,224,31, 31);
+		let arr[1] = Rectangle.new(50,224,31, 31);
+		let arr[2] = Rectangle.new(100,224, 31, 31);
+		let arr[3] = Rectangle.new(150,224,31, 31);
+		let arr[4] = Rectangle.new(200,224,31, 31);
+		let arr[5] = Rectangle.new(250,224,31, 31);
+		let arr[6] = Rectangle.new(300,224, 31, 31);
+		let arr[7] = Rectangle.new(350,224,31, 31);
+		let arr[8] = Rectangle.new(400,224,31, 31);
+		let arr[9] = Rectangle.new(450,224,31, 31);
+		return this;
 
 	}
 
     /** Deallocates the object's memory. */
     method void dispose() {
         do rect.dispose();
+<<<<<<< HEAD:Exe3/RectangleGame.jack
 		do Memory.deAlloc(arr);
+=======
+>>>>>>> 68723d4fab58dcdc6ad93c77750d0ce9b5bda917:Exe 3/RectangleGame.jack
         do Memory.deAlloc(this);
 		
 		
@@ -186,11 +187,29 @@ class RectangleGame {
 		
 		let i = 0;
 		while (i < 10) {
+	
+
+		//do Output.printString(arr[i]);
 			let temp = arr[i];
+<<<<<<< HEAD:Exe3/RectangleGame.jack
 			
 			if (rect.isPointIn(temp.getX(), temp.getY())) {
+=======
+			if ((((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX())) | ((temp.getX() = rect.getX()) & ((temp.getX() + temp.getL()) = rect.getX()))) & (((temp.getY() < rect.getY()) & ((temp.getY() + temp.getW()) > rect.getY())) | ((temp.getY() = rect.getY()) & ((temp.getY() + temp.getW()) = rect.getY())))){
+				if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();
+				
+>>>>>>> 68723d4fab58dcdc6ad93c77750d0ce9b5bda917:Exe 3/RectangleGame.jack
 				let ret = true;
+				
 			}
+<<<<<<< HEAD:Exe3/RectangleGame.jack
 			if (rect.isPointIn((temp.getX() + temp.getL()), temp.getY())) {
 				let ret = true;
 			}
@@ -211,11 +230,68 @@ class RectangleGame {
 				let ret = true;
 			}
 			if (temp.isPointIn((rect.getX() + rect.getL()), (rect.getY() + rect.getW()))) {
+=======
+			do Sys.wait(0);
+			if ((((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX())) | ((rect.getX() = temp.getX()) & ((rect.getX() + rect.getL()) = temp.getX()))) & (((temp.getY() < rect.getY()) & ((temp.getY() + temp.getW()) > rect.getY())) | ((temp.getY() = rect.getY()) & ((temp.getY() + temp.getW()) = rect.getY())))){
+				if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();
+				
 				let ret = true;
 			}
-			
+			do Sys.wait(0);
+			if ((((temp.getX() < rect.getX()) & ((temp.getX() + temp.getL()) > rect.getX())) | ((temp.getX() = rect.getX()) & ((temp.getX() + temp.getL()) = rect.getX()))) & (((rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) | ((rect.getY() = temp.getY()) & ((rect.getY() + rect.getW()) = temp.getY())))){
+				if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();
+				
+				let ret = true;
+			}
+			do Sys.wait(0);
+			if ((((rect.getX() < temp.getX()) & ((rect.getX() + rect.getL()) > temp.getX())) | ((rect.getX() = temp.getX()) & ((rect.getX() + rect.getL()) = temp.getX()))) & (((rect.getY() < temp.getY()) & ((rect.getY() + rect.getW()) > temp.getY())) | ((rect.getY() = temp.getY()) & ((rect.getY() + rect.getW()) = temp.getY())))){
+				if (dir = 1 | dir = 3) {
+					let direction = direction + 1;
+				}
+				if (dir = 2 | dir = 4) {
+					let direction = direction - 1;
+				}
+				
+				do temp.draw();
+				
+>>>>>>> 68723d4fab58dcdc6ad93c77750d0ce9b5bda917:Exe 3/RectangleGame.jack
+				let ret = true;
+			}
+			do Sys.wait(0);
 			let i = i + 1;
+
 		}
+<<<<<<< HEAD:Exe3/RectangleGame.jack
+=======
+
+		
+        if (dir = 1) {
+            let direction = rect.moveUp(toMark);
+        }
+        if (dir = 2) {
+            let direction = rect.moveDown(toMark);
+        }
+        if (dir = 3) {
+            let direction = rect.moveLeft(toMark);
+        }
+        if (dir = 4) {
+            let direction = rect.moveRight(toMark);
+        }
+>>>>>>> 68723d4fab58dcdc6ad93c77750d0ce9b5bda917:Exe 3/RectangleGame.jack
 
         if ((((dir = 1) | (dir = 2)) & toMark)) {
 			do Sys.wait(5);
