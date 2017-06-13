@@ -42,7 +42,7 @@ namespace Exe_5
 
             mutable temp1 = line.Substring(0, start); //get the subString from the beggining until the first (")
 
-            mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
+            mutable temp2 = line.Substring(start, end - start).Replace(" ", "@").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
 
             mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", ""); //get the subString from the secnd (") to the end.
 
@@ -96,6 +96,11 @@ namespace Exe_5
                     
                 }
                 else if(line.Contains("   *")) // check if we got commend in the middle of line
+                {
+                    lines[count] = "";
+                    count++;       
+                }
+                else if(line.Contains("*")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
@@ -157,7 +162,7 @@ namespace Exe_5
                     {
                         symbol(word, fs); // if the word is opernd keyword, so wo print the word
                     }
-                    else if (word.Contains("_"))
+                    else if (word.Contains("@"))
                     {
                         stringVal(word, fs);
                     }
@@ -230,7 +235,7 @@ namespace Exe_5
         public static stringVal(word:string, fs:FileStream):void //print stringVal token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
-            mutable words = word.Replace("_", " "); 
+            mutable words = word.Replace("@", " "); 
             writer.WriteLine("<stringConstant> " + words + " </stringConstant>");
 
             writer.Close();
