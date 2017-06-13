@@ -14,7 +14,7 @@ using Nemerle.Extensions;
 using System.Text.RegularExpressions;
 using System.IO.FileAttributes;
 
-namespace Exe_4
+namespace Exe_5
 {
     class CompilationEngine
     {
@@ -91,63 +91,63 @@ namespace Exe_4
         {
             if(word.Equals("class") || word.Equals("/class")) //we don't neet to space for "class"
             {
-                toXMLFile.WriteLine("<" + word + ">");
+                toXMLFile.WriteLine(word.Replace("/",""));//"<" + word + ">");
             }
             else
             {
-                countOfIndention ++; //for space
-                toXMLFile.WriteLine(Tabs(countOfIndention) + "<" + word + ">");
-                countOfIndention --;
+                //countOfIndention ++; //for space
+                toXMLFile.WriteLine(word.Replace("/",""));//Tabs(countOfIndention) + "<" + word + ">");
+                //countOfIndention --;
             }
         }
         //print keyword token
         public printXmlPattrenKeyword(word:string):void
         {
-            countOfIndention ++;
-            toXMLFile.WriteLine(Tabs(countOfIndention) + "<keyword> " + word + " </keyword>"); 
-            countOfIndention --;
+            //countOfIndention ++;
+            toXMLFile.WriteLine(word);//Tabs(countOfIndention) + "<keyword> " + word + " </keyword>"); 
+            //countOfIndention --;
         }
         //print identifier token
         public printXmlPattrenIdentifier(word:string):void
         {
-            countOfIndention ++;
-            toXMLFile.WriteLine(Tabs(countOfIndention) + "<identifier> " + word + " </identifier>"); 
-            countOfIndention --;
+            ////countOfIndention ++;
+            toXMLFile.WriteLine(word);//Tabs(countOfIndention) + "<identifier> " + word + " </identifier>"); 
+            ////countOfIndention --;
         }
         //print symbol token
         public printXmlPattreSymbol(word:string):void
         {
-            countOfIndention ++;
-            toXMLFile.WriteLine(Tabs(countOfIndention) + "<symbol> " + word + " </symbol>");
-            countOfIndention --;
+            ////countOfIndention ++;
+            toXMLFile.WriteLine(word);//Tabs(countOfIndention) + "<symbol> " + word + " </symbol>");
+            ////countOfIndention --;
         }
         //print integer token
         public printXmlPattrenIntegerConstant(word:int):void
         {
-            countOfIndention ++;
-            toXMLFile.WriteLine(Tabs(countOfIndention) + "<integerConstant> " + word + " </integerConstant>"); 
-            countOfIndention --;
+            ////countOfIndention ++;
+            toXMLFile.WriteLine(word);//Tabs(countOfIndention) + "<integerConstant> " + word + " </integerConstant>"); 
+            ////countOfIndention --;
         }
         //print string token
         public printXmlPattreStringConstant(word:string):void
         {
-            countOfIndention ++;
-            toXMLFile.WriteLine(Tabs(countOfIndention) + "<stringConstant>" + word + "</stringConstant>");
-            countOfIndention --;
+            ////countOfIndention ++;
+            toXMLFile.WriteLine(word);//Tabs(countOfIndention) + "<stringConstant>" + word + "</stringConstant>");
+            ////countOfIndention --;
         }
         
-        public static mutable countOfIndention = 1; // for space
+        //public static mutable countOfIndention = 1; // for space
         //print count of space 
-        public static Tabs(countOfIndention:int):string
+        /*public static Tabs(countOfIndention:int):string
         {
             mutable tabs :string = string(' ', countOfIndention);
             tabs;
-        }
+        }*/
         
         // 'class' className '{' classVarDec* subroutineDec* '}'
         public CompileClass():void
         {
-            printXmlPattrenToken("class");
+            //printXmlPattrenToken("class");
             advance(); //'tokens' if from tokens file, we don't need him, so we get the next token
             advance(); 
             when(returnKeywordToken().Equals("class"))
@@ -180,7 +180,7 @@ namespace Exe_4
                 printXmlPattreSymbol(returnSymbolToken()); //'}'
                 advance();
             }
-            printXmlPattrenToken("/class");
+            //printXmlPattrenToken("/class");
         }
         //'int' | 'char' | 'boolean' | className 
         public CompileType():void
@@ -199,8 +199,8 @@ namespace Exe_4
         //('static' | 'field' ) type varName (',' varName)* ';' 
         public CompileClassVarDec():void
         {
-            printXmlPattrenToken("classVarDec");
-            countOfIndention += 2;
+            //printXmlPattrenToken("classVarDec");
+            ////countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken()); //('static' | 'field' )
             advance();
             CompileType(); //type
@@ -226,14 +226,14 @@ namespace Exe_4
             {
                 printXmlPattreSymbol(returnSymbolToken()); //';'
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/classVarDec");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/classVarDec");
         }
         //('constructor' | 'function' | 'method') ('void' | type) subroutineName '(' parameterList ')' subroutineBody
         public CompileSubroutineDec():void
         { 
-            printXmlPattrenToken("subroutineDec");
-            countOfIndention +=2;
+            //printXmlPattrenToken("subroutineDec");
+            //countOfIndention +=2;
             printXmlPattrenKeyword(returnKeywordToken()); //('constructor' | 'function' | 'method')
 
             advance();        
@@ -247,14 +247,14 @@ namespace Exe_4
             printXmlPattreSymbol(returnSymbolToken()); //')'
             advance();
             CompileSuroutineBody();//subroutineBody
-            countOfIndention -=2;
-            printXmlPattrenToken("/subroutineDec");
+            //countOfIndention -=2;
+            //printXmlPattrenToken("/subroutineDec");
         }
         // '{' varDec* stetmenss '}'
         public CompileSuroutineBody():void
         {
-            printXmlPattrenToken("subroutineBody");
-            countOfIndention += 2;
+            //printXmlPattrenToken("subroutineBody");
+            //countOfIndention += 2;
             printXmlPattreSymbol(returnSymbolToken()); //'{'
             advance();
             while(returnKeywordToken().Equals("var"))
@@ -264,15 +264,15 @@ namespace Exe_4
             CompileStatements(); //statements
             printXmlPattreSymbol(returnSymbolToken()); //'}'
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/subroutineBody");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/subroutineBody");
         }
         
         //( (type varName) (',' type varName)*)? 
         public CompileParameterList():void
         {
-            printXmlPattrenToken("parameterList");
-            countOfIndention += 2;
+            //printXmlPattrenToken("parameterList");
+            //countOfIndention += 2;
             when(returnSymbolToken() != ")" )
             {
                 CompileType(); //type
@@ -287,14 +287,14 @@ namespace Exe_4
                     advance();
                 }
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/parameterList");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/parameterList");
         }
         //'var' type varName (',' varName)* ';'
         public CompileVarDec():void
         {
-            printXmlPattrenToken("varDec");
-            countOfIndention += 2; 
+            //printXmlPattrenToken("varDec");
+            //countOfIndention += 2; 
             printXmlPattrenKeyword(returnKeywordToken());//'var'
             advance();
             CompileType();//type
@@ -310,14 +310,14 @@ namespace Exe_4
             }
             printXmlPattreSymbol(returnSymbolToken());//';'
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/varDec");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/varDec");
         }
         //(letStatement | ifStatement | whileStatement | doStatement | returnStatement)*
         public CompileStatements():void
         {
-            printXmlPattrenToken("statements");
-            countOfIndention += 2;
+            //printXmlPattrenToken("statements");
+            //countOfIndention += 2;
             while(returnTypeToken().Equals("keyword")) 
             {
                 match(returnKeywordToken())
@@ -330,27 +330,27 @@ namespace Exe_4
                     |_=>()
                 }
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/statements");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/statements");
         }
         //'do' subroutineCall ';'
         public CompileDo():void
         {
-            printXmlPattrenToken("doStatement");
-            countOfIndention += 2;
+            //printXmlPattrenToken("doStatement");
+            //countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken()); //'do'
             advance();
             CompileSubroutineCall(); //subroutineCall
             printXmlPattreSymbol(returnSymbolToken()); //;
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/doStatement");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/doStatement");
         }
         //'let' varName ('[' expression ']')? '=' expression ';'
         public CompileLet():void
         {
-            printXmlPattrenToken("letStatement");
-            countOfIndention += 2;
+            //printXmlPattrenToken("letStatement");
+            //countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken());//let
             advance();
             printXmlPattrenIdentifier(returnIdentifierToken()); //varName
@@ -364,19 +364,19 @@ namespace Exe_4
                 printXmlPattreSymbol(returnSymbolToken());//]
                 advance();
             }
-            printXmlPattreSymbol(returnSymbolToken());//'='
+            printXmlPattreSymbol("eq");//'='
             advance();
             CompileExpression();//expression
             printXmlPattreSymbol(returnSymbolToken());//';'
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/letStatement");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/letStatement");
         }
         //'while' '(' expression ')' '{' statements '}'  
         public CompileWhile():void
         {
-            printXmlPattrenToken("whileStatement");
-            countOfIndention += 2;
+            //printXmlPattrenToken("whileStatement");
+            //countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken()); //'while'
             advance();
             printXmlPattreSymbol(returnSymbolToken()); //'('
@@ -389,14 +389,14 @@ namespace Exe_4
             CompileStatements();//statements
             printXmlPattreSymbol(returnSymbolToken()); //'}'
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/whileStatement"); 
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/whileStatement"); 
         }
         //'return' expression? ';' 
         public CompileReturn():void
         {
-            printXmlPattrenToken("returnStatement");
-            countOfIndention += 2;
+            //printXmlPattrenToken("returnStatement");
+            //countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken()); //'return'
             advance();
             when(returnSymbolToken() != ";")
@@ -405,14 +405,14 @@ namespace Exe_4
             }
             printXmlPattreSymbol(returnSymbolToken()); //';'
             advance();
-            countOfIndention -= 2;
-            printXmlPattrenToken("/returnStatement");  
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/returnStatement");  
         }
         // 'if' ( experssion ) '{' stestmens '}' (else '{' stetmens '}')?
         public CompileIf():void
         {
-            printXmlPattrenToken("ifStatement");
-            countOfIndention += 2;
+            //printXmlPattrenToken("ifStatement");
+            //countOfIndention += 2;
             printXmlPattrenKeyword(returnKeywordToken()); //if
             advance();
             printXmlPattreSymbol(returnSymbolToken()); //'('
@@ -433,32 +433,46 @@ namespace Exe_4
                 printXmlPattreSymbol(returnSymbolToken()); //'}'
                 advance();
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/ifStatement");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/ifStatement");
         }
         //term (op term)* 
         public CompileExpression():void
         {
-            printXmlPattrenToken("expression");
-            countOfIndention += 2;
+            //printXmlPattrenToken("expression");
+            //countOfIndention += 2;
             CompileTerm();//term
             when(isOperandToken())
             {
-                printXmlPattreSymbol(returnSymbolToken()); //'+' OR '=' etc
+                match(returnKeywordToken())
+                {
+                    |"+" => printXmlPattreSymbol("add");
+                    |"-" => printXmlPattreSymbol("sub");
+                    |"*" => printXmlPattreSymbol("mult");
+                    |"/" => printXmlPattreSymbol("diff");
+                    |"=" => printXmlPattreSymbol("eq");
+                    |"|" => printXmlPattreSymbol("or");
+                    |"&" => printXmlPattreSymbol("and");
+                    |"&amp;" => printXmlPattreSymbol("amp");
+                    |"&lt;" => printXmlPattreSymbol("lt");
+                    |"&gt;" => printXmlPattreSymbol("gt");
+                    |_=>()
+                }
+                //printXmlPattreSymbol(returnSymbolToken()); //'+' OR '=' etc
                 advance();
             }
             when(!returnSymbolToken().Equals(")") && !returnSymbolToken().Equals(";") && !returnSymbolToken().Equals("]")  && !returnSymbolToken().Equals(","))
             {
                 CompileTerm(); //term
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/expression");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/expression");
         }
         //integerConstant | stringConstant | keywordConstant | varName | varName '[' expression ']' |identifier > subroutineCall | '(' expression ')' | unaryOp term
         public CompileTerm():void
         {
-            printXmlPattrenToken("term");
-            countOfIndention += 2;
+            //printXmlPattrenToken("term");
+            //countOfIndention += 2;
             match(returnTypeToken())
             {
                 |"integerConstant" =>
@@ -521,8 +535,8 @@ namespace Exe_4
                     }
                 }
             } 
-            countOfIndention -= 2;
-            printXmlPattrenToken("/term");
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/term");
         } 
         //subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
         public CompileSubroutineCall():void
@@ -553,8 +567,8 @@ namespace Exe_4
         //(expression (',' expression)* )? 
         public CompileExpressionList():void
         {
-            printXmlPattrenToken("expressionList");
-            countOfIndention += 2;
+            //printXmlPattrenToken("expressionList");
+            //countOfIndention += 2;
             when(returnSymbolToken() != ")")
             {
                 CompileExpression();//expression
@@ -566,8 +580,8 @@ namespace Exe_4
                     CompileExpression();//expression
                 }
             }
-            countOfIndention -= 2;
-            printXmlPattrenToken("/expressionList");     
+            //countOfIndention -= 2;
+            //printXmlPattrenToken("/expressionList");     
         }
     }
 }

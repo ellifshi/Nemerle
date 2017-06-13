@@ -59,7 +59,13 @@
     </MacroReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.n" />
+    <Compile Include="CompilationEngine.n">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="JackAnalyzer.n" />
+    <Compile Include="JackTokenizer.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
   </ItemGroup>
   <ItemGroup>

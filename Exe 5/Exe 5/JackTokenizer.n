@@ -16,7 +16,7 @@ using Nemerle;
 using Nemerle.Utility.NString;
 
 
-namespace Exe_4
+namespace Exe_5
 {
     class JackTokenizer
     {
@@ -42,7 +42,7 @@ namespace Exe_4
 
             mutable temp1 = line.Substring(0, start); //get the subString from the beggining until the first (")
 
-            mutable temp2 = line.Substring(start, end - start).Replace(" ", "@").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
+            mutable temp2 = line.Substring(start, end - start).Replace(" ", "_").Replace("\"",""); // get the subString from the first (") until the secound ("). and replace " " to "_".
 
             mutable temp3 = line.Substring(end).Replace("\"", "").Replace("\\", ""); //get the subString from the secnd (") to the end.
 
@@ -95,12 +95,7 @@ namespace Exe_4
                     count++;
                     
                 }
-                else if(line.Contains("   *")) // check if we got commend in the middle of line, ****need to be checked!!!***
-                {
-                    lines[count] = "";
-                    count++;       
-                }
-                else if(line.StartsWith("*")) // check if we got commend in the middle of line
+                else if(line.Contains("   *")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
@@ -162,7 +157,7 @@ namespace Exe_4
                     {
                         symbol(word, fs); // if the word is opernd keyword, so wo print the word
                     }
-                    else if (word.Contains("@"))
+                    else if (word.Contains("_"))
                     {
                         stringVal(word, fs);
                     }
@@ -235,7 +230,7 @@ namespace Exe_4
         public static stringVal(word:string, fs:FileStream):void //print stringVal token that we get to Txml file
         {
             mutable writer =  StreamWriter(fs);  
-            mutable words = word.Replace("@", " "); 
+            mutable words = word.Replace("_", " "); 
             writer.WriteLine("<stringConstant> " + words + " </stringConstant>");
 
             writer.Close();
