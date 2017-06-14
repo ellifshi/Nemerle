@@ -32,9 +32,17 @@ module Program
         mutable lines :array[string];
         foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
         {
-            mutable pathVMFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", ".vm"));
+            mutable pathTxmlFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", "T.xml"));
+            mutable pathXMLFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", ".vm"));
+            mutable fs =  FileStream(pathTxmlFile, FileMode.Create,FileAccess.Write);
+            Exe_5.JackTokenizer.printTokens("<tokens>", fs);
+
             lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
-            Exe_5.JackTokenizer.sessionData(lines, pathVMFile);
+            Exe_5.JackTokenizer.sessionData(lines, pathTxmlFile, pathXMLFile);
+
+            mutable fsTemp = FileStream(pathTxmlFile,FileMode.Append,FileAccess.Write);
+            Exe_5.JackTokenizer.printTokens("</tokens>", fsTemp); 
+            Exe_5.CompilationEngine(pathTxmlFile, pathXMLFile); 
         }
     }
 }
