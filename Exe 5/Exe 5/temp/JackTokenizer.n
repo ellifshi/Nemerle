@@ -16,7 +16,7 @@ using Nemerle;
 using Nemerle.Utility.NString;
 
 
-namespace Exe_4
+namespace Exe_5
 {
     class JackTokenizer
     {
@@ -95,12 +95,12 @@ namespace Exe_4
                     count++;
                     
                 }
-                else if(line.Contains("   *")) // check if we got commend in the middle of line, ****need to be checked!!!***
+                else if(line.Contains("   *")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
                 }
-                else if(line.StartsWith("*")) // check if we got commend in the middle of line
+                else if(line.Contains("*")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
@@ -162,11 +162,7 @@ namespace Exe_4
                     {
                         symbol(word, fs); // if the word is opernd keyword, so wo print the word
                     }
-<<<<<<< HEAD
-                    else if (word.Contains("@")) 
-=======
                     else if (word.Contains("@"))
->>>>>>> 0cd151be59c4d74cd209a38c1547fbdfffffd392
                     {
                         stringVal(word, fs);
                     }

@@ -16,13 +16,14 @@ using Nemerle;
 using Nemerle.Utility.NString;
 
 
-namespace Exe_4
+namespace Exe_5
 {
     class JackTokenizer
     {
+        public static  toTXMLFile = List();
         public static opKeyWord : Set [string];
         public static KeyWords : Set [string];
-
+        
         static this ()
         {
             def tab1 = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
@@ -95,12 +96,12 @@ namespace Exe_4
                     count++;
                     
                 }
-                else if(line.Contains("   *")) // check if we got commend in the middle of line, ****need to be checked!!!***
+                else if(line.Contains("   *")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
                 }
-                else if(line.StartsWith("*")) // check if we got commend in the middle of line
+                else if(line.Contains("*")) // check if we got commend in the middle of line
                 {
                     lines[count] = "";
                     count++;       
@@ -118,19 +119,16 @@ namespace Exe_4
             foreach(line in lines)
             {
                 if(line.Equals(""))//we don't need empty line.
-                {
-                    //count++;
-                }
+                {}
                 else 
                 {
                     newLines.Add(line);
-                    //count++;
                 }
             }
             newLines.ToArray();
         }
 
-        static public sessionData(lines:array[string], pathTXMLFile:string, pathXMLFIle:string):void
+        static public sessionData(lines:array[string], pathVMFile:string):void
         {
             //mutable newLines = List();
             mutable newLines = returnArray(lines);
@@ -138,17 +136,9 @@ namespace Exe_4
             foreach (line in newLines)
             {
                 mutable words = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);    
-                mutable fs : FileStream;
+                //mutable fs : FileStream;
                 foreach(word in words)
                 {   
-                    if (File.Exists(pathTXMLFile))
-                    {
-                        fs = FileStream(pathTXMLFile,FileMode.Append,FileAccess.Write);
-                    }
-                    else
-                    {
-                        fs =  FileStream(pathTXMLFile, FileMode.Create,FileAccess.Write);
-                    }
                     def checkIfTheWordEqualToKeyWord = KeyWords.Contains(word); //bool
                     def checkIfTheWordEqualOPKeyWord = opKeyWord.Contains(word); // bool
                 
@@ -156,94 +146,54 @@ namespace Exe_4
                 
                     if(checkIfTheWordEqualToKeyWord) 
                     {
-                        keyWord(word, fs); // if the word is keyword, so wo print the word
+                        keyWord(word); // if the word is keyword, so wo print the word
                     }
                     else if(checkIfTheWordEqualOPKeyWord)
                     {
-                        symbol(word, fs); // if the word is opernd keyword, so wo print the word
+                        symbol(word); // if the word is opernd keyword, so wo print the word
                     }
-<<<<<<< HEAD
-                    else if (word.Contains("@")) 
-=======
                     else if (word.Contains("@"))
->>>>>>> 0cd151be59c4d74cd209a38c1547fbdfffffd392
                     {
-                        stringVal(word, fs);
+                        stringVal(word);
                     }
                     else if(int.TryParse(word, out number))// check if char is a number
                     {
-                        intVal(word, fs); // if the word is number, so wo print the word
+                        intVal(word); // if the word is number, so wo print the word
                     }
                     else
                     {
-                        identifier(word, fs); // if the word is identifier, so wo print the word
+                        identifier(word); // if the word is identifier, so wo print the word
                     }
                 }             
             }
-            
-          //mutable jef = fromTxmlToList(pathTXMLFile);
-          //WriteLine(jef);
+            Exe_5.CompilationEngine(toTXMLFile, pathVMFile); 
         }
-        public static fromTxmlToList(pathTXMLFile:string):List[string]//sometime we more esiaer to hendle with list
-        {       
-            mutable allLinesText = List();
-            allLinesText = File.ReadAllLines(pathTXMLFile).ToList();
-            allLinesText;
+
+        public static printTokens(word:string):void //print token that we get to Txml file
+        { 
+            toTXMLFile.Add(word);
         }
-        public static printTokens(word:string, fs:FileStream):void //print token that we get to Txml file
+
+        public static keyWord(word:string):void //print keyWord token that we get to Txml file
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine(word);
-
-            writer.Close();
-            fs.Close();
+            toTXMLFile.Add("<keyword> " + word + " </keyword>");
         }
-
-        public static keyWord(word:string, fs:FileStream):void //print keyWord token that we get to Txml file
+        public static symbol(word:string):void //print symbol token that we get to Txml file
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine("<keyword> " + word + " </keyword>");
-
-            writer.Close();
-            fs.Close();
+            toTXMLFile.Add("<symbol> " + word + " </symbol>");
         }
-        public static symbol(word:string, fs:FileStream):void //print symbol token that we get to Txml file
+        public static identifier(word:string):void //print identifier token that we get to Txml file
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine("<symbol> " + word + " </symbol>");
-
-            writer.Close();
-            fs.Close();
+            toTXMLFile.Add("<identifier> " + word + " </identifier>");
         }
-        public static identifier(word:string, fs:FileStream):void //print identifier token that we get to Txml file
+        public static intVal(word:string):void //print intVal token that we get to Txml file
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine("<identifier> " + word + " </identifier>");
-
-            writer.Close();
-            fs.Close();
+            toTXMLFile.Add("<integerConstant> " + word + " </integerConstant>");
         }
-        public static intVal(word:string, fs:FileStream):void //print intVal token that we get to Txml file
+        public static stringVal(word:string):void //print stringVal token that we get to Txml file
         {
-            mutable writer =  StreamWriter(fs);  
-
-            writer.WriteLine("<integerConstant> " + word + " </integerConstant>");
-
-            writer.Close();
-            fs.Close();
-        }
-        public static stringVal(word:string, fs:FileStream):void //print stringVal token that we get to Txml file
-        {
-            mutable writer =  StreamWriter(fs);  
             mutable words = word.Replace("@", " "); 
-            writer.WriteLine("<stringConstant> " + words + " </stringConstant>");
-
-            writer.Close();
-            fs.Close();
+            toTXMLFile.Add("<stringConstant> " + words + " </stringConstant>");
         }
     }
 }

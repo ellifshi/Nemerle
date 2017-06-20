@@ -1,0 +1,45 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Exe_5
+{
+/// <summary>
+/// Description of SymbolTable.
+/// </summary>
+    class SymbolTable
+    {
+        public enum kind {| STATIC | FIELD | ARG | VAR}
+
+        public this()             
+        {
+        }
+
+        public define(name:string, type:string, kind:kind):void
+        {
+        }
+
+        public varCount(kind:kind):int
+        {
+            1
+        }
+        public kindOf(name:string):kind
+        {
+            kind.ARG;//todo
+        }
+        public typeOf(name:string):string
+        {
+            ""
+        }
+        public indexOf(name:string):int
+        {
+            1
+        }
+
+    }
+}
