@@ -1,0 +1,159 @@
+﻿using Nemerle;
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+
+namespace Exe_5
+{
+/// <summary>
+/// Description of SymbolTable.
+/// </summary>
+    class SymbolTable
+    {
+        public enum Kind {| STATIC | FIELD | ARG | VAR}
+        
+        private className : string;
+        
+        private mutable name = ArrayList();
+        private mutable type = ArrayList();
+        private mutable kind = ArrayList();
+        private mutable counter = ArrayList();
+        
+        private mutable staticCounter = 0;
+        private mutable fieldCounter = 0;
+        private mutable argumentCounter = 0;
+        private mutable variableCounter = 0;
+        
+        public this(name:string)             
+        {
+            className = name;
+        }
+        
+        public ClassName : string {
+            get {className}
+        }
+
+        /*public define(name:string, type:string, kind:kind):void
+        {
+        }
+
+        public varCount(kind:kind):int
+        {
+            1
+        }
+        public kindOf(name:string):kind
+        {
+            kind.ARG;//todo
+        }
+        public typeOf(name:string):string
+        {
+            ""
+        }
+        public indexOf(name:string):int
+        {
+            1
+        }*/
+        
+        public addStatic(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.STATIC);
+            counter.Add (staticCounter);
+            
+            staticCounter++;
+        }
+        
+        public addField(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.FIELD);
+            counter.Add (fieldCounter);
+            
+            fieldCounter++;
+        }
+        
+        public addArgunment(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.ARG);
+            counter.Add (argumentCounter);
+            
+            argumentCounter++;
+        }
+        
+        public addVariable(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.VAR);
+            counter.Add (variableCounter);
+            
+            variableCounter++;
+        }
+        
+        public exitFunctionDec() : void {
+            while (kind.IndexOf(Kind.ARG) != -1) {
+                mutable tmp = kind.IndexOf(Kind.ARG);
+                
+                kind.RemoveAt(tmp);
+                name.RemoveAt(tmp);
+                type.RemoveAt(tmp);
+                counter.RemoveAt(tmp);
+            }
+            
+            argumentCounter = 0;
+            
+            while (kind.IndexOf(Kind.VAR) != -1) {
+                mutable tmp = kind.IndexOf(Kind.VAR);
+                
+                kind.RemoveAt(tmp);
+                name.RemoveAt(tmp);
+                type.RemoveAt(tmp);
+                counter.RemoveAt(tmp);
+            }
+            
+            variableCounter = 0;
+        }
+        
+        public getType(a_name:string) : string {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = type[i].ToString();
+            }
+            
+            ret            
+        }
+        
+        public getKind(a_name:string) : string {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = kind[i].ToString();
+            }
+            
+            ret            
+        }
+        
+       public getCounter(a_name:string) : int {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = Int32.Parse(counter[i].ToString());
+            }
+            
+            ret            
+        }
+
+    }
+}
