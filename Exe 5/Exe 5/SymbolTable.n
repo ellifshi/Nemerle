@@ -12,10 +12,9 @@ namespace Exe_5
 /// <summary>
 /// Description of SymbolTable.
 /// </summary>
+    public enum kind {| STATIC | FIELD | ARG | VAR}
     class SymbolTable
     {
-        public enum kind {| STATIC | FIELD | ARG | VAR}
-
         public this()             
         {
         }

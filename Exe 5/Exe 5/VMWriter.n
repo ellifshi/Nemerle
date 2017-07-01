@@ -34,7 +34,7 @@ namespace Exe_5
       {
           toVMFile.WriteLine("pop " + segment + " " + index); 
       }
-      public WriteArithmetic(commend:string):void
+      public WriteWord(commend:string):void
       {
           toVMFile.WriteLine(commend); 
       }

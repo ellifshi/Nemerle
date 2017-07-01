@@ -1,0 +1,53 @@
+return
+push constant 0
+return
+eq
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+push constant 0
+return
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+eq
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+push constant 0
+return

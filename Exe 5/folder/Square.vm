@@ -1,0 +1,83 @@
+return
+push constant 0
+return
+add
+add
+push constant 0
+return
+add
+add
+push constant 0
+return
+add
+lt
+amp
+add
+lt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+add
+push constant 0
+return
+gt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+sub
+push constant 0
+return
+gt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+add
+sub
+add
+add
+sub
+add
+add
+push constant 0
+return
+add
+lt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+add
+add
+add
+add
+sub
+add
+add
+push constant 0
+return
+gt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+add
+sub
+add
+add
+sub
+add
+add
+push constant 0
+return
+add
+lt
+if-goto IF_TRUEnum
+goto IF_FALSEnum
+label IF_TRUEnum
+add
+add
+add
+add
+sub
+add
+add
+push constant 0
+return
