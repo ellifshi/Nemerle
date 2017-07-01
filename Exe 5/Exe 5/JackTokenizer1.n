@@ -18,27 +18,30 @@ using Nemerle.Utility.NString;
 
 namespace Exe_5
 {
-    class JackTokenizer
+    class JackTokenizer1
     {
-        private static mutable toTXMLFile = List();
-        public static opKeyWord : Set [string];
-        public static KeyWords : Set [string];
-        public static cleanList():void
+        private mutable toTXMLFile = List();
+        public  mutable opKeyWord : Set [string];
+        public  mutable KeyWords : Set [string];
+        public  cleanList():void
         {
-            toTXMLFile = null;   
+            toTXMLFile = List();   
         } 
-        static this ()
+         public this (lines:array[string], pathVMFile:string)
         {
-            toTXMLFile = List();
+
            // cleanList();
             def tab1 = array ["class", "constructor", "function", "method", "field", "static", "var", "int", "char", "boolean", "void", "true", "false", "null", "this", "let", "do", "if", "else", "while", "return",];
             KeyWords = Set(tab1);
             def tab2 = array ["+", "-", "*", "/", "|", "&amp;", "&lt;", "&gt;", "=", "(", ")", "}", "{", ";", ",", ".", "[", "]", "~"];
-            opKeyWord = Set(tab2);       
+            opKeyWord = Set(tab2);
+            //toTXMLFile = List();
+            sessionData(lines:array[string], pathVMFile:string);
+            
         }
         
         //in the string, we have sevelrle of words, whith space. so we need to hendle in string diffrently.
-        static public hendleWithString(line:string) : string
+         public hendleWithString(line:string) : string
         {
             mutable start = line.IndexOf("\""); // what is the index of the first (") 
 
@@ -57,7 +60,7 @@ namespace Exe_5
         }
         
         //in returnArray we change the lines from the jack files for any relevent char with space, delte some line withe commend, and returne to array.
-        static public returnArray(lines:array[string]) : array[string]
+         public returnArray(lines:array[string]) : array[string]
         {
             mutable finalLine :string;
             mutable count = 0;
@@ -135,9 +138,8 @@ namespace Exe_5
             newLines.ToArray();
         }
 
-        static public sessionData(lines:array[string], pathVMFile:string):void
+         public sessionData(lines:array[string], pathVMFile:string):void
         {
-            //cleanList();
             mutable newLines = returnArray(lines);
            
             foreach (line in newLines)
@@ -179,28 +181,28 @@ namespace Exe_5
             //toTXMLFile.Clear();
         }
 
-        public static printTokens(word:string):void //print token that we get to Txml file
+        public  printTokens(word:string):void //print token that we get to Txml file
         { 
             toTXMLFile.Add(word);
         }
 
-        public static keyWord(word:string):void //print keyWord token that we get to Txml file
+        public  keyWord(word:string):void //print keyWord token that we get to Txml file
         {
             toTXMLFile.Add("<keyword> " + word + " </keyword>");
         }
-        public static symbol(word:string):void //print symbol token that we get to Txml file
+        public  symbol(word:string):void //print symbol token that we get to Txml file
         {
             toTXMLFile.Add("<symbol> " + word + " </symbol>");
         }
-        public static identifier(word:string):void //print identifier token that we get to Txml file
+        public  identifier(word:string):void //print identifier token that we get to Txml file
         {
             toTXMLFile.Add("<identifier> " + word + " </identifier>");
         }
-        public static intVal(word:string):void //print intVal token that we get to Txml file
+        public  intVal(word:string):void //print intVal token that we get to Txml file
         {
             toTXMLFile.Add("<integerConstant> " + word + " </integerConstant>");
         }
-        public static stringVal(word:string):void //print stringVal token that we get to Txml file
+        public  stringVal(word:string):void //print stringVal token that we get to Txml file
         {
             mutable words = word.Replace("@", " "); 
             toTXMLFile.Add("<stringConstant> " + words + " </stringConstant>");

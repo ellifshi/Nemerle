@@ -66,6 +66,9 @@
     <Compile Include="JackTokenizer.n">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="JackTokenizer1.n">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.n" />
     <Compile Include="SymbolTable.n">
       <SubType>Code</SubType>

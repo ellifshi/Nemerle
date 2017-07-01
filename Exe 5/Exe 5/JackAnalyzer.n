@@ -32,9 +32,16 @@ module Program
         mutable lines :array[string];
         foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
         {
+            
             mutable pathVMFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", ".vm"));
             lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
-            Exe_5.JackTokenizer.sessionData(lines, pathVMFile);
+            
+            Exe_5.JackTokenizer1(lines, pathVMFile); 
+            
+        }
+        foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.txt"))
+        {
+            //File.Delete(file);
         }
     }
 }
