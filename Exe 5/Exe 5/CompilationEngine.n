@@ -18,35 +18,74 @@ namespace Exe_5
 {
     class CompilationEngine
     {
-        //mutable toVMFile:StreamWriter;
-        mutable toVMFile:VMWriter;        
+        public mutable toVMFile:VMWriter;        
         public static mutable count = 0;
         public mutable token:string;// one token. for example "<keyword> class </keyword>"
-        public mutable tokensFromJackTokenizer = List(); //all the tokens
+        public mutable tokensFromJackTokenizer : StreamReader; //all the tokens
+        public mutable symbolTableClass : SymbolTable;
+        public mutable symbolTableSubRoutine : SymbolTable;
+        public mutable fileName:string;
+        public mutable whileLabelCounter : int;
+        public mutable ifLabelCounter : int;
+        public mutable tokesFromTxmlFile:StreamWriter;
+     
         
-
         public this(ListOfTokens:List[Object], pathVMFile:string)             
         {
-            tokensFromJackTokenizer = ListOfTokens;
-            toVMFile = Exe_5.VMWriter(pathVMFile);
-            CompileClass();
-            //toVMFile.Close();
-        }
+            fromListToWriteReader(pathVMFile.Replace(".vm", ".txt"), ListOfTokens);
+            tokensFromJackTokenizer = StreamReader(pathVMFile.Replace(".vm", ".txt"));
 
-        public hasMoreTokens(count:int):bool
+            symbolTableClass = SymbolTable();
+            symbolTableSubRoutine = SymbolTable();
+            whileLabelCounter = 0;
+            ifLabelCounter = 0;
+
+            toVMFile = Exe_5.VMWriter(pathVMFile);
+            fileName = Path.GetFileName(pathVMFile).Replace(".vm", "");
+            CompileClass();
+            toVMFile.close();
+            tokensFromJackTokenizer.Close();
+            //Exe_5.VMWriter.close();
+        }
+        public fromListToWriteReader(pathTXMLFile:string, ListOfTokens:List[Object]):void
+        {
+            mutable fs : FileStream;
+            fs =  FileStream(pathTXMLFile, FileMode.Create,FileAccess.Write);
+            mutable writer =  StreamWriter(fs);
+            //writer.WriteLine("<tokens>");
+            foreach(line in ListOfTokens)
+            {
+                writer.WriteLine(line);
+            }
+            //writer.WriteLine("</tokens>");
+            writer.Close();
+            fs.Close();
+        }
+        public hasMoreTokens():bool
+        {
+            tokensFromJackTokenizer.EndOfStream;
+        }
+        public advance():void
+        {
+            when(!hasMoreTokens())           
+            {
+                token = tokensFromJackTokenizer.ReadLine();
+            } 
+        }
+        /*public hasMoreTokens():bool
         {
             count < tokensFromJackTokenizer.Count;
         }
         public advance():void
         {      
-            when(hasMoreTokens(count))           
+            when(hasMoreTokens())           
             {    
                 mutable temp  = tokensFromJackTokenizer.ToArray();
                 mutable temp1 = Array.ConvertAll(temp, x=>x.ToString()); 
                 token = temp1[count]; //the temp and the temp1, is because that I don't success to assigning to the token the specific token
                 count ++;
             }         
-        }
+        }*/
         public returnTypeToken():string
         {
             mutable line = token.Replace("<", "").Replace(">", "").Split(' ');           
@@ -86,192 +125,157 @@ namespace Exe_5
                 | "+"|"-"|"*"|"/"|"="|"|"|"&"|"&amp;"|"&lt;"|"&gt;" =>  true;
                 | _=> false;
             }
-        }  
-        //if we want to print text with '<' and '>'
-        public printXmlPattrenToken(word:string):void
-        {
-            //toVMFile.WriteLine(word.Replace("/",""));//"<" + word + ">");
-        }
-        //print keyword token
-        public printXmlPattrenKeyword(word:string):void
-        {  
-            //toVMFile.WriteLine(word);//Tabs(countOfIndention) + "<keyword> " + word + " </keyword>"); 
-        }
-        //print identifier token
-        public printXmlPattrenIdentifier(word:string):void
-        {
-            //toVMFile.WriteLine(word);//Tabs(countOfIndention) + "<identifier> " + word + " </identifier>"); 
-        }
-        //print symbol token
-        public printXmlPattreSymbol(word:string):void
-        {
-            //toVMFile.WriteLine(word);//Tabs(countOfIndention) + "<symbol> " + word + " </symbol>");
-        }
-        //print integer token
-        public printXmlPattrenIntegerConstant(word:int):void
-        {
-            //toVMFile.WriteLine(word);//Tabs(countOfIndention) + "<integerConstant> " + word + " </integerConstant>"); 
-        }
-        //print string token
-        public printXmlPattreStringConstant(word:string):void
-        {
-            //toVMFile.WriteLine(word);//Tabs(countOfIndention) + "<stringConstant>" + word + "</stringConstant>");
         }
         
+        public returnNToken(n:int):void
+        {
+            for(mutable i = 0; i < n; i++)
+            {
+                advance();
+            }
+        }
+
         // 'class' className '{' classVarDec* subroutineDec* '}'
         public CompileClass():void
         {
-            //printXmlPattrenToken("class");
-            advance(); 
-            when(returnKeywordToken().Equals("class"))
-            {
-               printXmlPattrenKeyword(returnKeywordToken());//'class'
-            }  
-            advance();
-            when(returnTypeToken().Equals("identifier"))
-            {
-                printXmlPattrenIdentifier(returnIdentifierToken());//className
-            } 
-            advance();
-            when(returnSymbolToken().Equals("{"))
-            {
-                printXmlPattreSymbol(returnSymbolToken()); //'{'
-            } 
-            advance();
+            returnNToken(4); //'class', className, '{', classVarDec* subroutineDec*
             while(returnKeywordToken().Equals("static")  || returnKeywordToken().Equals("field"))
             {
                 CompileClassVarDec(); //classVarDec
-                advance();//next token for classVarDec
+                //advance();//next token for classVarDec
+                returnNToken(1); //classVarDec*
             }
             while(returnKeywordToken().Equals("constructor")  || returnKeywordToken().Equals("function") || returnKeywordToken().Equals("method"))
             {
                 CompileSubroutineDec(); //subroutineDec
             }
-
-            when(returnSymbolToken().Equals( "}"))
-            {
-                printXmlPattreSymbol(returnSymbolToken()); //'}'
-                advance();
-            }
-            //printXmlPattrenToken("/class");
+            returnNToken(1); //'}'
         }
         //'int' | 'char' | 'boolean' | className 
-        public CompileType():void
+        public CompileType():string
         {
+            mutable temp :string;
             if(returnTypeToken().Equals("keyword"))
             {
-                printXmlPattrenKeyword(returnKeywordToken()); //'int' | 'char' | 'boolean' 
+                temp = returnKeywordToken(); //'int' | 'char' | 'boolean' 
             }
             else
             {
-                printXmlPattrenIdentifier(returnIdentifierToken()); //className
+                temp = returnIdentifierToken(); //className            
             }
-            advance();    
+            temp   
         }      
         //('static' | 'field' ) type varName (',' varName)* ';' 
         public CompileClassVarDec():void
         {
-            //printXmlPattrenToken("classVarDec");
-            printXmlPattrenKeyword(returnKeywordToken()); //('static' | 'field' )
-            advance();
-            CompileType(); //type
-            when(returnTypeToken().Equals("identifier"))
-            {
-                printXmlPattrenIdentifier(returnIdentifierToken());//varName
-            }    
-            advance();
+            mutable kind : string = returnKeywordToken();//('static' | 'field' )
+            returnNToken(1); //type
+            mutable type : string = CompileType(); //type
+            returnNToken(1); //varName
+            symbolTableClass.define(returnIdentifierToken(), type, kind);
+            returnNToken(1); //','
             while(returnSymbolToken().Equals(","))
             {
-                printXmlPattreSymbol(returnSymbolToken()); //','
-                advance();
-                when(returnTypeToken().Equals("identifier"))
-                {
-                    printXmlPattrenIdentifier(returnIdentifierToken()); //varName
-                }
-                advance();
+                returnNToken(1); //varName
+                symbolTableClass.define(returnIdentifierToken(), type, kind);
+                returnNToken(1);// could be ',' OR ';' for the end.
             }
-            when(returnSymbolToken().Equals(";")) 
-            {
-                printXmlPattreSymbol(returnSymbolToken()); //';'
-            }
-            //printXmlPattrenToken("/classVarDec");
         }
+        
         //('constructor' | 'function' | 'method') ('void' | type) subroutineName '(' parameterList ')' subroutineBody
         public CompileSubroutineDec():void
         { 
-            //printXmlPattrenToken("subroutineDec");
-            printXmlPattrenKeyword(returnKeywordToken()); //('constructor' | 'function' | 'method')
-            advance();        
-            CompileType(); //('void' | type)
-            printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName
-            advance();
-            printXmlPattreSymbol(returnSymbolToken()); //'('
-            advance();
+            symbolTableSubRoutine.cleanSubroutine(); //new subRoutins
+            whileLabelCounter = 0;
+            ifLabelCounter = 0;       
+            mutable type = CompileType(); //('void' | type)
+            returnNToken(2); //('void' | type), subroutineName
+            mutable name = returnIdentifierToken();  
+            when(name.Equals("method"))
+            {
+                symbolTableSubRoutine.define("this", name, "argument");
+            }
+            returnNToken(2);//'(', parameterList
+            
             CompileParameterList();//parameterList
-            printXmlPattreSymbol(returnSymbolToken()); //')'
-            advance();
-            CompileSuroutineBody();//subroutineBody
-            //printXmlPattrenToken("/subroutineDec");
+            returnNToken(1);//')'
+            
+            CompileSuroutineBody(type, name);//subroutineBody
         }
+        
         // '{' varDec* stetmenss '}'
-        public CompileSuroutineBody():void
+        public CompileSuroutineBody(type:string, name:string):void
         {
-            //printXmlPattrenToken("subroutineBody");   
-            printXmlPattreSymbol(returnSymbolToken()); //'{'
-            advance();
+            returnNToken(1);//'{'
             while(returnKeywordToken().Equals("var"))
             {
                 CompileVarDec();  //varDec
             }
+            match(type)
+            {
+                | "constructor" =>
+                {
+                    toVMFile.writeFunction(fileName + "." + name, symbolTableSubRoutine.varCount("local"));
+                    toVMFile.writePush("constant", symbolTableClass.varCount("field"));
+                    toVMFile.writeCall("Memory.alloc",1);
+                    toVMFile.writePop("pointer", 0);
+                }
+                | "method" => 
+                {
+                    toVMFile.writeFunction(fileName + "." + name, symbolTableSubRoutine.varCount("local"));
+                    toVMFile.writePush("argument", 0);
+                    toVMFile.writePop("pointer", 0);
+                }
+                | "function" =>
+                {
+                    toVMFile.writeFunction(fileName + "." + name, symbolTableSubRoutine.varCount("local"));
+                }
+                |_=> ()
+            }
+            
             CompileStatements(); //statements
-            printXmlPattreSymbol(returnSymbolToken()); //'}'
-            advance();            
-            //printXmlPattrenToken("/subroutineBody");
+            returnNToken(1);//'}'          
         }  
         //( (type varName) (',' type varName)*)? 
         public CompileParameterList():void
-        {
-            //printXmlPattrenToken("parameterList");       
+        {      
             when(returnSymbolToken() != ")" )
             {
-                CompileType(); //type
-                printXmlPattrenIdentifier(returnIdentifierToken());
-                advance();
+                mutable type = CompileType(); //type
+
+                returnNToken(1);//varName
+                symbolTableSubRoutine.define(returnIdentifierToken(), type, "argument");
+                returnNToken(1);//',' OR ')'
                 while(returnSymbolToken().Equals(",")) //(',' type varName)*
                 {
-                    printXmlPattreSymbol(returnSymbolToken());
-                    advance();
-                    CompileType(); //type
-                    printXmlPattrenIdentifier(returnIdentifierToken()); //varName
-                    advance();
+                    returnNToken(1);//type
+                    type = CompileType(); //type
+                    returnNToken(1);//varName
+                    symbolTableSubRoutine.define(returnIdentifierToken(), type, "argument");
+                    returnNToken(1);//',' OR ')'
                 }
             }      
-            //printXmlPattrenToken("/parameterList");
         }
+        
         //'var' type varName (',' varName)* ';'
         public CompileVarDec():void
         {
-            //printXmlPattrenToken("varDec");  
-            printXmlPattrenKeyword(returnKeywordToken());//'var'
-            advance();
-            CompileType();//type
-            printXmlPattrenIdentifier(returnIdentifierToken());//varName
-            advance();
+            returnNToken(1);//type
+            mutable type = CompileType(); //type
+            returnNToken(1);//varName
+            symbolTableSubRoutine.define(returnIdentifierToken(), type, "local");
+            returnNToken(1);//could be ';' OR ','
             while(returnSymbolToken().Equals(",")) //(',' varName)*
             {
-                printXmlPattreSymbol(returnSymbolToken()); //','
-                advance();
-                printXmlPattrenIdentifier(returnIdentifierToken()); //varName
-                advance();
+                returnNToken(1); //varName
+                symbolTableSubRoutine.define(returnIdentifierToken(), type, "local");
+                returnNToken(1);//could be ';' OR ','
             }
-            printXmlPattreSymbol(returnSymbolToken());//';'
-            advance();    
-            //printXmlPattrenToken("/varDec");
+            returnNToken(1); //next stetmens   
         }
         //(letStatement | ifStatement | whileStatement | doStatement | returnStatement)*
         public CompileStatements():void
         {
-            //printXmlPattrenToken("statements");   
             while(returnTypeToken().Equals("keyword")) 
             {
                 match(returnKeywordToken())
@@ -284,172 +288,207 @@ namespace Exe_5
                     |_=>()
                 }
             }  
-            //printXmlPattrenToken("/statements");
         }
+        
         //'do' subroutineCall ';'
         public CompileDo():void
         {
-            //printXmlPattrenToken("doStatement");      
-            printXmlPattrenKeyword(returnKeywordToken()); //'do'
-            advance();
-            CompileSubroutineCall(); //subroutineCall
-            printXmlPattreSymbol(returnSymbolToken()); //;
-            advance();   
-            //printXmlPattrenToken("/doStatement");
+            returnNToken(1); //for example 'Output'
+            CompileSubroutineCall(""); //subroutineCall
+            returnNToken(1);  //next token, could be another 'do' for example
+            toVMFile.writePop("temp", 0);
         }
         //'let' varName ('[' expression ']')? '=' expression ';'
-        public CompileLet():void
+        public CompileLet():void 
         {
-            //printXmlPattrenToken("letStatement");  
-            printXmlPattrenKeyword(returnKeywordToken());//let
-            advance();
-            printXmlPattrenIdentifier(returnIdentifierToken()); //varName
-            advance();
-            when(returnSymbolToken().Equals("[")) //('[' expression ']')?
+            returnNToken(1); //varName
+            mutable kind = kind(returnIdentifierToken());
+            mutable index = index(returnIdentifierToken());
+            returnNToken(1); //'['
+            if(returnSymbolToken().Equals("[")) //('[' expression ']')?
             {
-                printXmlPattreSymbol(returnSymbolToken());//[
-                advance();
+                returnNToken(1); //expression
                 CompileExpression();
-                printXmlPattreSymbol(returnSymbolToken());//]
-                advance();
+                toVMFile.writePush(kind, index);
+                toVMFile.WriteArithmetic("add");
+                //printXmlPattreSymbol(returnSymbolToken());//]
+                returnNToken(2); //'=', expression
+                
+                CompileExpression(); //expression
+                returnNToken(1); //next token
+                toVMFile.writePop("temp", 0);
+                toVMFile.writePop("pointer", 1);
+                toVMFile.writePush("temp", 0);
+                toVMFile.writePop("that", 0);         
             }
-            printXmlPattreSymbol("eq");//'='
-            advance();
-            CompileExpression();//expression
-            printXmlPattreSymbol(returnSymbolToken());//';'
-            advance();       
-            //printXmlPattrenToken("/letStatement");
+            else
+            {
+                returnNToken(1); //'='
+                CompileExpression(); //expression
+                returnNToken(1); //next token
+                toVMFile.writePop(kind, index);
+            }
         }
+        
         //'while' '(' expression ')' '{' statements '}'  
         public CompileWhile():void
         {
-            //printXmlPattrenToken("whileStatement");      
-            printXmlPattrenKeyword(returnKeywordToken()); //'while'
-            advance();
-            printXmlPattreSymbol(returnSymbolToken()); //'('
-            advance();
+            mutable tempCounter : int = whileLabelCounter;
+            whileLabelCounter++;
+            
+            returnNToken(2); //'(', expression
+            toVMFile.WriteLabel("WHILE_EXP" + tempCounter.ToString());
             CompileExpression();//expression
-            printXmlPattreSymbol(returnSymbolToken()); //')'
-            advance();
-            printXmlPattreSymbol(returnSymbolToken()); //'{'
-            advance();
-            CompileStatements();//statements
-            printXmlPattreSymbol(returnSymbolToken()); //'}'
-            advance();     
-            //printXmlPattrenToken("/whileStatement"); 
+            toVMFile.WriteArithmetic("not");
+            toVMFile.WriteIf("WHILE_END" + tempCounter);
+            returnNToken(1);//'{'
+            returnNToken(1); //statements
+            CompileStatements();
+            returnNToken(1); //'}"
+            toVMFile.WriteGoto("WHILE_EXP" + tempCounter);
+            toVMFile.WriteLabel("WHILE_END" + tempCounter);
         }
+        
         //'return' expression? ';' 
         public CompileReturn():void
         {
-            //printXmlPattrenToken("returnStatement");    
-            printXmlPattrenKeyword(returnKeywordToken()); //'return'
-            advance();
-            when(returnSymbolToken() != ";")
+            returnNToken(1); //expression
+            if(returnSymbolToken() != ";")
             {
                 CompileExpression();//expression
+                returnNToken(1);
             }
-            printXmlPattreSymbol(returnSymbolToken()); //';'
-            advance();
-            //printXmlPattrenToken("/returnStatement");  
+            else
+            {
+                returnNToken(1);//next token
+                toVMFile.writePush("constant", 0);
+            }
+            toVMFile.writeReturn();
         }
+        
         // 'if' ( experssion ) '{' stestmens '}' (else '{' stetmens '}')?
         public CompileIf():void
         {
-            //printXmlPattrenToken("ifStatement");  
-            printXmlPattrenKeyword(returnKeywordToken()); //if
-            advance();
-            printXmlPattreSymbol(returnSymbolToken()); //'('
-            advance();
+            mutable tempCounter : int = ifLabelCounter;
+            ifLabelCounter++;
+            returnNToken(2); // '(', experssion
             CompileExpression();
-            printXmlPattreSymbol(returnSymbolToken()); // ')'
-            advance();
-            printXmlPattreSymbol(returnSymbolToken()); //'{'
-            advance();
+            toVMFile.WriteIf("IF_TRUE" + tempCounter);   
+            toVMFile.WriteGoto("IF_FALSE" + tempCounter);
+            toVMFile.WriteLabel("IF_TRUE" + tempCounter);
+            returnNToken(2); //'{', stestmens
             CompileStatements();
-            printXmlPattreSymbol(returnSymbolToken()); //'}'
-            advance();
-            when(returnKeywordToken().Equals("else"))
+            returnNToken(1); //next token OR 'else'
+
+            if(returnKeywordToken().Equals("else"))
             {
-                printXmlPattrenKeyword(returnKeywordToken()); // '{'
-                advance();
+                toVMFile.WriteGoto("IF_END" + tempCounter);
+                toVMFile.WriteLabel("IF_FALSE" + tempCounter);
+                returnNToken(2); //'{', stetmens
                 CompileStatements(); //stetmens
-                printXmlPattreSymbol(returnSymbolToken()); //'}'
-                advance();
+                returnNToken(1); //'}'
+                toVMFile.WriteLabel("IF_END" + tempCounter);
             }
-            //printXmlPattrenToken("/ifStatement");
+            else
+            {
+                toVMFile.WriteLabel("IF_FALSE" + tempCounter);
+            }
         }
         //term (op term)* 
         public CompileExpression():void
-        {
-            //printXmlPattrenToken("expression");
-            
+        {            
             CompileTerm();//term
-            when(isOperandToken())
+            while(isOperandToken())
             {
-                match(returnKeywordToken())
+                mutable temp = returnSymbolToken();
+                returnNToken(1); //term
+                CompileTerm();
+                match(temp)
                 {
-                    |"+" => printXmlPattreSymbol("add");
-                    |"-" => printXmlPattreSymbol("sub");
-                    |"*" => printXmlPattreSymbol("call Math.multiply 2");
-                    |"/" => printXmlPattreSymbol("call Math.divide 2");
-                    |"=" => printXmlPattreSymbol("eq");
-                    |"|" => printXmlPattreSymbol("or");
-                    |"&" => printXmlPattreSymbol("and");
-                    |"&amp;" => printXmlPattreSymbol("amp");
-                    |"&lt;" => printXmlPattreSymbol("lt");
-                    |"&gt;" => printXmlPattreSymbol("gt");
+                    |"+" => toVMFile.WriteArithmetic("add");
+                    |"-" => toVMFile.WriteArithmetic("sub");
+                    |"*" => toVMFile.writeCall("Math.multiply", 2);
+                    |"/" => toVMFile.writeCall("Math.divide",  2);
+                    |"=" => toVMFile.WriteArithmetic("eq");
+                    |"|" => toVMFile.WriteArithmetic("or");
+                    |"&" => toVMFile.WriteArithmetic("and");
+                    |"&amp;" => toVMFile.WriteArithmetic("and");
+                    |"&lt;" => toVMFile.WriteArithmetic("lt");
+                    |"&gt;" => toVMFile.WriteArithmetic("gt");
                     |_=>()
                 }
-                advance();
             }
-            when(!returnSymbolToken().Equals(")") && !returnSymbolToken().Equals(";") && !returnSymbolToken().Equals("]")  && !returnSymbolToken().Equals(","))
-            {
-                CompileTerm(); //term
-            }    
-            //printXmlPattrenToken("/expression");
         }
+        
         //integerConstant | stringConstant | keywordConstant | varName | varName '[' expression ']' |identifier > subroutineCall | '(' expression ')' | unaryOp term
         public CompileTerm():void
         {
-            //printXmlPattrenToken("term");  
             match(returnTypeToken())
             {
                 |"integerConstant" =>
                 {
-                    printXmlPattrenIntegerConstant(returnIntegerConstantValue()); //number for example 254
-                    advance();
+                    mutable temp : string = returnIntegerConstantValue().ToString();
+
+                    if(temp.StartsWith("-"))
+                    {
+                        toVMFile.writePush("constant", Int32.Parse(temp.Substring(1)));
+                        toVMFile.WriteArithmetic("neg");
+                    }
+                    else
+                    {
+                        toVMFile.writePush("constant", returnIntegerConstantValue());
+                    }
+
+                    returnNToken(1);
                 }
                 |"stringConstant"=>
                 {
-                    printXmlPattreStringConstant(returnStringConstantValue()); //string for exemple "hello"
-                    advance();
+                    toVMFile.writePush("constant", returnStringConstantValue().Length);
+                    toVMFile.writeCall("String.new", 1);
+                    for(mutable i = 0; i < returnStringConstantValue().Length; i++)
+                    {
+                        toVMFile.writePush("constant", System.Convert.ToInt32(returnStringConstantValue()[i]));
+                        toVMFile.writeCall("String.appendChar", 2);
+                    }
+                    returnNToken(1);
                 }
                 |"keyword" =>
                 {
-                    printXmlPattrenKeyword(returnKeywordToken()); //keyword for example 'false'
-                    advance();
+                    match(returnKeywordToken())
+                    {
+                        |"false" => toVMFile.writePush("constant", 0);
+                        |"true" =>
+                        {
+                            toVMFile.writePush("constant", 0);
+                            toVMFile.WriteArithmetic("not");
+                        }
+                        |"this" =>toVMFile.writePush("pointer", 0);
+                        |"null" => toVMFile.writePush("constant", 0);
+                        |_ => ()
+                    }
+                    returnNToken(1);
                 }
                 |"identifier" =>
                 {
-                    printXmlPattrenIdentifier(returnIdentifierToken()); //identifier for example 'x'
-                    advance();
+                    mutable temp : string = returnIdentifierToken();
+                    returnNToken(1);
                     match(returnSymbolToken())
                     {
                         |"[" =>
                         {
-                            printXmlPattreSymbol(returnSymbolToken()); //'['
-                            advance();
+                            returnNToken(1);
                             CompileExpression(); //expression
-                            printXmlPattreSymbol(returnSymbolToken()); //']'
-                            advance();
+                            returnNToken(1); //']'
+                            toVMFile.writePush(kind(temp), index(temp));
+                            toVMFile.WriteArithmetic("add");
+                            toVMFile.writePop("pointer", 1);
+                            toVMFile.writePush("that", 0);
                         }
                         |"("|"." =>
-                        {
-                            printXmlPattreSymbol(returnSymbolToken()); //'.' OR '('
-                            advance();                        
-                            CompileSubroutineCall(); //subRoutinsCall
+                        {                       
+                            CompileSubroutineCall(temp); //subRoutinsCall
                         }
-                        |_=>()
+                        |_=> toVMFile.writePush(kind(temp), index(temp));
                     }
                 }
                 |"symbol" =>
@@ -458,66 +497,134 @@ namespace Exe_5
                     {
                         |"(" =>
                         {
-                            printXmlPattreSymbol(returnSymbolToken()); //'('
-                            advance();
+                            returnNToken(1);//exoression
                             CompileExpression(); //expression 
-                            printXmlPattreSymbol(returnSymbolToken()); //')'
-                            advance();
+                            returnNToken(1);//')'
                         }
-                        |"-"|"~" =>
+                        |"-" =>
                         {
-                            printXmlPattreSymbol(returnSymbolToken()); //'~' OR '-'
-                            advance();
+                            returnNToken(1);
                             CompileTerm(); //term
+                            toVMFile.WriteArithmetic("neg");
+                        }
+                        |"~" =>
+                        {
+                            returnNToken(1);
+                            CompileTerm(); //term
+                            toVMFile.WriteArithmetic("not");
                         }
                         |_ =>()
                     }
                 }
             }      
-            //printXmlPattrenToken("/term");
         } 
-        //subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
-        public CompileSubroutineCall():void
+        
+        public kind(name:string):string
         {
-            printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName || ( className | varName)
-            advance();
-            when(returnSymbolToken().Equals("("))
+            mutable temp : string = "";
+            if(symbolTableSubRoutine.alreadyExists(name))
             {
-                printXmlPattreSymbol(returnSymbolToken());//'('
-                advance();
-                CompileExpressionList();//expressionList
-                printXmlPattreSymbol(returnSymbolToken());//')'
-                advance();           
+                 temp = symbolTableSubRoutine.kindOf(name);
             }
-            when(returnSymbolToken().Equals("."))
+            else if(symbolTableClass.alreadyExists(name))
             {
-                printXmlPattreSymbol(returnSymbolToken());//'.'
-                advance();
-                printXmlPattrenIdentifier(returnIdentifierToken());//subroutineName
-                advance();
-                printXmlPattreSymbol(returnSymbolToken());//'('
-                advance();
-                CompileExpressionList();//expressionList
-                printXmlPattreSymbol(returnSymbolToken());//')'
-                advance();       
+                if(symbolTableClass.kindOf(name) == "field")
+                {
+                    temp = "this";
+                }
+                else
+                {
+                    temp = "static";
+                }      
             }
+            else
+            {
+                temp = "";
+            }           
+            temp
+        }
+        public index(identifier:string):int
+        {
+            mutable temp :int;
+            if(symbolTableSubRoutine.alreadyExists(identifier))
+            {
+                temp = symbolTableSubRoutine.indexOf(identifier);
+            }        
+            else
+            {
+                temp = symbolTableClass.indexOf(identifier);
+            }  
+            temp
+        } 
+
+
+        
+        
+        //subroutineName '(' expressionList ')' | ( className | varName) '.' subroutineName '(' expressionList ')' 
+        public CompileSubroutineCall(name:string):void
+        {
+            mutable nameTemp :string = name;
+            mutable finalClassName : string;
+            mutable countOfArguments : int = 0;
+            
+            when(name.Equals(""))
+            {
+                nameTemp = returnIdentifierToken();       
+                returnNToken(1);
+            }
+            
+            if(returnSymbolToken().Equals("."))
+            {
+                returnNToken(1); //subroutineName
+                mutable className = nameTemp;
+                mutable subRotinName = returnIdentifierToken();
+                
+                if(symbolTableSubRoutine.alreadyExists(className))
+                {
+                    finalClassName = symbolTableSubRoutine.typeOf(className) + "." + subRotinName;
+                    toVMFile.writePush(kind(className), index(className));
+                    countOfArguments++;
+                }
+                else if(symbolTableClass.alreadyExists(className))
+                {
+                    finalClassName = symbolTableClass.typeOf(className) + "." + subRotinName;
+                    toVMFile.writePush(kind(className), index(className));
+                    countOfArguments++;
+                }
+                else
+                {
+                    finalClassName = className + "." + subRotinName;
+                } 
+                returnNToken(1);
+            }
+            else
+            {
+                finalClassName = fileName + "." + nameTemp;
+                toVMFile.writePush("pointer", 0);
+                countOfArguments ++;
+            }
+            returnNToken(1);
+            countOfArguments += CompileExpressionList();
+            returnNToken(1);
+            toVMFile.writeCall(finalClassName, countOfArguments);
+            
         }
         //(expression (',' expression)* )? 
-        public CompileExpressionList():void
+        public CompileExpressionList():int
         {
-            //printXmlPattrenToken("expressionList");           
+            mutable count :int = 0;
             when(returnSymbolToken() != ")")
             {
                 CompileExpression();//expression
-
+                count ++;
                 while(returnSymbolToken().Equals(","))
                 {
-                    printXmlPattreSymbol(returnSymbolToken());//','
-                    advance();
+                    returnNToken(1);
                     CompileExpression();//expression
+                    count ++;
                 }
-            }   
-            //printXmlPattrenToken("/expressionList");     
+            }
+            count
         }
     }
 }
