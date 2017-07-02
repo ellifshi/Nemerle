@@ -1,0 +1,70 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+using System.Text.RegularExpressions;
+using System.IO.FileAttributes;
+
+namespace Exe_5
+{
+  /// <summary>
+  /// Description of VMWriter.
+  /// </summary>
+  class VMWriter
+  {
+      mutable toVMFile:StreamWriter;
+      public this(pathVMFile:string)
+      {
+          toVMFile = StreamWriter(pathVMFile);
+      }
+      public writePush(segment:string, index:int):void
+      {
+          toVMFile.WriteLine("push " + segment + " " + index);  
+      }
+      public writePop(segment:string, index:int):void
+      {
+          toVMFile.WriteLine("pop " + segment + " " + index); 
+      }
+      public WriteArithmetic(commend:string):void
+      {
+          toVMFile.WriteLine(commend); 
+      }
+      public WriteLabel(label:string):void
+      {
+          toVMFile.WriteLine("label " + label);   
+      }
+      public WriteGoto(label:string):void
+      {
+          toVMFile.WriteLine("goto " + label);
+      }
+      public WriteIf(label:string):void
+      {
+          toVMFile.WriteLine("if-goto " + label);
+      }
+      public writeCall(name:string, nArgs:int):void
+      {
+          toVMFile.WriteLine("call " + name + " " + nArgs);
+      }
+      public writeFunction(name:string, nLocals:int):void
+      {
+          toVMFile.WriteLine("function " + name + " " + nLocals);
+      }
+      public writeReturn():void
+      {
+          toVMFile.WriteLine("return");
+      }
+      public close():void
+      {
+          toVMFile.Close();
+      }
+  }
+}

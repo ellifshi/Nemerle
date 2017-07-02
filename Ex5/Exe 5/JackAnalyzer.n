@@ -1,0 +1,47 @@
+﻿//אראל פלדמר 209374420
+//שניאור גלעדי 301739561
+//מס' קבוצה 150060.01.5777.25
+using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+module Program
+{
+    Main() : void
+    {
+        WriteLine("Pleas enter full directory path that you want to run");
+        def pathJackFiles : string = @"C:\Users\User\Desktop\Ex5\folder";// ReadLine(); 
+
+        mutable path : string = pathJackFiles;
+        when(!Directory.Exists(path))
+        {
+            WriteLine("The path of folter, isn't correct! \nplease press anter to exit");
+            _ = ReadLine();
+            return;
+        }
+        mutable lines :array[string];
+        foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.jack"))
+        {
+            
+            mutable pathVMFile : string = pathJackFiles + "\\" + Path.GetFileName(file.Replace(".jack", ".vm"));
+            lines = File.ReadLines(file).Where(line => !line.Equals("") && !line.StartsWith("/") && !line.StartsWith("*") && !line.StartsWith(" * ") && !line.StartsWith(" */") && !line.StartsWith("    /")).ToArray(); //delete empty line
+            
+            Exe_5.JackTokenizer1(lines, pathVMFile); 
+            
+        }
+        foreach (file in Directory.EnumerateFiles(pathJackFiles, "*.txt"))
+        {
+            //File.Delete(file);
+        }
+    }
+}

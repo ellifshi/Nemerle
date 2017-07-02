@@ -1,0 +1,244 @@
+﻿using Nemerle.Collections;
+using Nemerle.Text;
+using Nemerle.Utility;
+using System.IO.File;
+using System;
+using System.Collections.Generic;
+using System.Console;
+using System.Linq;
+using System.IO;
+using System.Net.Sockets;
+using Nemerle.Imperative;
+using System.Collections.DictionaryEntry;
+using Nemerle.Extensions;
+
+namespace Exe_5
+{
+/// <summary>
+/// Description of SymbolTable.  TODO, mabay we need to print the all data
+/// </summary>
+    class Item
+    {
+        public mutable index:int;
+        public mutable name:string;
+        public mutable type:string;
+        public mutable kind:string;       
+    }
+   
+    class SymbolTable
+    {
+        //public enum Kind {| STATIC | FIELD | ARG | VAR}
+        
+        public mutable lines:List[Item];
+
+        /* mutable name = List();
+        public mutable type = List();
+        public mutable kind = List();
+        public mutable counter = List();
+        
+        public mutable staticCounter = 0;
+        public mutable fieldCounter = 0;
+        public mutable argumentCounter = 0;
+        public mutable variableCounter = 0;*/
+        
+        public this()             
+        {
+            lines = List();
+        }
+        
+        public alreadyExists(name:string):bool
+        {
+            foreach(line in lines)
+            {
+                when(line.name == name)
+                {
+                   return true; 
+                }
+            }
+            false;
+        }
+        public define(name:string, type:string, kind:string):void
+        {           
+            when(!alreadyExists(name))
+            {
+                mutable item = Item();
+                item.name = name;
+                item.type = type;
+                item.kind = kind;
+                item.index = varCount(kind);
+                lines.Add(item);
+            }
+        }
+        
+        //check in counter, how many the same of kind we have in lines.
+        public varCount(kind:string):int
+        {
+            mutable counter:int = 0;
+            foreach(line in lines)
+            {
+                when(line.kind == kind)
+                {
+                   counter++; 
+                }
+            }
+            
+            counter;
+        }
+        
+        //in kindOf we return the kind of the name that we get as argument.
+        public kindOf(name:string):string
+        {
+            foreach(line in lines)
+            {
+                when(line.name == name)
+                {
+                   return line.kind; 
+                }
+            }
+            "";
+        }
+        
+        // in typeOf we retuen the type of the name of argument that we get.
+        public typeOf(name:string):string
+        {
+            foreach(line in lines)
+            {
+                when(line.name == name)
+                {
+                   return line.type; 
+                }
+            }
+            "";
+        }
+        
+        
+        // in indexOf we retuen the index of the name of argument that we get.
+        public indexOf(name:string):int
+        {
+            foreach(line in lines)
+            {
+                when(line.name == name)
+                {
+                   return line.index; 
+                }
+            }
+            0;  //if the name dosen't exsist, we return that his indesx is zero, because he the first.
+        }
+        
+        
+        
+        public printTable():void
+        {
+            WriteLine("name - type - kind - index");
+            foreach(line in lines)
+            {
+                WriteLine(line.name + " " + line.type + " " + line.kind + " " + line.index);
+            }
+        }
+        
+        
+        public cleanSubroutine():void
+        {
+            lines = List();   
+        } 
+
+        
+       /* public addStatic(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.STATIC);
+            counter.Add (staticCounter);
+            
+            staticCounter++;
+        }
+        
+        public addField(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.FIELD);
+            counter.Add (fieldCounter);
+            
+            fieldCounter++;
+        }
+        
+        public addArgunment(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.ARG);
+            counter.Add (argumentCounter);
+            
+            argumentCounter++;
+        }
+        
+        public addVariable(a_name:string, a_type:string) : void {
+            name.Add (a_name);
+            type.Add (a_type);
+            kind.Add (Kind.VAR);
+            counter.Add (variableCounter);
+            
+            variableCounter++;
+        }
+        
+        public exitFunctionDec() : void {
+            while (kind.IndexOf(Kind.ARG) != -1) {
+                mutable tmp = kind.IndexOf(Kind.ARG);
+                
+                kind.RemoveAt(tmp);
+                name.RemoveAt(tmp);
+                type.RemoveAt(tmp);
+                counter.RemoveAt(tmp);
+            }
+            
+            argumentCounter = 0;
+            
+            while (kind.IndexOf(Kind.VAR) != -1) {
+                mutable tmp = kind.IndexOf(Kind.VAR);
+                
+                kind.RemoveAt(tmp);
+                name.RemoveAt(tmp);
+                type.RemoveAt(tmp);
+                counter.RemoveAt(tmp);
+            }
+            
+            variableCounter = 0;
+        }
+        
+        public getType(a_name:string) : string {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = type[i].ToString();
+            }
+            
+            ret            
+        }
+        
+        public getKind(a_name:string) : string {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = kind[i].ToString();
+            }
+            
+            ret            
+        }
+        
+       public getCounter(a_name:string) : int {
+            mutable i : int;
+            mutable ret;
+            
+            when (name.Contains(a_name)) {
+                i = name.IndexOf(a_name);
+                ret = Int32.Parse(counter[i].ToString());
+            }
+            
+            ret            
+        }*/
+
+    }
+}
+
